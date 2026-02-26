@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Developer API Key Management | PSPManager</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#138aec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101a22",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex">
+<aside class="w-64 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 flex flex-col fixed h-full">
+<div class="p-6 flex items-center gap-3">
+<div class="size-10 bg-primary rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-[24px]">account_balance_wallet</span>
+</div>
+<div>
+<h1 class="text-base font-bold leading-none">PSPManager</h1>
+<p class="text-xs text-slate-500 mt-1">Payment Gateway</p>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-1 overflow-y-auto">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[22px]">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[22px]">receipt_long</span>
+<span class="text-sm font-medium">Transactions</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[22px]">alt_route</span>
+<span class="text-sm font-medium">Routing</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[22px]">analytics</span>
+<span class="text-sm font-medium">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 bg-primary/10 text-primary rounded-lg" href="#">
+<span class="material-symbols-outlined text-[22px] fill-current">code</span>
+<span class="text-sm font-medium">Developer</span>
+</a>
+</nav>
+<div class="mt-auto">
+<div class="px-4 py-4 border-t border-slate-100 dark:border-slate-800">
+<nav class="space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[22px]">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[22px]">help</span>
+<span class="text-sm font-medium">Help Center</span>
+</a>
+</nav>
+</div>
+<div class="p-4 border-t border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-900 cursor-pointer transition-colors">
+<div class="size-9 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center overflow-hidden">
+<img alt="User Avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDI1UFfpMhrOh9nRUAO_rYFevFXroEcyGj9MUX073qjZiuzWepE4KzuJqclz79MLqF0hTMwHrnfG_pzhUBdxIrloD56B1i4iK6VKqdMIhKJnDd4gj9OIUcRsqQrUS8AMv64V_muGIPy52RoSpBe6TzZFv3MuHL26Sfi91BjEvMNBG3KYyEAnBA--JaArsZ9aO66Ppvtht7FRF02T9pq8MFWKje_wgcFUHrsS9x_IjUuQklvEFbV5v4p6wRYbSi7jkMNVi_xsOTPGm4"/>
+</div>
+<div class="flex-1 overflow-hidden">
+<p class="text-sm font-semibold truncate">Alex Rivera</p>
+<p class="text-xs text-slate-500 truncate">Account Owner</p>
+</div>
+<span class="material-symbols-outlined text-slate-400 text-[20px]">more_vert</span>
+</div>
+</div>
+</div>
+</aside>
+<main class="flex-1 ml-64 flex flex-col min-h-screen">
+<header class="h-16 bg-white dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-8 sticky top-0 z-10">
+<div class="flex items-center gap-4">
+<h2 class="text-lg font-bold">Developer</h2>
+<div class="h-4 w-px bg-slate-200 dark:bg-slate-800"></div>
+<nav class="flex items-center gap-2 text-sm">
+<a class="text-primary font-medium underline underline-offset-4" href="#">API Keys</a>
+<span class="text-slate-300">/</span>
+<a class="text-slate-500 hover:text-slate-700" href="#">Webhooks</a>
+<span class="text-slate-300">/</span>
+<a class="text-slate-500 hover:text-slate-700" href="#">Logs</a>
+<span class="text-slate-300">/</span>
+<a class="text-slate-500 hover:text-slate-700" href="#">Documentation</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 px-3 py-1.5 bg-green-500/10 rounded-full">
+<span class="size-2 bg-green-500 rounded-full animate-pulse"></span>
+<span class="text-[10px] font-bold text-green-600 tracking-wider uppercase">Production Mode</span>
+</div>
+<button class="size-10 flex items-center justify-center rounded-lg text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors border border-slate-200 dark:border-slate-800">
+<span class="material-symbols-outlined text-[22px]">notifications</span>
+</button>
+</div>
+</header>
+<div class="p-8 space-y-8 max-w-6xl">
+<div class="flex justify-between items-end">
+<div>
+<h1 class="text-3xl font-black tracking-tight text-slate-900 dark:text-white">API Key Management</h1>
+<p class="text-slate-500 mt-1">Authenticate your integration with secret keys and monitor system activity.</p>
+</div>
+<button class="bg-primary hover:bg-primary/90 text-white px-6 py-2.5 rounded-lg font-bold text-sm transition-all shadow-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                    Generate New Key
+                </button>
+</div>
+<div class="grid grid-cols-1 gap-8">
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm overflow-hidden">
+<div class="p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
+<div>
+<h3 class="text-lg font-bold text-slate-900 dark:text-white">Active API Keys</h3>
+<p class="text-sm text-slate-500">Security tokens for server-side operations.</p>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50 dark:bg-slate-950/50 text-slate-500 text-xs font-bold uppercase tracking-wider">
+<th class="px-6 py-4 border-b border-slate-100 dark:border-slate-800">Key Name</th>
+<th class="px-6 py-4 border-b border-slate-100 dark:border-slate-800">Created Date</th>
+<th class="px-6 py-4 border-b border-slate-100 dark:border-slate-800">Last Used</th>
+<th class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+<tr class="hover:bg-slate-50/50 dark:hover:bg-slate-900/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-400">key</span>
+<div>
+<p class="text-sm font-bold">Production Master Key</p>
+<p class="text-xs font-mono text-slate-400">pk_live_******************3f42</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">Oct 12, 2023</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">2 minutes ago</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+<button class="text-slate-400 hover:text-red-600 p-1 ml-2">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50/50 dark:hover:bg-slate-900/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-400">key</span>
+<div>
+<p class="text-sm font-bold">Checkout Integration</p>
+<p class="text-xs font-mono text-slate-400">pk_live_******************a109</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">Jan 05, 2024</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">6 hours ago</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+<button class="text-slate-400 hover:text-red-600 p-1 ml-2">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm overflow-hidden flex flex-col">
+<div class="p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
+<div>
+<h3 class="text-lg font-bold text-slate-900 dark:text-white">Webhook Endpoints</h3>
+<p class="text-sm text-slate-500">Receive real-time event notifications.</p>
+</div>
+<button class="text-primary text-sm font-bold hover:underline">Add Endpoint</button>
+</div>
+<div class="p-6 space-y-4 flex-1">
+<div class="p-4 border border-slate-100 dark:border-slate-800 rounded-lg flex items-center justify-between">
+<div class="flex flex-col gap-1">
+<span class="text-[10px] font-bold text-primary uppercase tracking-widest">Active</span>
+<p class="text-sm font-medium truncate max-w-[200px]">https://api.merchant.com/v1/hooks</p>
+<p class="text-xs text-slate-500">Events: payment.success, payment.failed</p>
+</div>
+<label class="inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="relative w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="p-4 border border-slate-100 dark:border-slate-800 rounded-lg flex items-center justify-between">
+<div class="flex flex-col gap-1">
+<span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Inactive</span>
+<p class="text-sm font-medium text-slate-400 truncate max-w-[200px]">https://dev.site.io/webhooks</p>
+<p class="text-xs text-slate-400">Events: all</p>
+</div>
+<label class="inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="relative w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+</label>
+</div>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm overflow-hidden flex flex-col">
+<div class="p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
+<div>
+<h3 class="text-lg font-bold text-slate-900 dark:text-white">Recent Requests</h3>
+<p class="text-sm text-slate-500">Live API request history.</p>
+</div>
+<button class="text-slate-500 hover:text-slate-900 dark:hover:text-white p-1">
+<span class="material-symbols-outlined">refresh</span>
+</button>
+</div>
+<div class="flex-1 overflow-y-auto max-h-[300px]">
+<div class="p-4 space-y-4">
+<div class="flex items-start justify-between text-sm">
+<div class="flex items-center gap-3">
+<span class="px-2 py-0.5 bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 font-bold text-[10px] rounded">POST</span>
+<div>
+<p class="font-mono text-xs">/v1/payments</p>
+<p class="text-[10px] text-slate-400 mt-1">req_928k... • 12:45:10</p>
+</div>
+</div>
+<span class="text-slate-500 text-xs">200 OK</span>
+</div>
+<div class="flex items-start justify-between text-sm">
+<div class="flex items-center gap-3">
+<span class="px-2 py-0.5 bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 font-bold text-[10px] rounded">GET</span>
+<div>
+<p class="font-mono text-xs">/v1/customers/cus_123</p>
+<p class="text-[10px] text-slate-400 mt-1">req_772a... • 12:44:52</p>
+</div>
+</div>
+<span class="text-slate-500 text-xs">200 OK</span>
+</div>
+<div class="flex items-start justify-between text-sm">
+<div class="flex items-center gap-3">
+<span class="px-2 py-0.5 bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 font-bold text-[10px] rounded">POST</span>
+<div>
+<p class="font-mono text-xs">/v1/payouts</p>
+<p class="text-[10px] text-slate-400 mt-1">req_001b... • 12:42:15</p>
+</div>
+</div>
+<span class="text-red-500 text-xs font-medium">403 Forbidden</span>
+</div>
+<div class="flex items-start justify-between text-sm">
+<div class="flex items-center gap-3">
+<span class="px-2 py-0.5 bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 font-bold text-[10px] rounded">POST</span>
+<div>
+<p class="font-mono text-xs">/v1/refunds</p>
+<p class="text-[10px] text-slate-400 mt-1">req_441c... • 12:40:01</p>
+</div>
+</div>
+<span class="text-slate-500 text-xs">200 OK</span>
+</div>
+</div>
+</div>
+<div class="p-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-center">
+<button class="text-xs font-bold text-slate-500 hover:text-primary">View Full Logs Explorer</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+
+</body></html>

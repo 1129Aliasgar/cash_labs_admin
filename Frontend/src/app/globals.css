@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --brand-primary: #2563eb;
+  --brand-primary-hover: #1d4ed8;
+  --color-bg: #f3f4f6;
+  --color-card: #ffffff;
+  --color-text: #111827;
+  --color-muted: #6b7280;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Form inputs ────────────────────────────────────────────── */
+.auth-input {
+  @apply w-full px-4 py-3 pl-10 text-sm text-gray-800 placeholder-gray-400
+         bg-white border border-gray-200 rounded-xl 
+         focus:outline-none focus:ring-2 focus:ring-brand-600 focus:border-transparent
+         transition-all duration-200;
+}
+
+.auth-input-error {
+  @apply border-red-400 focus:ring-red-400;
+}
+
+/* ─── Primary button ─────────────────────────────────────────── */
+.btn-primary {
+  @apply w-full flex items-center justify-center gap-2
+         py-3.5 px-6 rounded-xl text-white font-semibold text-sm
+         bg-brand-600 hover:bg-brand-700 active:bg-brand-800
+         transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed
+         shadow-sm;
+}
+
+/* ─── Secondary button ───────────────────────────────────────── */
+.btn-secondary {
+  @apply w-full flex items-center justify-center gap-2
+         py-3.5 px-6 rounded-xl text-gray-700 font-semibold text-sm
+         bg-gray-100 hover:bg-gray-200 active:bg-gray-300
+         transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+/* ─── Auth card ──────────────────────────────────────────────── */
+.auth-card {
+  @apply bg-white rounded-2xl border border-gray-100 p-8;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.07);
+}
+
+/* ─── Security badge ─────────────────────────────────────────── */
+.security-badge {
+  @apply flex items-center gap-1.5 text-xs font-semibold tracking-wide uppercase;
+}

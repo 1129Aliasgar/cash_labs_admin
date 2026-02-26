@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Check Your Email - PSP Global</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#138aec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101a22",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen flex flex-col font-display">
+<!-- Top Navigation Bar -->
+<header class="w-full bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-6 py-4">
+<div class="max-w-7xl mx-auto flex items-center justify-between">
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-3xl" data-icon="shield_with_heart">shield_with_heart</span>
+<span class="text-slate-900 dark:text-slate-100 text-xl font-bold tracking-tight">PSP Global</span>
+</div>
+<div class="flex items-center gap-4">
+<a class="text-slate-600 dark:text-slate-400 text-sm font-medium hover:text-primary transition-colors" href="#">Help Center</a>
+<div class="h-8 w-[1px] bg-slate-200 dark:bg-slate-700 mx-2"></div>
+<button class="bg-primary/10 text-primary px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary/20 transition-all">
+                    Support
+                </button>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-grow flex items-center justify-center p-6">
+<div class="w-full max-w-[480px]">
+<!-- Centered Card -->
+<div class="bg-white dark:bg-slate-900 rounded-xl shadow-xl border border-slate-100 dark:border-slate-800 overflow-hidden">
+<div class="p-8 md:p-12 flex flex-col items-center text-center">
+<!-- Icon Section -->
+<div class="mb-8 relative">
+<div class="size-24 bg-primary/10 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-5xl" data-icon="mark_email_read">mark_email_read</span>
+</div>
+<div class="absolute -top-1 -right-1 size-8 bg-green-500 rounded-full border-4 border-white dark:border-slate-900 flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-xs font-bold" data-icon="check">check</span>
+</div>
+</div>
+<!-- Typography Stack -->
+<h1 class="text-slate-900 dark:text-slate-100 text-3xl font-bold mb-4 tracking-tight">Check your email</h1>
+<p class="text-slate-600 dark:text-slate-400 text-base leading-relaxed mb-8">
+                        We have sent password recovery instructions to your email address. Please check your inbox and follow the link to reset your password.
+                    </p>
+<!-- Action Buttons -->
+<div class="w-full space-y-4">
+<button class="w-full bg-primary text-white font-bold py-3.5 px-6 rounded-lg shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-xl" data-icon="open_in_new">open_in_new</span>
+                            Open Email App
+                        </button>
+<a class="block w-full text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm font-semibold py-2 transition-colors" href="#">
+                            Back to Sign In
+                        </a>
+</div>
+<!-- Resend Section -->
+<div class="mt-10 pt-8 border-t border-slate-100 dark:border-slate-800 w-full text-sm">
+<p class="text-slate-500 dark:text-slate-400">
+                            Didn't receive the email? 
+                            <button class="text-primary font-bold hover:underline ml-1">Click to resend</button>
+</p>
+<p class="mt-2 text-slate-400 dark:text-slate-500 text-xs italic">
+                            Tip: Please check your spam or junk folder.
+                        </p>
+</div>
+<!-- Trust Badges Footer inside Card -->
+<div class="mt-8 pt-6 flex flex-wrap justify-center items-center gap-6 opacity-60 grayscale hover:grayscale-0 transition-all duration-300">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-blue-600 text-lg" data-icon="verified_user">verified_user</span>
+<span class="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest">PCI-DSS Compliant</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-slate-800 dark:text-slate-200 text-lg" data-icon="lock">lock</span>
+<span class="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest">SSL Encrypted</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-amber-500 text-lg" data-icon="security">security</span>
+<span class="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest">ISO 27001</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Link -->
+<p class="mt-8 text-center text-slate-500 dark:text-slate-400 text-sm">
+                Need more help? <a class="text-primary font-semibold hover:underline" href="#">Contact PSP Global Support</a>
+</p>
+</div>
+</main>
+<!-- Simple Footer Section -->
+<footer class="py-8 px-6 text-center">
+<p class="text-slate-400 dark:text-slate-600 text-xs">
+            © 2024 PSP Global Gateway Services. All rights reserved. 
+            <br class="md:hidden"/>
+<span class="hidden md:inline mx-2">•</span>
+<a class="hover:text-primary" href="#">Privacy Policy</a>
+<span class="mx-2">•</span>
+<a class="hover:text-primary" href="#">Terms of Service</a>
+</p>
+</footer>
+</body></html>

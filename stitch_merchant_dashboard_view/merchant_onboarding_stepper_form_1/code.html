@@ -1,0 +1,225 @@
+<html class="light" lang="en"><head></head><body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">```html
+
+
+
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Application Status - PSP Gateway</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#138aec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101a22",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .timeline-line {
+            @apply absolute left-1/2 top-0 h-full w-0.5 -translate-x-1/2 bg-slate-200 dark:bg-slate-700;
+        }
+        .step-completed {
+            @apply bg-green-500 text-white border-green-500;
+        }
+        .step-active {
+            @apply bg-amber-500 text-white border-amber-500 ring-4 ring-amber-100 dark:ring-amber-900/30;
+        }
+        .step-pending {
+            @apply bg-white dark:bg-slate-800 text-slate-300 border-slate-200 dark:border-slate-700;
+        }
+    </style>
+
+
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<header class="sticky top-0 z-50 flex items-center justify-between border-b border-slate-200 bg-white dark:bg-slate-900 px-6 py-3 lg:px-10">
+<div class="flex items-center gap-3">
+<div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-white">
+<span class="material-symbols-outlined">payments</span>
+</div>
+<div>
+<h2 class="text-lg font-bold leading-tight tracking-tight text-slate-900 dark:text-white">PSP Gateway</h2>
+<p class="text-xs text-slate-500 font-medium">Merchant Portal</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex flex-col items-end mr-2 text-right">
+<span class="text-sm font-semibold text-slate-900 dark:text-white">Acme Corp Inc.</span>
+<span class="text-xs text-slate-500 flex items-center gap-1 justify-end">
+<span class="inline-block w-2 h-2 rounded-full bg-amber-500"></span>
+                    Application Pending
+                </span>
+</div>
+<button class="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="h-10 w-10 overflow-hidden rounded-full border border-slate-200 dark:border-slate-700">
+<img alt="User Profile" class="h-full w-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDuL9b6mlZxD_O2r64TmBKwjk_iQq_tL9ccZZAIxxY0rLfWev9ETrGDn7Cpt3-Xm-Bm3Vb9c8meu2KdBoHLY2RPmohg_cFaJc9_AsH3Xb9XjIVEC66j5whNq_-4to_PLBqWLrlG_e429L3-XW-D_mI5aA8syt3drLLnfUoqfRkOqdtnDbnE8Gl4hf2dVLL8SqoACzyViA32bC3YdWm6r94id66ocv3rlcaZjl10isoElgeoe-UYF07Iws0g6XwyTrLR4oG7XsEkKeU"/>
+</div>
+</div>
+</header>
+<main class="flex-1 flex flex-col items-center justify-start py-12 px-6 lg:px-12">
+<div class="w-full max-w-4xl">
+<div class="mb-12 text-center">
+<div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 mb-6 dark:bg-amber-900/20 dark:text-amber-400 dark:border-amber-800">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+</span>
+<span class="text-sm font-bold uppercase tracking-wider">Under Review</span>
+</div>
+<h1 class="text-4xl font-black text-slate-900 dark:text-white tracking-tight">Merchant Application Pending</h1>
+<p class="mt-4 text-lg text-slate-500 max-w-2xl mx-auto">We've received your onboarding documents. Our compliance team is currently verifying your business information. You'll have full access to the dashboard once approved.</p>
+</div>
+<div class="grid grid-cols-1 gap-8">
+<div class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-8 lg:p-10">
+<div class="flex flex-col md:flex-row items-center justify-between gap-8 mb-12">
+<div class="flex-1 text-center md:text-left">
+<h2 class="text-xl font-bold text-slate-900 dark:text-white">Application Progress</h2>
+<p class="text-slate-500 mt-1">Reviewing: Business Documentation</p>
+</div>
+<div class="flex items-center gap-3 bg-slate-50 dark:bg-slate-800 px-5 py-3 rounded-xl border border-slate-100 dark:border-slate-700">
+<span class="material-symbols-outlined text-primary">schedule</span>
+<div class="flex flex-col">
+<span class="text-xs font-bold uppercase text-slate-400">Estimated Completion</span>
+<span class="text-sm font-bold text-slate-900 dark:text-white">24 - 48 Hours</span>
+</div>
+</div>
+</div>
+<div class="relative px-4">
+<div class="absolute left-0 top-[18px] w-full h-1 bg-slate-100 dark:bg-slate-800"></div>
+<div class="relative flex justify-between">
+<div class="flex flex-col items-center gap-3 relative z-10 bg-white dark:bg-slate-900 px-2">
+<div class="w-10 h-10 rounded-full flex items-center justify-center border-2 step-completed transition-all">
+<span class="material-symbols-outlined text-xl">check</span>
+</div>
+<div class="text-center">
+<span class="block text-sm font-bold text-slate-900 dark:text-white">Submitted</span>
+<span class="block text-xs text-slate-400">Oct 24, 10:45 AM</span>
+</div>
+</div>
+<div class="flex flex-col items-center gap-3 relative z-10 bg-white dark:bg-slate-900 px-2">
+<div class="w-10 h-10 rounded-full flex items-center justify-center border-2 step-active transition-all">
+<span class="material-symbols-outlined text-xl">pending</span>
+</div>
+<div class="text-center">
+<span class="block text-sm font-bold text-slate-900 dark:text-white">Verifying</span>
+<span class="block text-xs text-amber-500 font-medium italic">In progress...</span>
+</div>
+</div>
+<div class="flex flex-col items-center gap-3 relative z-10 bg-white dark:bg-slate-900 px-2">
+<div class="w-10 h-10 rounded-full flex items-center justify-center border-2 step-pending transition-all">
+<span class="material-symbols-outlined text-xl">verified</span>
+</div>
+<div class="text-center">
+<span class="block text-sm font-bold text-slate-400">Approved</span>
+<span class="block text-xs text-slate-400">Pending review</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
+<div class="px-8 py-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">forum</span>
+<h3 class="font-bold text-slate-900 dark:text-white">Support Messages</h3>
+</div>
+<span class="bg-primary/10 text-primary text-[10px] font-black px-2 py-0.5 rounded uppercase">New</span>
+</div>
+<div class="p-0">
+<div class="p-6 border-b border-slate-50 dark:border-slate-800/50 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors cursor-pointer group">
+<div class="flex gap-4">
+<div class="h-10 w-10 flex-shrink-0 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-400">support_agent</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between mb-1">
+<span class="text-sm font-bold text-slate-900 dark:text-white">Compliance Team</span>
+<span class="text-xs text-slate-400">10 mins ago</span>
+</div>
+<p class="text-sm text-slate-600 dark:text-slate-400 line-clamp-2">Your business registration document has been received and is currently being processed. No further action is required from your side at this moment.</p>
+</div>
+</div>
+</div>
+<div class="p-6 opacity-60 grayscale-[0.5] hover:opacity-100 hover:grayscale-0 transition-all cursor-pointer">
+<div class="flex gap-4">
+<div class="h-10 w-10 flex-shrink-0 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-400">mark_email_read</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between mb-1">
+<span class="text-sm font-bold text-slate-900 dark:text-white">System Notification</span>
+<span class="text-xs text-slate-400">Yesterday</span>
+</div>
+<p class="text-sm text-slate-600 dark:text-slate-400">Application submitted successfully. Reference ID: #APP-2023-9941.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-slate-50 dark:bg-slate-800/50 px-8 py-4">
+<button class="w-full py-2.5 rounded-lg border-2 border-dashed border-slate-200 dark:border-slate-700 text-slate-500 font-bold text-sm hover:border-primary hover:text-primary transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">send</span>
+                            Send message to reviewer
+                        </button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="p-6 bg-blue-50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-800/50 rounded-xl">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary mt-0.5">info</span>
+<div>
+<h4 class="font-bold text-slate-900 dark:text-white text-sm">What happens next?</h4>
+<p class="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">Once verified, you will receive an API key to start integrating the payment gateway in test mode.</p>
+</div>
+</div>
+</div>
+<div class="p-6 bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-slate-400 mt-0.5">download</span>
+<div>
+<h4 class="font-bold text-slate-900 dark:text-white text-sm">Download Summary</h4>
+<p class="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">Keep a copy of your application details for your business records.</p>
+<button class="mt-2 text-xs font-bold text-primary hover:underline">Download PDF</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-16 flex flex-col items-center justify-center gap-4">
+<p class="text-sm text-slate-500">Need to access another account?</p>
+<button class="flex items-center gap-2 px-10 py-3.5 rounded-xl border-2 border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold text-base hover:bg-slate-200 dark:hover:bg-slate-800 hover:border-slate-400 dark:hover:border-slate-600 transition-all shadow-sm">
+<span class="material-symbols-outlined">logout</span>
+                    Sign Out and Return Later
+                </button>
+</div>
+</div>
+</main>
+<a class="fixed bottom-6 right-6 z-50 flex items-center gap-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-5 py-3 rounded-full shadow-xl hover:shadow-2xl transition-all group" href="#">
+<span class="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary">
+<span class="material-symbols-outlined text-[20px]">support_agent</span>
+</span>
+<span class="text-sm font-bold text-slate-700 dark:text-slate-200">Need help?</span>
+</a>
+</div>
+
+</body></html>

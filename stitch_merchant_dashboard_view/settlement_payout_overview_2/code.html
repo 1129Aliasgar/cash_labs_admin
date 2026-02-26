@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Merchant Teams Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#138aec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101a22",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen relative">
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+<div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"></div>
+<div class="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-xl shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800">
+<div class="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white">Invite Team Member</h3>
+<button class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="p-6 space-y-5">
+<div class="grid grid-cols-1 gap-5">
+<div>
+<label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Full Name</label>
+<input class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-primary focus:border-primary transition-all" placeholder="e.g. John Doe" type="text"/>
+</div>
+<div>
+<label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Email Address</label>
+<input class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-primary focus:border-primary transition-all" placeholder="john.doe@example.com" type="email"/>
+</div>
+<div>
+<label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Select Role</label>
+<select class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-primary focus:border-primary transition-all appearance-none">
+<option value="viewer">Viewer</option>
+<option value="support">Support</option>
+<option value="developer">Developer</option>
+<option value="admin">Admin</option>
+</select>
+</div>
+</div>
+<div class="pt-2 border-t border-slate-100 dark:border-slate-800">
+<label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">Access Level</label>
+<div class="space-y-4">
+<div>
+<span class="text-[11px] font-semibold text-slate-400 uppercase mb-2 block tracking-tight">Organizations</span>
+<div class="flex flex-wrap gap-2">
+<label class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-primary bg-primary/5 text-primary text-xs font-medium cursor-pointer">
+<input checked="" class="hidden" type="checkbox"/>
+<span>Global Retail Corp</span>
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+</label>
+<label class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 text-xs font-medium cursor-pointer hover:border-primary/50 transition-colors">
+<input class="hidden" type="checkbox"/>
+<span>EMEA Tech Hub</span>
+</label>
+</div>
+</div>
+<div>
+<span class="text-[11px] font-semibold text-slate-400 uppercase mb-2 block tracking-tight">Clients</span>
+<div class="grid grid-cols-2 gap-2">
+<label class="flex items-center gap-3 p-2 rounded-lg border border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+<input class="rounded border-slate-300 text-primary focus:ring-primary h-4 w-4" type="checkbox"/>
+<span class="text-xs font-medium">E-commerce Store</span>
+</label>
+<label class="flex items-center gap-3 p-2 rounded-lg border border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+<input class="rounded border-slate-300 text-primary focus:ring-primary h-4 w-4" type="checkbox"/>
+<span class="text-xs font-medium">Mobile App</span>
+</label>
+<label class="flex items-center gap-3 p-2 rounded-lg border border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+<input class="rounded border-slate-300 text-primary focus:ring-primary h-4 w-4" type="checkbox"/>
+<span class="text-xs font-medium">POS Terminal</span>
+</label>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="px-6 py-4 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-3">
+<button class="px-5 py-2 text-sm font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors">
+                Cancel
+            </button>
+<button class="bg-primary text-white px-6 py-2 rounded-lg text-sm font-semibold hover:bg-primary/90 transition-all shadow-md flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">send</span>
+                Send Invitation
+            </button>
+</div>
+</div>
+</div>
+<div class="flex h-screen overflow-hidden">
+<aside class="w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col shrink-0">
+<div class="p-6 flex flex-col gap-1">
+<div class="flex items-center gap-2 mb-6">
+<div class="bg-primary text-white p-1 rounded">
+<span class="material-symbols-outlined text-2xl">account_balance_wallet</span>
+</div>
+<div>
+<h1 class="text-sm font-bold leading-none">PSP Platform</h1>
+<p class="text-[10px] text-slate-500 uppercase tracking-wider font-semibold">Merchant Portal</p>
+</div>
+</div>
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">receipt_long</span>
+<span class="text-sm font-medium">Transactions</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">corporate_fare</span>
+<span class="text-sm font-medium">Organizations</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">groups</span>
+<span class="text-sm font-medium">Clients</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">analytics</span>
+<span class="text-sm font-medium">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">person_search</span>
+<span class="text-sm font-medium">Customers</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">payments</span>
+<span class="text-sm font-medium">Settlement</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 bg-primary/10 text-primary rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">badge</span>
+<span class="text-sm font-medium">Teams</span>
+</a>
+</nav>
+</div>
+<div class="mt-auto p-6 flex flex-col gap-1 border-t border-slate-200 dark:border-slate-800">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">help</span>
+<span class="text-sm font-medium">Support</span>
+</a>
+<div class="flex items-center gap-3 px-3 py-4 mt-2">
+<div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCd59isQN4nLF86aDoo9aeqkOWCGXJdauDyIZGMR3anTxV1kzuqF8MF4jbpkPCSqf9PWYGpAsB191cQh2HA5icBYvPqtJDCHLVL6_R7JnVkQkuYo9Wg2eRBOISaVCA7LW7ZYxq-x9BYgvgwWsFAFnFMgCWrb8cu9AAx3fCkGHUd88borh6ljM79ZUt_79ndkOT3YQSGe86X5VGGfc6cy0wIvZnFttI5js19MKOUVOGhFb1lElWz4YZb117RssjJ_Y5AgO90eud6_cE')"></div>
+<div class="flex flex-col">
+<span class="text-xs font-bold leading-none text-slate-900 dark:text-white">Alex Morgan</span>
+<span class="text-[10px] text-slate-500">Finance Lead</span>
+</div>
+</div>
+</div>
+</aside>
+<main class="flex-1 flex flex-col overflow-hidden">
+<header class="h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-8 shrink-0">
+<div class="flex items-center gap-4">
+<h2 class="text-lg font-bold">Teams</h2>
+<div class="h-6 w-[1px] bg-slate-200 dark:bg-slate-800 mx-2"></div>
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-2">
+<label class="text-xs text-slate-500 font-semibold uppercase">Org:</label>
+<select class="text-xs border-slate-200 dark:border-slate-700 bg-transparent rounded focus:ring-primary py-1 pr-8">
+<option>Global Retail Corp</option>
+<option>EMEA Tech Hub</option>
+</select>
+</div>
+<div class="flex items-center gap-2">
+<label class="text-xs text-slate-500 font-semibold uppercase">Client:</label>
+<select class="text-xs border-slate-200 dark:border-slate-700 bg-transparent rounded focus:ring-primary py-1 pr-8">
+<option>All Clients</option>
+<option>E-commerce Store</option>
+<option>Mobile App</option>
+</select>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="relative p-2 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-slate-900"></span>
+</button>
+<button class="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary/90 transition-all shadow-sm">
+<span class="material-symbols-outlined text-lg">person_add</span>
+                    Invite Team Member
+                </button>
+</div>
+</header>
+<div class="flex-1 overflow-y-auto p-8 bg-background-light dark:bg-background-dark">
+<div class="grid grid-cols-1 xl:grid-cols-4 gap-8">
+<div class="xl:col-span-3">
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+<div class="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+<div>
+<h3 class="text-base font-bold">Team Members</h3>
+<p class="text-xs text-slate-500">Manage your team's access and roles across the organization.</p>
+</div>
+<div class="flex items-center gap-2">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+<input class="pl-9 pr-4 py-1.5 text-sm rounded border-slate-200 dark:border-slate-700 bg-background-light dark:bg-slate-800 focus:ring-primary w-64" placeholder="Search members by name or email..." type="text"/>
+</div>
+<button class="p-1.5 rounded border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-sm">filter_list</span>
+</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-sm text-left">
+<thead class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-800">
+<tr>
+<th class="px-6 py-4">Member Name</th>
+<th class="px-6 py-4">Role</th>
+<th class="px-6 py-4">Organization/Client Access</th>
+<th class="px-6 py-4">Last Active</th>
+<th class="px-6 py-4">Status</th>
+<th class="px-6 py-4 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-slate-200 bg-cover bg-center shrink-0" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBtI0oNsEkLx8C7I-9AmZ1eiA7qu8oJEVLa0s_ase_Yl0IT9uuKwnWcvjY_wmw_8XkWX_35JkQmLBBXQ5Jb0y8MjZDS8l56UmZcoWNGRBVfnLUKp3WzLlmGCPJ4LelIqOvq7iASpljrouHBhgcZpnuhtLWkn2DaQSmMqPUg95kJ-gWkLp9eUSNdOI7WUjqbM8Oe-FyP5tQozQYMmAOnr5t2wgatufmQHiehN3j8YbpnQFonNaB9IFwEDb3VfDOD59FuaoTXxIFbA5A')"></div>
+<div class="flex flex-col">
+<span class="font-bold text-slate-900 dark:text-slate-100">Alex Morgan</span>
+<span class="text-xs text-slate-500">alex.morgan@globalretail.com</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[11px] font-bold uppercase tracking-wider">Admin</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="font-medium">Full Access</span>
+<span class="text-xs text-slate-400">All Organizations</span>
+</div>
+</td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-400">2 mins ago</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                                Active
+                                            </span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-1 text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">edit</span>
+</button>
+<button class="p-1 text-slate-400 hover:text-rose-500 transition-colors">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-slate-200 bg-cover bg-center shrink-0" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA8xUwsLS4MTIRVk9c3B3BD2zvRg5zi94AvpqCQ8WwHlyE5E2UrBVZ9BrA-vVY6TvGpuraektynA7RYyXKUMx4WIaIluMO7StUUIT8WPAiK66HvGmwzGN_gG8M9IDsVtKHIuavmRP4pZV6ywcPG8GPQqz68u7-bDj6a-JWszLsDSyVl7F9HhDwtUQK1EVVwglhcYgcO7OHmxqeak9XzSBPi1dZWXciNtFUYoslAG0ys4-RbmICU5CT9NXKWQOm1hFIdId5P_441IRA')"></div>
+<div class="flex flex-col">
+<span class="font-bold text-slate-900 dark:text-slate-100">Sarah Jenkins</span>
+<span class="text-xs text-slate-500">sarah.j@globalretail.com</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[11px] font-bold uppercase tracking-wider">Developer</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="font-medium">EMEA Tech Hub</span>
+<span class="text-xs text-slate-400">3 Clients</span>
+</div>
+</td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-400">1 hour ago</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                                Active
+                                            </span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-1 text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">edit</span>
+</button>
+<button class="p-1 text-slate-400 hover:text-rose-500 transition-colors">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-slate-200 bg-cover bg-center shrink-0" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCW4urjuTuuLcsbIIEYC0wd-Yfm7zj1SViJK26dxcN7y2Kg7c5UqrzLKZC53VOV6axypTMlivoN_Hu-V-Ns8iHT8r0DkBuRtygZjW4-bl_LzWIFYP5_ksZiVT89djgXugNMsq1TVQguPOZS6YtEfQ1k49ST20lzeUhhSvhyaxQCy75RWR79Ut9mel3aHw1-vaeCCtOq2A4f3UgAqlyFpW_wDZAv5TgTDVVvw09Dvxw6NANGRwYypQsyWZzFGbTb0VkkaRRi14mmp4g')"></div>
+<div class="flex flex-col">
+<span class="font-bold text-slate-900 dark:text-slate-100">Michael Chen</span>
+<span class="text-xs text-slate-500">m.chen@partner.com</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[11px] font-bold uppercase tracking-wider">Support</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="font-medium">Global Retail Corp</span>
+<span class="text-xs text-slate-400">E-commerce Store</span>
+</div>
+</td>
+<td class="px-6 py-4 text-slate-400 italic">Never</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                                                Pending
+                                            </span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-1 text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">edit</span>
+</button>
+<button class="p-1 text-slate-400 hover:text-rose-500 transition-colors">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-slate-200 bg-cover bg-center shrink-0" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDllQWu8m9M3KsgpYcUSLO6UzndsJhtOc04n49wOw2R-9tR04M--yefni0qrNfQeVsP11EjdMZ0HuGfTeis_rl1DPJW1yw5ylQv1XwgAEyIE4nsqEEss8gyyJ0h0V8jzPdK0VQQcIaXZZkfJvaaA1aGKJsYeiJtPt-jzGFX7lcT4bXVnq9E--VQRi3lRxCF8eYkFmzXwXtUlkHFFmZKro3jxJ8RGCTBOD0gKQ4CYXEnk8Bc384jEhvWfFNKfHy8MjMLY3HnC-bsqMc')"></div>
+<div class="flex flex-col">
+<span class="font-bold text-slate-900 dark:text-slate-100">David Ross</span>
+<span class="text-xs text-slate-500">david.ross@emea-tech.io</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[11px] font-bold uppercase tracking-wider">Viewer</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="font-medium">Global Retail Corp</span>
+<span class="text-xs text-slate-400">Mobile App</span>
+</div>
+</td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-400">Yesterday</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                                Active
+                                            </span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-1 text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">edit</span>
+</button>
+<button class="p-1 text-slate-400 hover:text-rose-500 transition-colors">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-4 bg-slate-50 dark:bg-slate-800/30 flex items-center justify-between border-t border-slate-200 dark:border-slate-800">
+<span class="text-xs text-slate-500">Showing 1-4 of 12 team members</span>
+<div class="flex gap-1">
+<button class="px-3 py-1 text-xs border border-slate-200 dark:border-slate-700 rounded bg-white dark:bg-slate-900 hover:bg-slate-50 disabled:opacity-50">Prev</button>
+<button class="px-3 py-1 text-xs border border-primary bg-primary text-white rounded">1</button>
+<button class="px-3 py-1 text-xs border border-slate-200 dark:border-slate-700 rounded bg-white dark:bg-slate-900 hover:bg-slate-50">2</button>
+<button class="px-3 py-1 text-xs border border-slate-200 dark:border-slate-700 rounded bg-white dark:bg-slate-900 hover:bg-slate-50">Next</button>
+</div>
+</div>
+</div>
+</div>
+<div class="xl:col-span-1">
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 sticky top-8">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-base font-bold text-slate-900 dark:text-white">Role Permissions</h3>
+<span class="material-symbols-outlined text-slate-400">info</span>
+</div>
+<div class="space-y-6">
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[10px] font-bold uppercase">Admin</span>
+<span class="text-[10px] text-slate-400 font-medium">Full Access</span>
+</div>
+<p class="text-xs text-slate-500 leading-relaxed">
+                                    Manage team members, configure routing, view financial reports, and edit API keys across the organization.
+                                </p>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[10px] font-bold uppercase">Developer</span>
+<span class="text-[10px] text-slate-400 font-medium">Technical Access</span>
+</div>
+<p class="text-xs text-slate-500 leading-relaxed">
+                                    Access API credentials, webhooks, and sandbox environments. Cannot manage team members or payout details.
+                                </p>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[10px] font-bold uppercase">Support</span>
+<span class="text-[10px] text-slate-400 font-medium">Operational Access</span>
+</div>
+<p class="text-xs text-slate-500 leading-relaxed">
+                                    View transactions, initiate refunds, and manage customer records. No access to financial settings.
+                                </p>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[10px] font-bold uppercase">Viewer</span>
+<span class="text-[10px] text-slate-400 font-medium">Read Only</span>
+</div>
+<p class="text-xs text-slate-500 leading-relaxed">
+                                    View-only access to dashboards and analytics. Cannot perform any actions or see sensitive card data.
+                                </p>
+</div>
+</div>
+<div class="mt-8 pt-6 border-t border-slate-200 dark:border-slate-800">
+<button class="w-full py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors flex items-center justify-center gap-2 text-slate-700 dark:text-slate-300">
+<span class="material-symbols-outlined text-lg">settings_suggest</span>
+                                Customize Roles
+                            </button>
+<p class="mt-4 text-[11px] text-slate-400 leading-relaxed text-center italic">
+                                Custom role configurations are available for enterprise organizations.
+                            </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+
+</body></html>

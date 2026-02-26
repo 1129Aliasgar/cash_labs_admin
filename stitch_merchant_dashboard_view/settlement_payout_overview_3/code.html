@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Settlement &amp; Payout Overview</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#138aec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101a22",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="flex h-screen overflow-hidden">
+<!-- Sidebar -->
+<aside class="w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col shrink-0">
+<div class="p-6 flex flex-col gap-1">
+<div class="flex items-center gap-2 mb-6">
+<div class="bg-primary text-white p-1 rounded">
+<span class="material-symbols-outlined text-2xl">account_balance_wallet</span>
+</div>
+<div>
+<h1 class="text-sm font-bold leading-none">PSP Platform</h1>
+<p class="text-[10px] text-slate-500 uppercase tracking-wider font-semibold">Merchant Portal</p>
+</div>
+</div>
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">receipt_long</span>
+<span class="text-sm font-medium">Transactions</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">corporate_fare</span>
+<span class="text-sm font-medium">Organizations</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">groups</span>
+<span class="text-sm font-medium">Clients</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">analytics</span>
+<span class="text-sm font-medium">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">person_search</span>
+<span class="text-sm font-medium">Customers</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 bg-primary/10 text-primary rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">payments</span>
+<span class="text-sm font-medium">Settlement</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">badge</span>
+<span class="text-sm font-medium">Teams</span>
+</a>
+</nav>
+</div>
+<div class="mt-auto p-6 flex flex-col gap-1 border-t border-slate-200 dark:border-slate-800">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">help</span>
+<span class="text-sm font-medium">Support</span>
+</a>
+<div class="flex items-center gap-3 px-3 py-4 mt-2">
+<div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 bg-cover bg-center" data-alt="User profile avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCvA2gnyloFPeBvy2BNLDr433yVyVuQq6s0trPBe7J0ofKU7YfnwmE0MdOWwCi5A_pNlDEPFNrhi169l7veEiJhcOEQT8Wsft-_G6YU5uZYMZfZHtKBELS4DOH548Egb_wt6ffMvw7teSw3AMafhZi_DS4d_xxNk1OZE_Ks1Q06ANwGm6SRE2gmarfasbx4RF4bC7TIP2m_8-QfPtBTwi8caqcUXxL35-RCs--bcK2tKnwjXbYJBWaCBUFCi7l5eNlZbLY3_k1_-3U')"></div>
+<div class="flex flex-col">
+<span class="text-xs font-bold leading-none">Alex Morgan</span>
+<span class="text-[10px] text-slate-500">Finance Lead</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col overflow-hidden">
+<!-- Header / Top Bar -->
+<header class="h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-8 shrink-0">
+<div class="flex items-center gap-4">
+<h2 class="text-lg font-bold">Settlement Overview</h2>
+<div class="h-6 w-[1px] bg-slate-200 dark:bg-slate-800 mx-2"></div>
+<!-- Global Filters -->
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-2">
+<label class="text-xs text-slate-500 font-semibold uppercase">Org:</label>
+<select class="text-xs border-slate-200 dark:border-slate-700 bg-transparent rounded focus:ring-primary py-1 pr-8">
+<option>Global Retail Corp</option>
+<option>EMEA Tech Hub</option>
+</select>
+</div>
+<div class="flex items-center gap-2">
+<label class="text-xs text-slate-500 font-semibold uppercase">Client:</label>
+<select class="text-xs border-slate-200 dark:border-slate-700 bg-transparent rounded focus:ring-primary py-1 pr-8">
+<option>All Clients</option>
+<option>E-commerce Store</option>
+<option>Mobile App</option>
+</select>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="relative p-2 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-slate-900"></span>
+</button>
+<button class="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary/90 transition-all">
+<span class="material-symbols-outlined text-lg">download</span>
+                        Export Report
+                    </button>
+</div>
+</header>
+<!-- Content Scrollable -->
+<div class="flex-1 overflow-y-auto p-8 bg-background-light dark:bg-background-dark">
+<!-- KPI Cards Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Next Payout Amount</span>
+<span class="material-symbols-outlined text-primary">payments</span>
+</div>
+<div class="mt-4">
+<h3 class="text-3xl font-bold tracking-tight">$12,450.00</h3>
+<p class="text-xs text-emerald-600 font-medium flex items-center mt-1">
+<span class="material-symbols-outlined text-sm">trending_up</span> +12% vs last month
+                            </p>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Next Payout Date</span>
+<span class="material-symbols-outlined text-primary">calendar_today</span>
+</div>
+<div class="mt-4">
+<h3 class="text-3xl font-bold tracking-tight">Oct 24, 2023</h3>
+<p class="text-xs text-slate-500 font-medium mt-1">Expected in 3 days</p>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Total Pending Settlements</span>
+<span class="material-symbols-outlined text-amber-500">pending_actions</span>
+</div>
+<div class="mt-4">
+<h3 class="text-3xl font-bold tracking-tight">3 Pending</h3>
+<p class="text-xs text-slate-500 font-medium mt-1">Processing across 2 gateways</p>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Last Settlement Amount</span>
+<span class="material-symbols-outlined text-primary">history</span>
+</div>
+<div class="mt-4">
+<h3 class="text-3xl font-bold tracking-tight">$8,920.50</h3>
+<p class="text-xs text-slate-500 font-medium mt-1">Paid on Oct 17, 2023</p>
+</div>
+</div>
+</div>
+<!-- Main Grid: History and Side Card -->
+<div class="grid grid-cols-1 xl:grid-cols-4 gap-8">
+<!-- History Table Column -->
+<div class="xl:col-span-3">
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+<div class="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+<h3 class="text-base font-bold">Settlement History</h3>
+<div class="flex items-center gap-2">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+<input class="pl-9 pr-4 py-1.5 text-sm rounded border-slate-200 dark:border-slate-700 bg-background-light dark:bg-slate-800 focus:ring-primary w-48" placeholder="Reference ID..." type="text"/>
+</div>
+<button class="p-1.5 rounded border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-sm">filter_list</span>
+</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-sm text-left">
+<thead class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-800">
+<tr>
+<th class="px-6 py-4">Reference ID</th>
+<th class="px-6 py-4">Amount (Gross)</th>
+<th class="px-6 py-4">Fees</th>
+<th class="px-6 py-4 font-bold text-slate-900 dark:text-slate-100">Net Payout</th>
+<th class="px-6 py-4">Organization/Client</th>
+<th class="px-6 py-4">Status</th>
+<th class="px-6 py-4">Paid On</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4 font-medium text-primary">SET-98210</td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-400">$4,500.00</td>
+<td class="px-6 py-4 text-rose-500">-$112.50</td>
+<td class="px-6 py-4 font-bold">$4,387.50</td>
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="font-medium">Global Retail Corp</span>
+<span class="text-xs text-slate-400">E-commerce Store</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                                    Paid
+                                                </span>
+</td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-400">Oct 20, 2023</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4 font-medium text-primary">SET-98211</td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-400">$3,200.00</td>
+<td class="px-6 py-4 text-rose-500">-$80.00</td>
+<td class="px-6 py-4 font-bold">$3,120.00</td>
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="font-medium">Tech Solutions</span>
+<span class="text-xs text-slate-400">Main Platform</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                                                    Scheduled
+                                                </span>
+</td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-400">Oct 25, 2023</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4 font-medium text-primary">SET-98212</td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-400">$1,850.00</td>
+<td class="px-6 py-4 text-rose-500">-$46.25</td>
+<td class="px-6 py-4 font-bold">$1,803.75</td>
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="font-medium">Global Retail Corp</span>
+<span class="text-xs text-slate-400">Marketplace</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-primary/10 text-primary">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                                                    Processing
+                                                </span>
+</td>
+<td class="px-6 py-4 text-slate-400 italic">In Progress</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4 font-medium text-primary">SET-98213</td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-400">$2,900.00</td>
+<td class="px-6 py-4 text-rose-500">-$72.50</td>
+<td class="px-6 py-4 font-bold">$2,827.50</td>
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="font-medium">Creative Agency</span>
+<span class="text-xs text-slate-400">Service Fee</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                                    Paid
+                                                </span>
+</td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-400">Oct 15, 2023</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-4 bg-slate-50 dark:bg-slate-800/30 flex items-center justify-between border-t border-slate-200 dark:border-slate-800">
+<span class="text-xs text-slate-500">Showing 1-4 of 124 settlements</span>
+<div class="flex gap-1">
+<button class="px-3 py-1 text-xs border border-slate-200 dark:border-slate-700 rounded bg-white dark:bg-slate-900 hover:bg-slate-50 disabled:opacity-50">Prev</button>
+<button class="px-3 py-1 text-xs border border-primary bg-primary text-white rounded">1</button>
+<button class="px-3 py-1 text-xs border border-slate-200 dark:border-slate-700 rounded bg-white dark:bg-slate-900 hover:bg-slate-50">2</button>
+<button class="px-3 py-1 text-xs border border-slate-200 dark:border-slate-700 rounded bg-white dark:bg-slate-900 hover:bg-slate-50">Next</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Sidebar Bank Card -->
+<div class="xl:col-span-1">
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 sticky top-8">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-base font-bold">Bank Information</h3>
+<span class="material-symbols-outlined text-slate-400">info</span>
+</div>
+<div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg border border-slate-200 dark:border-slate-700 mb-6">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 bg-white dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-700 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">account_balance</span>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-bold">Chase Business</span>
+<span class="text-[10px] text-slate-500 uppercase font-semibold">Primary Account</span>
+</div>
+<div class="ml-auto">
+<span class="w-2 h-2 rounded-full bg-emerald-500 inline-block" title="Verified"></span>
+</div>
+</div>
+<div class="space-y-3">
+<div class="flex flex-col">
+<span class="text-[10px] text-slate-500 uppercase font-bold tracking-tight">Account Holder</span>
+<span class="text-sm font-medium">Global Retail Corp LLC</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] text-slate-500 uppercase font-bold tracking-tight">Account Number (IBAN)</span>
+<span class="text-sm font-medium font-mono">US ** **** 4829</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] text-slate-500 uppercase font-bold tracking-tight">Routing Number (SWIFT)</span>
+<span class="text-sm font-medium font-mono">CHAS US 33 XXX</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] text-slate-500 uppercase font-bold tracking-tight">Settlement Currency</span>
+<div class="flex items-center gap-1 text-sm font-medium uppercase">
+<span class="material-symbols-outlined text-base">monetization_on</span> USD
+                                        </div>
+</div>
+</div>
+</div>
+<button class="w-full py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-lg">edit</span>
+                                Manage Accounts
+                            </button>
+<div class="mt-8 pt-6 border-t border-slate-200 dark:border-slate-800">
+<p class="text-[11px] text-slate-400 leading-relaxed text-center">
+                                    Changes to bank account details may result in a temporary settlement hold of 48 hours for security verification.
+                                </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

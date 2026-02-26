@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Create New Client - PSP Manager</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#138aec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101a22",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        body { font-family: 'Inter', sans-serif; }
+        .paper-card {
+            @apply bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm rounded-xl;
+        }
+        .nav-link {
+            @apply flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors font-medium;
+        }
+        .nav-link.active {
+            @apply bg-primary text-white shadow-md shadow-primary/20;
+        }
+        .form-label {
+            @apply block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5;
+        }
+        .form-input {
+            @apply w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-primary transition-all outline-none;
+        }
+        .radio-card {
+            @apply flex items-center gap-3 p-4 border border-slate-200 dark:border-slate-700 rounded-xl cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition-all;
+        }
+        .radio-card input:checked + div {
+            @apply border-primary ring-1 ring-primary;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display transition-colors duration-300">
+<div class="flex h-screen overflow-hidden">
+<aside class="w-64 flex-shrink-0 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col">
+<div class="p-6 flex items-center gap-3 border-b border-slate-50 dark:border-slate-800/50">
+<div class="size-8 bg-primary rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-[20px]">payments</span>
+</div>
+<h1 class="text-xl font-bold tracking-tight">PSP<span class="text-primary font-black">Manager</span></h1>
+</div>
+<nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+<a class="nav-link" href="#">
+<span class="material-symbols-outlined text-[22px]">dashboard</span>
+                Dashboard
+            </a>
+<a class="nav-link" href="#">
+<span class="material-symbols-outlined text-[22px]">receipt_long</span>
+                Transactions
+            </a>
+<a class="nav-link" href="#">
+<span class="material-symbols-outlined text-[22px]">corporate_fare</span>
+                Organizations
+            </a>
+<a class="nav-link active" href="#">
+<span class="material-symbols-outlined text-[22px]">business_center</span>
+                Clients
+            </a>
+<a class="nav-link" href="#">
+<span class="material-symbols-outlined text-[22px]">analytics</span>
+                Analytics
+            </a>
+<a class="nav-link" href="#">
+<span class="material-symbols-outlined text-[22px]">person</span>
+                Customers
+            </a>
+<a class="nav-link" href="#">
+<span class="material-symbols-outlined text-[22px]">account_balance_wallet</span>
+                Settlement
+            </a>
+<a class="nav-link" href="#">
+<span class="material-symbols-outlined text-[22px]">group</span>
+                Teams
+            </a>
+</nav>
+<div class="p-4 border-t border-slate-200 dark:border-slate-800 space-y-1">
+<a class="nav-link" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+                Settings
+            </a>
+<a class="nav-link" href="#">
+<span class="material-symbols-outlined text-[20px]">help</span>
+                Support
+            </a>
+<div class="mt-4 flex items-center gap-3 px-3 py-3 rounded-xl bg-slate-50 dark:bg-slate-800/50">
+<div class="size-10 rounded-full overflow-hidden border border-slate-200 dark:border-slate-700">
+<img alt="Alex Rivera Profile" class="size-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWOnbdD1LCkvT6_XI9TZoPfsd5CVau0l4eP_RVw64BcZmfZoh10Z1Lq6IPwKPsyFigIVYPl86NnXEN80gXtMKAwwGpcySUNmxIr5_lcfferlNhM6mCZf3_Nv5_lhIuN7E6X9Ic62vKXn434YARVJJhSJpQTkerDcdMKd8Mh9D_yIB88dZcCWnIsMnQXHdB8rzc3lMii2Hxh8Lqc32U02ERcAaG3KgCxqBjd3zcJ31jx5_wAQ-2miljDC6fsyBdFzrArxw3apIZdkY"/>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-semibold truncate">Alex Rivera</p>
+<p class="text-[10px] text-slate-500 uppercase font-bold tracking-tight">Merchant Admin</p>
+</div>
+</div>
+</div>
+</aside>
+<main class="flex-1 flex flex-col overflow-hidden relative">
+<header class="h-16 flex items-center justify-between px-8 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 z-10 flex-shrink-0">
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2">
+<span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Global Filter</span>
+<div class="h-4 w-px bg-slate-200 dark:bg-slate-700 mx-2"></div>
+<div class="relative">
+<select class="appearance-none bg-slate-100 dark:bg-slate-800 border-none rounded-lg pl-3 pr-8 py-1.5 text-xs font-semibold focus:ring-2 focus:ring-primary transition-all cursor-pointer">
+<option>All Organizations</option>
+<option>Global Corp Holdings</option>
+<option>Tech Solutions Ltd</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 text-[16px] pointer-events-none">expand_more</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="size-10 flex items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 relative">
+<span class="material-symbols-outlined text-[24px]">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-primary rounded-full border-2 border-white dark:border-slate-900"></span>
+</button>
+<button class="size-10 flex items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800">
+<span class="material-symbols-outlined text-[24px]">dark_mode</span>
+</button>
+</div>
+</header>
+<div class="flex-1 overflow-y-auto p-8">
+<div class="max-w-3xl mx-auto">
+<div class="mb-8">
+<a class="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 hover:text-primary transition-colors mb-4" href="#">
+<span class="material-symbols-outlined text-[18px]">arrow_back</span>
+                        Back to Clients
+                    </a>
+<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Create New Client</h2>
+<p class="text-slate-500 mt-1 text-sm">Configure a new client account for multi-gateway processing.</p>
+</div>
+<div class="paper-card p-8">
+<form class="space-y-8">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="col-span-2 md:col-span-1">
+<label class="form-label" for="client-name">Client Name</label>
+<input class="form-input" id="client-name" placeholder="e.g. Starlight Retail" type="text"/>
+</div>
+<div class="col-span-2 md:col-span-1">
+<label class="form-label" for="parent-org">Parent Organization</label>
+<div class="relative">
+<select class="form-input appearance-none pr-10" id="parent-org">
+<option value="">Select Organization</option>
+<option>Global Corp Holdings</option>
+<option>Tech Solutions Ltd</option>
+<option>Euro Ventures</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-[20px] pointer-events-none">expand_more</span>
+</div>
+</div>
+<div class="col-span-2 md:col-span-1">
+<label class="form-label" for="email">Contact Email</label>
+<input class="form-input" id="email" placeholder="contact@client.com" type="email"/>
+</div>
+<div class="col-span-2 md:col-span-1">
+<label class="form-label" for="website">Website URL</label>
+<input class="form-input" id="website" placeholder="https://www.client.com" type="url"/>
+</div>
+<div class="col-span-2 md:col-span-1">
+<label class="form-label" for="currency">Base Currency</label>
+<div class="relative">
+<select class="form-input appearance-none pr-10" id="currency">
+<option value="USD">USD - US Dollar</option>
+<option value="EUR">EUR - Euro</option>
+<option value="GBP">GBP - British Pound</option>
+<option value="JPY">JPY - Japanese Yen</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-[20px] pointer-events-none">expand_more</span>
+</div>
+</div>
+</div>
+<div>
+<h3 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-4">Integration Method</h3>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<label class="relative group">
+<input checked="" class="peer sr-only" name="integration" type="radio"/>
+<div class="flex flex-col items-center gap-3 p-4 border border-slate-200 dark:border-slate-800 rounded-xl cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:ring-1 peer-checked:ring-primary transition-all">
+<span class="material-symbols-outlined text-primary text-[32px]">api</span>
+<div class="text-center">
+<p class="text-sm font-bold">API</p>
+<p class="text-[11px] text-slate-500">Direct server-to-server</p>
+</div>
+</div>
+</label>
+<label class="relative group">
+<input class="peer sr-only" name="integration" type="radio"/>
+<div class="flex flex-col items-center gap-3 p-4 border border-slate-200 dark:border-slate-800 rounded-xl cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:ring-1 peer-checked:ring-primary transition-all">
+<span class="material-symbols-outlined text-primary text-[32px]">shopping_bag</span>
+<div class="text-center">
+<p class="text-sm font-bold">Hosted Checkout</p>
+<p class="text-[11px] text-slate-500">Secure PSP-hosted page</p>
+</div>
+</div>
+</label>
+<label class="relative group">
+<input class="peer sr-only" name="integration" type="radio"/>
+<div class="flex flex-col items-center gap-3 p-4 border border-slate-200 dark:border-slate-800 rounded-xl cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:ring-1 peer-checked:ring-primary transition-all">
+<span class="material-symbols-outlined text-primary text-[32px]">extension</span>
+<div class="text-center">
+<p class="text-sm font-bold">Plugin</p>
+<p class="text-[11px] text-slate-500">CMS (e.g. WooCommerce)</p>
+</div>
+</div>
+</label>
+</div>
+</div>
+<div class="pt-6 border-t border-slate-100 dark:border-slate-800 flex flex-col md:flex-row items-center gap-4 justify-end">
+<button class="w-full md:w-auto px-6 py-2.5 rounded-lg text-sm font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all" type="button">
+                                Cancel
+                            </button>
+<button class="w-full md:w-auto px-8 py-2.5 bg-primary text-white rounded-lg text-sm font-bold shadow-lg shadow-primary/25 hover:bg-primary/90 hover:-translate-y-0.5 transition-all" type="submit">
+                                Create Client
+                            </button>
+</div>
+</form>
+</div>
+</div>
+</div>
+</main>
+</div>
+
+</body></html>

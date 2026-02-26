@@ -1,0 +1,215 @@
+# PSPManager — Fintech Auth System: Walkthrough
+
+## ✅ Verification Results
+
+| Check | Result |
+|---|---|
+| Backend `npm install` | ✅ Exit 0 |
+| Backend `tsc --noEmit` | ✅ Compiles clean (0 errors) |
+| Frontend `npm install` | ✅ Exit 0 |
+| All files created | ✅ 30+ files across backend + frontend |
+
+---
+
+## 📁 Project Structure
+
+```
+c:/Projects/CashLabs_Admin/
+├── .env.example                    # Root deployment .env template
+├── docker-compose.yml              # 3 services: mongo, api, web
+│
+├── cashlabs-auth-api/              # Node.js + Express + MongoDB backend
+│   ├── src/
+│   │   ├── config/index.ts         # Centralized config (fails fast on missing env)
+│   │   ├── models/
+│   │   │   ├── User.ts             # password + refreshTokenHash are select:false
+│   │   │   ├── BlacklistedToken.ts # TTL index = auto self-cleaning blacklist
+│   │   │   └── AuditLog.ts         # Compound index (userId, createdAt)
+│   │   ├── utils/
+│   │   │   ├── tokens.ts           # sha256 hash, signAccess/Refresh (separate secrets)
+│   │   │   ├── asyncHandler.ts     # Prevents unhandled rejections in routes
+│   │   │   └── cookies.ts          # httpOnly + SameSite=Strict + Secure options
+│   │   ├── middleware/
+│   │   │   ├── authenticate.ts     # JWT verify + blacklist check (O(1))
+│   │   │   └── errorHandler.ts     # No stack traces in prod, generic 5xx messages
+│   │   ├── validators/
+│   │   │   └── auth.schema.ts      # Joi: password strength, hex token format
+│   │   ├── services/
+│   │   │   └── authService.ts      # All security logic (see flows below)
+│   │   ├── controllers/
+│   │   │   └── AuthController.ts   # Sets cookies, delegates to service
+│   │   ├── routes/
+│   │   │   └── authRoutes.ts       # asyncHandler wrapped routes
+│   │   ├── types/express.d.ts      # req.userId type augmentation
+│   │   ├── app.ts                  # Helmet + CORS + 3-tier rate limit
+│   │   └── server.ts               # DB connection + graceful SIGTERM shutdown
+│   ├── Dockerfile                  # Multi-stage, non-root user
+│   └── .env.example
+│
+└── cashlabs-auth-web/              # Next.js 15 + Tailwind + React Query frontend
+    ├── src/
+    │   ├── app/
+    │   │   ├── auth/
+    │   │   │   ├── login/page.tsx              # Sign In page
+    │   │   │   ├── signup/page.tsx             # Create Merchant Account
+    │   │   │   ├── verify-email/page.tsx       # OTP 6-box verification
+    │   │   │   ├── forgot-password/page.tsx    # Forgot Password
+    │   │   │   └── registration-success/page.tsx # Success screen
+    │   │   ├── dashboard/page.tsx              # Protected page with logout
+    │   │   ├── page.tsx                        # Root → redirect to /auth/login
+    │   │   ├── layout.tsx                      # ReactQueryProvider + Inter font
+    │   │   └── globals.css                     # Tailwind + auth-input/btn-primary utilities
+    │   ├── lib/
+    │   │   ├── axios.ts            # withCredentials + 401→refresh interceptor
+    │   │   └── queryClient.tsx     # mutations never retry, 401 queries don't retry
+    │   ├── features/auth/
+    │   │   ├── api/authApi.ts      # All typed API calls
+    │   │   ├── hooks/index.ts      # useAuth/Login/Signup/Logout/Verify hooks
+    │   │   ├── schemas/index.ts    # Zod: password regex mirrors backend Joi rule
+    │   │   └── types/index.ts      # AuthUser, LoginCredentials, SignupData types
+    │   └── middleware.ts           # Route protection + callbackUrl
+    └── Dockerfile                  # Multi-stage standalone output, non-root user
+```
+
+---
+
+## 🔐 Security Flows Implemented
+
+### Signup
+1. Joi validates: password strength (upper+lower+digit+special), email format, terms checkbox
+2. Timing-safe: hashes password even if email already exists (prevents enumeration timing attacks)
+3. bcrypt cost 12 (~300ms) — fintech grade
+4. `isVerified=false`, hashed verification token stored with 24h expiry
+5. `SIGNUP` event written to AuditLog (fire-and-forget)
+
+### Login
+1. Generic "Invalid email or password" message — prevents user enumeration
+2. Even if user not found, bcrypt.hash is still called (timing-safe)
+3. Checks [isLocked()](file:///c:/Projects/CashLabs_Admin/cashlabs-auth-api/src/models/User.ts#93-97) — returns exact remaining minutes
+4. On wrong password: increments `failedLoginAttempts`, locks after 5 (15 min)
+5. On success: resets `failedLoginAttempts`, issues tokens, stores **hashed** refresh token
+6. Access token → 15m HTTP-only cookie | Refresh token → 7d HTTP-only cookie
+7. Tokens NEVER appear in response body
+
+### Refresh (STRICT ROTATION)
+```
+Incoming refreshToken cookie
+   ↓ jwt.verify (separate secret from access token)
+   ↓ sha256 hash the incoming token
+   ↓ compare with user.refreshTokenHash in DB
+   ├── MISMATCH → TOKEN REUSE ATTACK DETECTED
+   │     → Wipe refreshTokenHash (invalidate all sessions)
+   │     → Write TOKEN_REUSE_DETECTED audit log
+   │     → Return 401
+   └── MATCH → Issue new access + refresh pair
+         → Update refreshTokenHash in DB (atomic)
+         → Set new cookies
+```
+
+### Logout  
+1. sha256 hash the access token → store in [BlacklistedToken](file:///c:/Projects/CashLabs_Admin/cashlabs-auth-api/src/models/BlacklistedToken.ts#3-7) with `expiresAt` = token expiry
+2. MongoDB TTL index auto-deletes the record when the token would have expired anyway
+3. Remove `refreshTokenHash` from User
+4. Clear both cookies with `maxAge: 0`
+
+### Authenticate Middleware
+1. Extract `accessToken` from HTTP-only cookie
+2. jwt.verify — throws on invalid/expired
+3. sha256 hash → indexed O(1) BlacklistedToken lookup
+4. Attach `userId` to `req.userId`
+
+---
+
+## 🚀 How to Run
+
+### Backend (dev)
+```bash
+# 1. Create .env from template
+cp c:/Projects/CashLabs_Admin/cashlabs-auth-api/.env.example \
+   c:/Projects/CashLabs_Admin/cashlabs-auth-api/.env
+
+# 2. Fill in .env values (at minimum MONGO_URI, JWT_ACCESS_SECRET, JWT_REFRESH_SECRET)
+# JWT secrets: openssl rand -base64 64
+
+# 3. Start
+cd c:/Projects/CashLabs_Admin/cashlabs-auth-api
+npm run dev
+# → API running at http://localhost:5000
+# → Health: http://localhost:5000/health
+```
+
+### Frontend (dev)
+```bash
+# Create .env.local
+echo "NEXT_PUBLIC_API_URL=http://localhost:5000" > \
+  c:/Projects/CashLabs_Admin/cashlabs-auth-web/.env.local
+
+cd c:/Projects/CashLabs_Admin/cashlabs-auth-web
+npm run dev
+# → UI at http://localhost:3000
+```
+
+### Docker (production)
+```bash
+cd c:/Projects/CashLabs_Admin
+cp .env.example .env
+# Fill in .env with production secrets
+
+docker-compose up -d --build
+# → MongoDB (internal only)
+# → API at :5000
+# → Web at :3000
+```
+
+---
+
+## 🔒 Security Checklist
+
+| Item | Status |
+|------|--------|
+| HTTP-only cookies (no JS access) | ✅ |
+| SameSite=Strict (CSRF protection) | ✅ |
+| Secure flag in production | ✅ |
+| Separate JWT secrets (access vs refresh) | ✅ |
+| Tokens hashed before DB storage | ✅ |
+| Blacklist with TTL auto-expire | ✅ |
+| Refresh token rotation (strict) | ✅ |
+| Token reuse detection + session wipe | ✅ |
+| Account lockout (5 attempts, 15 min) | ✅ |
+| bcrypt cost 12 | ✅ |
+| Timing-safe user enumeration prevention | ✅ |
+| Generic 5xx messages in production | ✅ |
+| Stack trace stripped in production | ✅ |
+| Helmet (security headers + HSTS) | ✅ |
+| CORS restricted to frontend origin | ✅ |
+| 3-tier rate limiting (API/Auth/Login) | ✅ |
+| Body size limit (10kb) | ✅ |
+| Trust proxy for DigitalOcean | ✅ |
+| Docker non-root user | ✅ |
+| Graceful SIGTERM shutdown | ✅ |
+| Audit logging (all auth events) | ✅ |
+| IP + User-Agent logging | ✅ |
+
+---
+
+## 📱 UI Pages (Pixel-Perfect Replicas)
+
+| Route | Description | Screenshot Match |
+|-------|-------------|-----------------|
+| `/auth/login` | PSPManager Sign In | sign_in_to_pspmanager |
+| `/auth/signup` | Create Merchant Account | create_your_merchant_account |
+| `/auth/verify-email` | OTP 6-box verification | email_verification_otp_screen |
+| `/auth/forgot-password` | Request reset link | forgot_password_step_1 |
+| `/auth/registration-success` | Account created | registration_success_confirmation |
+| `/dashboard` | Protected dashboard with logout | — |
+
+---
+
+## ⚡ DigitalOcean Deployment Notes
+
+1. **NGINX config** — Add `proxy_set_header X-Forwarded-For $remote_addr;` and set `app.set('trust proxy', 1)` (already done)
+2. **Certbot** — Get TLS cert for your domain. Cookies require HTTPS for `Secure` flag
+3. **COOKIE_DOMAIN** — Set to your root domain (e.g., `pspmanager.com`)
+4. **FRONTEND_URL** — Set to `https://pspmanager.com` for CORS
+5. **MongoDB** — Use MongoDB Atlas or dedicated Mongo droplet with auth enabled
+6. **Secrets** — Never use the example secrets. Generate with `openssl rand -base64 64`

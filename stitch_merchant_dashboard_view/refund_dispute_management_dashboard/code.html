@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Refund &amp; Dispute Management Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#138aec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101a22",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased min-h-screen">
+<div class="flex h-screen overflow-hidden">
+<!-- Sidebar -->
+<aside class="w-64 flex-shrink-0 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col">
+<div class="p-6 flex items-center gap-3">
+<div class="bg-primary size-8 rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined">payments</span>
+</div>
+<div>
+<h1 class="text-slate-900 dark:text-white font-bold text-lg leading-none">PSP Admin</h1>
+<p class="text-slate-500 dark:text-slate-400 text-xs mt-1">Merchant Portal</p>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-1 mt-4">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">account_balance_wallet</span>
+<span class="text-sm font-medium">Transactions</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 bg-primary/10 text-primary rounded-lg transition-colors border border-primary/20" href="#">
+<span class="material-symbols-outlined text-[20px]">warning</span>
+<span class="text-sm font-medium">Disputes</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">replay</span>
+<span class="text-sm font-medium">Refunds</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">group</span>
+<span class="text-sm font-medium">Customers</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-3 p-2 rounded-lg bg-slate-50 dark:bg-slate-800/50">
+<img alt="User Avatar" class="size-8 rounded-full border border-slate-200 dark:border-slate-700" data-alt="User profile circular avatar image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_2bHtIn-B-84E7RbbVTjadZrUzKIGZmeL-Sq_uysDbyMLzcQeIuKaVZEct8G50HqOfmFOyFE02qz0yXAVcAvSZ-KbAKMIYSPPDT-Txv93YbIJFdiNgAPLUeMX41PYgOEIHbzjYNr4Q8LwFiNz83axIn3y4Xah_UTuM1d-4ccUAel1RTgH53sbbzdev_QnGIi9D2E43G1x4K_cTN7KaWXLMC_G0CActzW7JXw2rTjZz4Wkai6DgC5sdmxa5o8xV2Q-Gc85hF1gtno"/>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-semibold truncate">Alex Chen</p>
+<p class="text-xs text-slate-500 truncate">Admin Account</p>
+</div>
+<span class="material-symbols-outlined text-slate-400 text-[18px]">more_vert</span>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto bg-slate-50 dark:bg-background-dark">
+<!-- Header -->
+<header class="h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-8 sticky top-0 z-10">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 text-sm text-slate-500">
+<a class="hover:text-primary transition-colors" href="#">Home</a>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="text-slate-900 dark:text-white font-medium">Disputes</span>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative group">
+<span class="absolute inset-y-0 left-3 flex items-center text-slate-400 group-focus-within:text-primary">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</span>
+<input class="bg-slate-100 dark:bg-slate-800 border-none rounded-lg pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-primary w-64 transition-all" placeholder="Search transaction ID..." type="text"/>
+</div>
+<div class="flex items-center gap-2 border-l border-slate-200 dark:border-slate-800 ml-4 pl-4">
+<button class="p-2 text-slate-400 hover:text-primary transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-red-500 rounded-full border-2 border-white dark:border-slate-900"></span>
+</button>
+<button class="p-2 text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">help</span>
+</button>
+</div>
+</div>
+</header>
+<div class="p-8">
+<!-- Title and Actions -->
+<div class="flex items-center justify-between mb-8">
+<div>
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Dispute Center</h2>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Manage cross-gateway disputes and customer refund requests.</p>
+</div>
+<div class="flex gap-3">
+<button class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">download</span>
+                            Export Report
+                        </button>
+<button class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary/90 transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                            Log Dispute
+                        </button>
+</div>
+</div>
+<!-- KPI Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<div class="p-2 bg-slate-100 dark:bg-slate-800 rounded-lg text-slate-600 dark:text-slate-400">
+<span class="material-symbols-outlined">analytics</span>
+</div>
+<span class="text-emerald-500 text-xs font-bold bg-emerald-50 dark:bg-emerald-500/10 px-2 py-1 rounded-full">+12%</span>
+</div>
+<p class="text-slate-500 text-sm font-medium">Total Disputes</p>
+<p class="text-2xl font-bold mt-1 tracking-tight">1,284</p>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<div class="p-2 bg-slate-100 dark:bg-slate-800 rounded-lg text-slate-600 dark:text-slate-400">
+<span class="material-symbols-outlined">emoji_events</span>
+</div>
+<span class="text-rose-500 text-xs font-bold bg-rose-50 dark:bg-rose-500/10 px-2 py-1 rounded-full">-2.5%</span>
+</div>
+<p class="text-slate-500 text-sm font-medium">Win Rate %</p>
+<p class="text-2xl font-bold mt-1 tracking-tight">64.2%</p>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<div class="p-2 bg-slate-100 dark:bg-slate-800 rounded-lg text-slate-600 dark:text-slate-400">
+<span class="material-symbols-outlined">pending_actions</span>
+</div>
+<span class="text-emerald-500 text-xs font-bold bg-emerald-50 dark:bg-emerald-500/10 px-2 py-1 rounded-full">+5%</span>
+</div>
+<p class="text-slate-500 text-sm font-medium">Pending Refunds</p>
+<p class="text-2xl font-bold mt-1 tracking-tight">42</p>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<div class="p-2 bg-slate-100 dark:bg-slate-800 rounded-lg text-slate-600 dark:text-slate-400">
+<span class="material-symbols-outlined">monetization_on</span>
+</div>
+<span class="text-rose-500 text-xs font-bold bg-rose-50 dark:bg-rose-500/10 px-2 py-1 rounded-full">-8%</span>
+</div>
+<p class="text-slate-500 text-sm font-medium">Total Disputed Amount</p>
+<p class="text-2xl font-bold mt-1 tracking-tight">$12,450.00</p>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Main Dispute Table -->
+<div class="lg:col-span-2 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col">
+<div class="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+<h3 class="font-bold text-slate-900 dark:text-white">Recent Dispute Cases</h3>
+<div class="flex gap-2">
+<button class="text-xs font-bold px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-200 transition-colors">All</button>
+<button class="text-xs font-bold px-3 py-1 text-slate-500 hover:text-slate-700 transition-colors">Active</button>
+<button class="text-xs font-bold px-3 py-1 text-slate-500 hover:text-slate-700 transition-colors">Closed</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-xs uppercase font-semibold">
+<tr>
+<th class="px-6 py-4">Transaction ID</th>
+<th class="px-6 py-4">Status</th>
+<th class="px-6 py-4">Reason</th>
+<th class="px-6 py-4">Amount</th>
+<th class="px-6 py-4">Deadline</th>
+<th class="px-6 py-4 text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4">
+<span class="font-mono text-sm text-primary">TRX-9428-A</span>
+</td>
+<td class="px-6 py-4">
+<span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400">Needs Response</span>
+</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-300">Product Not Received</td>
+<td class="px-6 py-4 text-sm font-semibold">$299.00</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-1.5 text-rose-500 font-medium text-xs">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+                                                8h left
+                                            </div>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="bg-primary/10 text-primary hover:bg-primary hover:text-white px-3 py-1 rounded-lg text-xs font-bold transition-all">Manage</button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4">
+<span class="font-mono text-sm text-primary">TRX-3105-B</span>
+</td>
+<td class="px-6 py-4">
+<span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400">Under Review</span>
+</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-300">Fraudulent Claim</td>
+<td class="px-6 py-4 text-sm font-semibold">$1,240.50</td>
+<td class="px-6 py-4">
+<div class="text-slate-500 text-xs">Oct 24, 2023</div>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="bg-primary/10 text-primary hover:bg-primary hover:text-white px-3 py-1 rounded-lg text-xs font-bold transition-all">Manage</button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4">
+<span class="font-mono text-sm text-primary">TRX-8821-C</span>
+</td>
+<td class="px-6 py-4">
+<span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400">Won</span>
+</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-300">Credit Not Processed</td>
+<td class="px-6 py-4 text-sm font-semibold">$56.00</td>
+<td class="px-6 py-4">
+<div class="text-slate-400 text-xs">Closed</div>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-3 py-1 rounded-lg text-xs font-bold transition-all">Details</button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4">
+<span class="font-mono text-sm text-primary">TRX-4492-D</span>
+</td>
+<td class="px-6 py-4">
+<span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-rose-100 dark:bg-rose-900/30 text-rose-700 dark:text-rose-400">Lost</span>
+</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-300">Duplicate Charge</td>
+<td class="px-6 py-4 text-sm font-semibold">$112.00</td>
+<td class="px-6 py-4">
+<div class="text-slate-400 text-xs">Closed</div>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-3 py-1 rounded-lg text-xs font-bold transition-all">Details</button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4">
+<span class="font-mono text-sm text-primary">TRX-7703-E</span>
+</td>
+<td class="px-6 py-4">
+<span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400">Needs Response</span>
+</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-300">Product Defective</td>
+<td class="px-6 py-4 text-sm font-semibold">$890.25</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-1.5 text-slate-500 font-medium text-xs">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+                                                2 days
+                                            </div>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="bg-primary/10 text-primary hover:bg-primary hover:text-white px-3 py-1 rounded-lg text-xs font-bold transition-all">Manage</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
+<p class="text-xs text-slate-500">Showing 1-5 of 128 active cases</p>
+<div class="flex gap-1">
+<button class="p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 disabled:opacity-30" disabled="">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 text-primary font-bold text-xs px-2">1</button>
+<button class="p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 text-xs px-2">2</button>
+<button class="p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 text-xs px-2">3</button>
+<button class="p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Dispute Health Chart Sidebar -->
+<div class="space-y-6">
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<h3 class="font-bold text-slate-900 dark:text-white mb-6">Dispute Health</h3>
+<div class="relative h-48 w-full">
+<div class="absolute inset-0 flex items-end justify-between gap-2">
+<div class="w-full bg-primary/10 rounded-t-sm h-[30%] group relative">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded hidden group-hover:block whitespace-nowrap">Mon: 12</div>
+</div>
+<div class="w-full bg-primary/10 rounded-t-sm h-[45%] group relative">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded hidden group-hover:block whitespace-nowrap">Tue: 18</div>
+</div>
+<div class="w-full bg-primary/30 rounded-t-sm h-[60%] group relative">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded hidden group-hover:block whitespace-nowrap">Wed: 24</div>
+</div>
+<div class="w-full bg-primary/10 rounded-t-sm h-[40%] group relative">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded hidden group-hover:block whitespace-nowrap">Thu: 16</div>
+</div>
+<div class="w-full bg-primary/80 rounded-t-sm h-[85%] group relative">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded hidden group-hover:block whitespace-nowrap">Fri: 34</div>
+</div>
+<div class="w-full bg-primary/40 rounded-t-sm h-[55%] group relative">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded hidden group-hover:block whitespace-nowrap">Sat: 22</div>
+</div>
+<div class="w-full bg-primary/20 rounded-t-sm h-[35%] group relative">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded hidden group-hover:block whitespace-nowrap">Sun: 14</div>
+</div>
+</div>
+</div>
+<div class="flex justify-between mt-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+<span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
+</div>
+<div class="mt-8 space-y-4">
+<div class="flex items-center justify-between text-sm">
+<div class="flex items-center gap-2">
+<div class="size-2 bg-primary rounded-full"></div>
+<span class="text-slate-600 dark:text-slate-400">Avg. Response Time</span>
+</div>
+<span class="font-bold">1.4 days</span>
+</div>
+<div class="flex items-center justify-between text-sm">
+<div class="flex items-center gap-2">
+<div class="size-2 bg-emerald-500 rounded-full"></div>
+<span class="text-slate-600 dark:text-slate-400">Revenue Protected</span>
+</div>
+<span class="font-bold text-emerald-500">+$8,420</span>
+</div>
+</div>
+</div>
+<div class="bg-gradient-to-br from-primary to-blue-600 p-6 rounded-xl text-white shadow-lg relative overflow-hidden">
+<div class="relative z-10">
+<h4 class="font-bold text-lg mb-2">Multi-Gateway View</h4>
+<p class="text-white/80 text-xs leading-relaxed mb-4">You are currently monitoring disputes across 4 connected payment gateways.</p>
+<div class="flex -space-x-2">
+<div class="size-8 rounded-full bg-white/20 border-2 border-primary flex items-center justify-center font-bold text-[10px]">STR</div>
+<div class="size-8 rounded-full bg-white/20 border-2 border-primary flex items-center justify-center font-bold text-[10px]">PAY</div>
+<div class="size-8 rounded-full bg-white/20 border-2 border-primary flex items-center justify-center font-bold text-[10px]">ADYN</div>
+<div class="size-8 rounded-full bg-white/20 border-2 border-primary flex items-center justify-center font-bold text-[10px]">BRA</div>
+</div>
+</div>
+<!-- Abstract decoration -->
+<div class="absolute -right-4 -bottom-4 size-24 bg-white/10 rounded-full blur-xl"></div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

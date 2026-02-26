@@ -1,0 +1,72 @@
+version: '3.9'
+
+services:
+  # ─── MongoDB ────────────────────────────────────────────────────
+  mongo:
+    image: mongo:7.0
+    container_name: pspmanager-mongo
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_DATABASE: pspmanager
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - psp-network
+    # NOT exposed on host in production — only accessible within Docker network
+
+  # ─── Auth API (Node.js/Express) ─────────────────────────────────
+  api:
+    build:
+      context: ./cashlabs-auth-api
+      dockerfile: Dockerfile
+    container_name: pspmanager-api
+    restart: unless-stopped
+    depends_on:
+      - mongo
+    environment:
+      NODE_ENV: production
+      PORT: 5000
+      MONGO_URI: mongodb://mongo:27017/pspmanager
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+      JWT_ACCESS_EXPIRY: 15m
+      JWT_REFRESH_EXPIRY: 7d
+      BCRYPT_ROUNDS: 12
+      COOKIE_DOMAIN: ${COOKIE_DOMAIN}
+      FRONTEND_URL: ${FRONTEND_URL}
+      MAX_FAILED_ATTEMPTS: 5
+      LOCKOUT_DURATION_MINUTES: 15
+    ports:
+      - "5000:5000"
+    networks:
+      - psp-network
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ─── Frontend (Next.js 15) ───────────────────────────────────────
+  web:
+    build:
+      context: ./cashlabs-auth-web
+      dockerfile: Dockerfile
+    container_name: pspmanager-web
+    restart: unless-stopped
+    depends_on:
+      - api
+    environment:
+      NODE_ENV: production
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://api:5000}
+    ports:
+      - "3000:3000"
+    networks:
+      - psp-network
+
+volumes:
+  mongo_data:
+    driver: local
+
+networks:
+  psp-network:
+    driver: bridge
