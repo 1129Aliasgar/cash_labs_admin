@@ -1,7 +1,7 @@
-'use client';
-
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 import { authApi } from '../api/authApi';
+import { getRedirectPath } from '../utils/redirection';
 import type { LoginCredentials, SignupData } from '../types';
 
 export const AUTH_QUERY_KEY = ['auth', 'me'] as const;
@@ -31,12 +31,27 @@ export function useAuth() {
  */
 export function useLogin() {
   const queryClient = useQueryClient();
+  const router = useRouter();
+
   return useMutation({
     mutationFn: (credentials: LoginCredentials) => authApi.login(credentials),
-    onSuccess: async (data) => {
-      // Populate auth cache immediately with user from response
-      if (data.user) {
-        queryClient.setQueryData(AUTH_QUERY_KEY, data.user);
+    retry: false,
+    onSuccess: async () => {
+      // 1. Force refresh user state from server to ensure fresh profile/status
+      await queryClient.invalidateQueries({ queryKey: AUTH_QUERY_KEY });
+      await queryClient.refetchQueries({ queryKey: AUTH_QUERY_KEY });
+      
+      // REDIRECTION REMOVED: Delegated to central AuthProvider/Gate
+    },
+    onError: (error: any, variables) => {
+      // Handle "unverified email" case - should this be handled by the Gate too?
+      // For now, keeping the 403 handling as it's a specific "pre-auth" redirect
+      if (
+        error.response?.status === 403 &&
+        error.response?.data?.message?.toLowerCase().includes('verify')
+      ) {
+        const email = variables.email;
+        router.push(`/auth/verify-email?email=${encodeURIComponent(email)}`);
       }
     },
   });
@@ -46,8 +61,15 @@ export function useLogin() {
  * useSignup — register a new merchant account
  */
 export function useSignup() {
+  const queryClient = useQueryClient();
+  
   return useMutation({
     mutationFn: (data: SignupData) => authApi.signup(data),
+    onSuccess: async () => {
+      // Ensure state is cleared or updated if necessary
+      await queryClient.invalidateQueries({ queryKey: AUTH_QUERY_KEY });
+      // Redirection to verification handled by the gate or specific UI trigger
+    },
   });
 }
 

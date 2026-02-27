@@ -41,6 +41,7 @@ export async function signup(req: Request, res: Response, next: NextFunction): P
         fullName: body.fullName,
         companyName: body.companyName,
         telegramId: body.telegramId,
+        role: body.role,
       },
       req
     );

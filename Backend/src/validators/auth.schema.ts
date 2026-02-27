@@ -23,6 +23,7 @@ export const signupSchema = Joi.object({
   companyName: Joi.string().min(2).max(150).trim().required().messages({
     'string.min': 'Company name must be at least 2 characters.',
   }),
+  role: Joi.string().valid('MERCHANT', 'AGENT').default('MERCHANT'),
   telegramId: Joi.string().trim().optional().allow(''),
   agreeToTerms: Joi.boolean().valid(true).required().messages({
     'any.only': 'You must agree to the Terms of Service and Privacy Policy.',

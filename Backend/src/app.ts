@@ -2,10 +2,12 @@ import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import rateLimit from 'express-rate-limit';
 import morgan from 'morgan';
 import { config } from './config';
 import authRoutes from './routes/authRoutes';
+import adminRoutes from './routes/adminRoutes';
+import merchantRoutes from './routes/merchantRoutes';
+import userRoutes from './routes/userRoutes';
 import { errorHandler } from './middleware/errorHandler';
 
 const app = express();
@@ -48,50 +50,11 @@ app.use(express.json({ limit: '10kb' }));    // Limit size to prevent abuse
 app.use(express.urlencoded({ extended: false, limit: '10kb' }));
 app.use(cookieParser());
 
-// ─── Rate Limiting ────────────────────────────────────────────────────────────
-
-// Strict limit on auth endpoints — brute force protection
-const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,   // 15 minutes
-  max: 20,                      // Max 20 requests per window per IP
-  message: {
-    success: false,
-    message: 'Too many requests from this IP. Please try again in 15 minutes.',
-  },
-  standardHeaders: true,
-  legacyHeaders: false,
-  skipSuccessfulRequests: false, // Count ALL requests, not just failures
-});
-
-// Tighter limit specifically on login — 10 attempts per 15 min per IP
-const loginLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 10,
-  message: {
-    success: false,
-    message: 'Too many login attempts from this IP. Please try again in 15 minutes.',
-  },
-  standardHeaders: true,
-  legacyHeaders: false,
-});
-
-// General API rate limit — prevent API scraping / DoS
-const apiLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 200,
-  message: {
-    success: false,
-    message: 'Rate limit exceeded. Please slow down.',
-  },
-  standardHeaders: true,
-  legacyHeaders: false,
-});
-
 // ─── Routes ───────────────────────────────────────────────────────────────────
-app.use('/api', apiLimiter);
-app.use('/api/auth', authLimiter);
-app.use('/api/auth/login', loginLimiter);
 app.use('/api/auth', authRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/merchant', merchantRoutes);
+app.use('/api/users', userRoutes);
 
 // ─── Health Check ─────────────────────────────────────────────────────────────
 app.get('/health', (req, res) => {

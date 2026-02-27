@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -10,7 +9,6 @@ import { useLogin } from '@/features/auth/hooks';
 import { loginSchema, type LoginFormData } from '@/features/auth/schemas';
 
 export default function LoginPage() {
-    const router = useRouter();
     const [showPassword, setShowPassword] = useState(false);
     const [serverError, setServerError] = useState('');
 
@@ -28,7 +26,7 @@ export default function LoginPage() {
         setServerError('');
         login(data, {
             onSuccess: () => {
-                router.push('/dashboard');
+                // REDIRECTION REMOVED: Managed by root AuthProvider/Gate
             },
             onError: (error: unknown) => {
                 const axiosError = error as { response?: { data?: { message?: string } } };

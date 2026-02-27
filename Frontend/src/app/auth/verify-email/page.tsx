@@ -1,17 +1,27 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useState, useRef, KeyboardEvent } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useState, useRef, KeyboardEvent, useEffect } from 'react';
 import { ArrowRight, AlertCircle, RefreshCw, Mail } from 'lucide-react';
 import { useVerifyEmail } from '@/features/auth/hooks';
 
 export default function VerifyEmailPage() {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const email = searchParams.get('email');
+
     const [otp, setOtp] = useState<string[]>(Array(6).fill(''));
     const [serverError, setServerError] = useState('');
     const [serverSuccess, setServerSuccess] = useState('');
     const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
+
+    // Enforce email context
+    useEffect(() => {
+        if (!email) {
+            router.replace('/auth/login');
+        }
+    }, [email, router]);
 
     const { mutate: verifyEmail, isPending } = useVerifyEmail();
 
@@ -52,7 +62,8 @@ export default function VerifyEmailPage() {
         setServerError('');
         verifyEmail(token, {
             onSuccess: () => {
-                router.push('/auth/registration-success');
+                // Redirect directly to dashboard as requested (middleware will handle further status-based routing)
+                router.push('/superadmin/dashboard');
             },
             onError: (error: unknown) => {
                 const axiosError = error as { response?: { data?: { message?: string } } };
@@ -90,7 +101,7 @@ export default function VerifyEmailPage() {
                         We&apos;ve sent a 6-digit verification code to
                     </p>
                     <p className="text-sm font-semibold text-gray-800 text-center mb-8">
-                        your registered email address
+                        {email || 'your registered email address'}
                     </p>
 
                     {serverError && (

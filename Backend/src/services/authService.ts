@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import { Request } from 'express';
 import { config } from '../config';
-import { User } from '../models/User';
+import { User, UserRole, MerchantStatus } from '../models/User';
 import { BlacklistedToken } from '../models/BlacklistedToken';
 import { AuditLog, AuditAction } from '../models/AuditLog';
 import {
@@ -61,6 +61,7 @@ export async function signup(
     fullName: string;
     companyName: string;
     telegramId?: string;
+    role: UserRole;
   },
   req: Request
 ): Promise<{ message: string; verificationToken: string }> {
@@ -81,12 +82,13 @@ export async function signup(
     fullName: data.fullName,
     companyName: data.companyName,
     telegramId: data.telegramId,
+    role: data.role,
     isVerified: false,
     verificationToken: hashedToken,
     verificationTokenExpiry: tokenExpiry,
   });
 
-  await writeAuditLog('SIGNUP', req, user.id, { email: data.email });
+  await writeAuditLog(AuditAction.SIGNUP, req, user.id, { email: data.email });
 
   return {
     message: 'Account created. Please check your email to verify your account.',
@@ -124,7 +126,7 @@ export async function verifyEmail(
     $unset: { verificationToken: '', verificationTokenExpiry: '' },
   });
 
-  await writeAuditLog('EMAIL_VERIFIED', req, user.id);
+  await writeAuditLog(AuditAction.EMAIL_VERIFIED, req, user.id);
 
   return { message: 'Email verified successfully. You can now sign in.' };
 }
@@ -145,7 +147,11 @@ export async function verifyEmail(
 export async function login(
   credentials: { email: string; password: string },
   req: Request
-): Promise<{ accessToken: string; refreshToken: string; user: { id: string; email: string; fullName: string } }> {
+): Promise<{ 
+  accessToken: string; 
+  refreshToken: string; 
+  user: { id: string; email: string; fullName: string; role: UserRole; merchantStatus: MerchantStatus } 
+}> {
   // Select password and refreshTokenHash explicitly (both are select:false)
   const user = await User.findOne({ email: credentials.email }).select(
     '+password +refreshTokenHash'
@@ -159,7 +165,7 @@ export async function login(
   if (!user) {
     // Still hash to be timing-safe even if user not found
     await bcrypt.hash(credentials.password, config.bcrypt.rounds);
-    await writeAuditLog('LOGIN_FAILED', req, undefined, { email: credentials.email, reason: 'user_not_found' });
+    await writeAuditLog(AuditAction.LOGIN_FAILED, req, undefined, { email: credentials.email, reason: 'user_not_found' });
     throw createError(INVALID_CREDENTIALS, 401);
   }
 
@@ -172,7 +178,7 @@ export async function login(
     const remainingMs = user.lockUntil!.getTime() - Date.now();
     const remainingMin = Math.ceil(remainingMs / 60000);
     await AuditLog.create({
-      userId: user.id, action: 'ACCOUNT_LOCKED', ip, userAgent,
+      userId: user.id, action: AuditAction.ACCOUNT_LOCKED, ip, userAgent,
       metadata: { remainingMinutes: remainingMin }
     }).catch(() => {});
     throw createError(
@@ -192,7 +198,7 @@ export async function login(
       ...(shouldLock && { lockUntil: new Date(Date.now() + config.auth.lockoutDurationMs) }),
     });
 
-    await writeAuditLog('LOGIN_FAILED', req, user.id, {
+    await writeAuditLog(AuditAction.LOGIN_FAILED, req, user.id, {
       attempt: newFailedAttempts,
       locked: shouldLock,
     });
@@ -212,7 +218,7 @@ export async function login(
   }
 
   // ✅ Credentials valid — issue tokens
-  const accessToken = signAccessToken(user.id);
+  const accessToken = signAccessToken(user.id, user.role, user.isVerified);
   const refreshToken = signRefreshToken(user.id);
   const refreshTokenHash = hashToken(refreshToken);
 
@@ -223,7 +229,7 @@ export async function login(
     $unset: { lockUntil: '' },
   });
 
-  await writeAuditLog('LOGIN_SUCCESS', req, user.id);
+  await writeAuditLog(AuditAction.LOGIN_SUCCESS, req, user.id);
 
   return {
     accessToken,
@@ -232,6 +238,8 @@ export async function login(
       id: user.id,
       email: user.email,
       fullName: user.fullName,
+      role: user.role,
+      merchantStatus: user.merchantStatus,
     },
   };
 }
@@ -279,7 +287,7 @@ export async function refresh(
     // Wipe the stored refresh token to invalidate all existing sessions for this user
     await User.findByIdAndUpdate(user._id, { $unset: { refreshTokenHash: '' } });
 
-    await writeAuditLog('TOKEN_REUSE_DETECTED', req, user.id, {
+    await writeAuditLog(AuditAction.TOKEN_REUSE_DETECTED, req, user.id, {
       action: 'all_sessions_invalidated',
     });
 
@@ -290,16 +298,16 @@ export async function refresh(
   }
 
   // 4. Issue new tokens
-  const newAccessToken = signAccessToken(user.id);
+  const accessToken = signAccessToken(user.id, user.role, user.isVerified);
   const newRefreshToken = signRefreshToken(user.id);
   const newRefreshTokenHash = hashToken(newRefreshToken);
 
   // 5. Atomically replace old hash with new hash
   await User.findByIdAndUpdate(user._id, { refreshTokenHash: newRefreshTokenHash });
 
-  await writeAuditLog('TOKEN_REFRESHED', req, user.id);
+  await writeAuditLog(AuditAction.TOKEN_REFRESHED, req, user.id);
 
-  return { accessToken: newAccessToken, refreshToken: newRefreshToken };
+  return { accessToken, refreshToken: newRefreshToken };
 }
 
 /**
@@ -326,7 +334,7 @@ export async function logout(
   // Remove refresh token from DB
   await User.findByIdAndUpdate(userId, { $unset: { refreshTokenHash: '' } });
 
-  await writeAuditLog('LOGOUT', req, userId);
+  await writeAuditLog(AuditAction.LOGOUT, req, userId);
 }
 
 /**
@@ -336,7 +344,16 @@ export async function logout(
  */
 export async function getCurrentUser(
   userId: string
-): Promise<{ id: string; email: string; fullName: string; companyName: string; isVerified: boolean; createdAt: Date }> {
+): Promise<{
+  id: string;
+  email: string;
+  fullName: string;
+  companyName: string;
+  isVerified: boolean;
+  role: string;
+  merchantStatus: string;
+  createdAt: Date;
+}> {
   const user = await User.findById(userId).lean();
   if (!user) {
     throw createError('User not found.', 404);
@@ -348,6 +365,8 @@ export async function getCurrentUser(
     fullName: user.fullName,
     companyName: user.companyName,
     isVerified: user.isVerified,
+    role: user.role,
+    merchantStatus: user.merchantStatus,
     createdAt: user.createdAt,
   };
 }

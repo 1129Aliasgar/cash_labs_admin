@@ -52,11 +52,13 @@ export default function SignupPage() {
     const strength = useMemo(() => getPasswordStrength(passwordValue), [passwordValue]);
     const strengthInfo = strengthConfig[strength];
 
+    const selectedRole = watch('role') || 'MERCHANT';
+
     const onSubmit = (data: SignupFormData) => {
         setServerError('');
         signup(data, {
             onSuccess: () => {
-                router.push('/auth/verify-email');
+                // Redirection handled by hook
             },
             onError: (error: unknown) => {
                 const axiosError = error as { response?: { data?: { message?: string } } };
@@ -70,15 +72,19 @@ export default function SignupPage() {
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-4 py-12">
             {/* Header */}
-            <div className="flex flex-col items-center mb-6">
+            <div className="flex flex-col items-center mb-6 text-center">
                 <div className="flex items-center gap-2 mb-3">
                     <div className="w-8 h-8 bg-brand-600 rounded-lg flex items-center justify-center">
                         <span className="text-white font-bold text-sm">P</span>
                     </div>
                     <span className="text-2xl font-bold text-gray-900 tracking-tight">PSPMANAGER</span>
                 </div>
-                <h1 className="text-2xl font-bold text-gray-900">Create Your Merchant Account</h1>
-                <p className="text-sm text-gray-500 mt-1">Join the multi-gateway routing network today.</p>
+                <h1 className="text-2xl font-bold text-gray-900">Create Your {selectedRole === 'MERCHANT' ? 'Merchant' : 'Agent'} Account</h1>
+                <p className="text-sm text-gray-500 mt-1 max-w-xs mx-auto">
+                    {selectedRole === 'MERCHANT'
+                        ? 'Join the multi-gateway routing network today.'
+                        : 'Help businesses scale with professional fintech tools.'}
+                </p>
             </div>
 
             {/* Card */}
@@ -93,16 +99,23 @@ export default function SignupPage() {
                 )}
 
                 <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
-                    {/* Account Type (display-only, always Merchant per spec) */}
+                    {/* Role Selection */}
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">Account Type</label>
-                        <div className="relative">
-                            <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                            <div className="auth-input flex items-center justify-between cursor-default">
-                                <span className="text-gray-700">Merchant</span>
-                                <ChevronDown className="w-4 h-4 text-gray-400" />
-                            </div>
+                        <div className="relative group">
+                            <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-brand-600 transition-colors pointer-events-none" />
+                            <select
+                                {...register('role')}
+                                className="auth-input pl-10 appearance-none cursor-pointer pr-10"
+                            >
+                                <option value="MERCHANT">Merchant (Default)</option>
+                                <option value="AGENT">Agent</option>
+                            </select>
+                            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none group-hover:text-gray-600 transition-colors" />
                         </div>
+                        {errors.role && (
+                            <p className="mt-1 text-xs text-red-500">{errors.role.message}</p>
+                        )}
                     </div>
 
                     {/* Full Name + Telegram ID */}
@@ -209,8 +222,8 @@ export default function SignupPage() {
                                 </div>
                                 {strengthInfo.label && (
                                     <p className={`text-xs font-semibold tracking-wider ${strength === 4 ? 'text-brand-600' :
-                                            strength === 3 ? 'text-yellow-600' :
-                                                strength === 2 ? 'text-orange-500' : 'text-red-500'
+                                        strength === 3 ? 'text-yellow-600' :
+                                            strength === 2 ? 'text-orange-500' : 'text-red-500'
                                         }`}>
                                         {strengthInfo.label} PASSWORD
                                     </p>

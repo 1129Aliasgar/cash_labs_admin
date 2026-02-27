@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { ReactQueryProvider } from '@/lib/queryClient';
+import { AuthProvider } from '@/features/auth/components/AuthProvider';
 
 export const metadata: Metadata = {
     title: 'PSPManager — Payment Service Provider Dashboard',
@@ -20,7 +21,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 />
             </head>
             <body>
-                <ReactQueryProvider>{children}</ReactQueryProvider>
+                <ReactQueryProvider>
+                    <AuthProvider>{children}</AuthProvider>
+                </ReactQueryProvider>
             </body>
         </html>
     );

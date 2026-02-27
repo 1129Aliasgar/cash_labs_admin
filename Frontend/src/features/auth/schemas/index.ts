@@ -14,6 +14,7 @@ export const signupSchema = z.object({
   telegramId: z.string().trim().optional().or(z.literal('')),
   email: z.string().email('Please enter a valid email address').toLowerCase().trim(),
   companyName: z.string().min(2, 'Company name must be at least 2 characters').max(150).trim(),
+  role: z.enum(['MERCHANT', 'AGENT']).default('MERCHANT'),
   password: passwordSchema,
   agreeToTerms: z.boolean().refine((val) => val === true, {
     message: 'You must agree to the Terms of Service and Privacy Policy',

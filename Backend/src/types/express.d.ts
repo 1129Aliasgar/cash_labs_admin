@@ -1,8 +1,10 @@
-// Extend Express Request to carry userId after authentication middleware
+import { UserRole } from '../models/User';
+
 declare global {
   namespace Express {
     interface Request {
-      userId?: string;
+      userId: string;
+      role: UserRole;
     }
   }
 }

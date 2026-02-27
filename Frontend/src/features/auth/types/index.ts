@@ -4,9 +4,11 @@ export interface AuthUser {
   id: string;
   email: string;
   fullName: string;
-  companyName?: string;
-  isVerified?: boolean;
-  createdAt?: string;
+  companyName: string;
+  isVerified: boolean;
+  role: 'SUPER_ADMIN' | 'ADMIN' | 'MERCHANT' | 'AGENT';
+  merchantStatus: 'NONE' | 'ACTIVE' | 'PENDING' | 'APPROVED' | 'REJECTED';
+  createdAt: string;
 }
 
 export interface LoginCredentials {

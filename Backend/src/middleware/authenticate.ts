@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { verifyAccessToken } from '../utils/tokens';
-import { hashToken } from '../utils/tokens';
+import { verifyAccessToken, hashToken, AccessTokenPayload } from '../utils/tokens';
+import { UserRole } from '../models/User';
 import { BlacklistedToken } from '../models/BlacklistedToken';
 
 /**
@@ -26,7 +26,7 @@ export async function authenticate(
     }
 
     // 1. Verify JWT
-    let payload: { userId: string };
+    let payload: AccessTokenPayload;
     try {
       payload = verifyAccessToken(accessToken);
     } catch {
@@ -42,8 +42,9 @@ export async function authenticate(
       return;
     }
 
-    // 3. Attach userId for downstream use
+    // 3. Attach userId and role for downstream use
     req.userId = payload.userId;
+    req.role = payload.role;
     next();
   } catch (error) {
     next(error);

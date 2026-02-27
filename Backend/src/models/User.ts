@@ -1,11 +1,31 @@
 import mongoose, { Document, Schema, Model } from 'mongoose';
 
+export enum UserRole {
+  SUPER_ADMIN = 'SUPER_ADMIN',
+  ADMIN = 'ADMIN',
+  MERCHANT = 'MERCHANT',
+  AGENT = 'AGENT',
+}
+
+export enum MerchantStatus {
+  NONE = 'NONE',
+  ACTIVE = 'ACTIVE', // Has signed up, needs onboarding
+  PENDING = 'PENDING', // Has submitted onboarding, awaiting approval
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
+}
+
 export interface IUser extends Document {
   email: string;
   password: string;
   fullName: string;
   companyName: string;
   telegramId?: string;
+
+  role: UserRole;
+  merchantStatus: MerchantStatus;
+  approvedBy?: mongoose.Types.ObjectId;
+  approvedAt?: Date;
 
   isVerified: boolean;
   verificationToken?: string;       // hashed
@@ -55,6 +75,32 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>(
     telegramId: {
       type: String,
       trim: true,
+    },
+
+    role: {
+      type: String,
+      enum: Object.values(UserRole),
+      default: UserRole.MERCHANT,
+      index: true,
+    },
+    merchantStatus: {
+      type: String,
+      enum: Object.values(MerchantStatus),
+      default: function (this: IUser) {
+        if (this.role === UserRole.SUPER_ADMIN || this.role === UserRole.ADMIN || this.role === UserRole.AGENT) {
+          return MerchantStatus.NONE;
+        }
+        // Merchants start in ACTIVE state (onboarding phase)
+        return MerchantStatus.ACTIVE;
+      },
+      index: true,
+    },
+    approvedBy: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+    },
+    approvedAt: {
+      type: Date,
     },
 
     isVerified: {
