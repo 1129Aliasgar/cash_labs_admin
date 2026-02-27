@@ -1,4 +1,5 @@
 import { injectable } from "inversify";
+import { BaseService } from "./BaseService";
 
 export interface PaymentStatus {
   id: string;
@@ -8,7 +9,7 @@ export interface PaymentStatus {
 }
 
 @injectable()
-export class PaymentService {
+export class PaymentService extends BaseService {
   getStatus(id: string): PaymentStatus {
     return {
       id,

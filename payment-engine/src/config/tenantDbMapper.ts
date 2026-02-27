@@ -1,9 +1,15 @@
-/**
- * Maps tenant key (e.g. subdomain) to MongoDB database name.
- * Extend this map for each tenant.
- */
-export const tenantDbMapper: Record<string, string> = {
-  default: 'default',
-  api: 'default',
-  // Add tenants: 'subdomain': 'db_name'
-};
+type TenantMapping = Record<string, string>;
+
+const rawMapping = process.env.BETSEA_TENANT_MAP || '';
+
+export const tenantDbMapper: TenantMapping = rawMapping
+  .split(',')
+  .filter(Boolean)
+  .reduce((acc, item) => {
+    const [domain, db] = item.split(':').map(v => v.trim());
+    if (domain && db) acc[domain] = db;
+    return acc;
+  }, {} as TenantMapping);
+
+
+

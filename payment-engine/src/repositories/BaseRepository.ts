@@ -54,4 +54,26 @@ export abstract class BaseRepository<T> {
   async deleteById(id: string, modelName: string): Promise<T | null> {
     return this.getModel(modelName).findByIdAndDelete(id).exec();
   }
+
+  async findWithPagination(
+    query: Record<string, unknown>,
+    modelName: string,
+    page: number,
+    limit: number,
+    sort: Record<string, 1 | -1> = { createdAt: -1 }
+  ): Promise<{ data: T[]; total: number; page: number; limit: number; totalPages: number }> {
+    const model = this.getModel(modelName);
+    const skip = (page - 1) * limit;
+    const [data, total] = await Promise.all([
+      model.find(query).sort(sort).skip(skip).limit(limit).exec(),
+      model.countDocuments(query).exec(),
+    ]);
+    return {
+      data,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit) || 1,
+    };
+  }
 }

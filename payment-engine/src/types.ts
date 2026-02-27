@@ -1,3 +1,1 @@
-export const TYPES = {
-  PaymentService: Symbol.for("PaymentService"),
-};
+export { TYPES } from './config/inversifyTypes';
