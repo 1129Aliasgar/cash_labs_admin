@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { ArrowRight, AlertCircle, RefreshCw, Mail, ShieldCheck, ExternalLink } from 'lucide-react';
+import {  AlertCircle, RefreshCw, Mail, ShieldCheck, ExternalLink } from 'lucide-react';
 import { Logo } from '@/components/common/Logo';
 
 import { Suspense } from 'react';
@@ -39,7 +39,6 @@ function VerifyEmailContent() {
             setIsResending(false);
         }
     };
-
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col">
             {/* Header */}

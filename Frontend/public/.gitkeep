@@ -1,0 +1,1 @@
+# Keep this directory in git; Next.js and Docker expect public/ to exist.
