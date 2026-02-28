@@ -38,4 +38,11 @@ export const adminApi = {
     const response = await apiClient.patch<AdminResponse>(`/admin/merchant/${merchantId}/reject`);
     return response.data;
   },
+  /**
+   * Get system audit logs
+   */
+  getAuditLogs: async (page = 1, limit = 50): Promise<{ success: boolean; data: any; pagination: any }> => {
+    const response = await apiClient.get(`/admin/audit-logs?page=${page}&limit=${limit}`);
+    return response.data;
+  },
 };

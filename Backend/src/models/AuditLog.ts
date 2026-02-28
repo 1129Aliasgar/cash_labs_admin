@@ -1,19 +1,8 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
-export enum AuditAction {
-  SIGNUP = 'SIGNUP',
-  EMAIL_VERIFIED = 'EMAIL_VERIFIED',
-  LOGIN_SUCCESS = 'LOGIN_SUCCESS',
-  LOGIN_FAILED = 'LOGIN_FAILED',
-  ACCOUNT_LOCKED = 'ACCOUNT_LOCKED',
-  TOKEN_REFRESHED = 'TOKEN_REFRESHED',
-  TOKEN_REUSE_DETECTED = 'TOKEN_REUSE_DETECTED',
-  MERCHANT_APPROVED = 'MERCHANT_APPROVED',
-  MERCHANT_REJECTED = 'MERCHANT_REJECTED',
-  USER_CREATED = 'USER_CREATED',
-  USER_DELETED = 'USER_DELETED',
-  LOGOUT = 'LOGOUT',
-}
+import { AuditAction } from '../constants';
+
+export { AuditAction };
 
 export interface IAuditLog extends Document {
   userId?: string;

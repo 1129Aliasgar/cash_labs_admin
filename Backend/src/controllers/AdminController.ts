@@ -138,3 +138,40 @@ export async function getAllMerchants(
     next(error);
   }
 }
+/**
+ * getAuditLogs — Get system audit logs (Admin only)
+ * @route GET /api/admin/audit-logs
+ */
+export async function getAuditLogs(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 50;
+    const skip = (page - 1) * limit;
+
+    const logs = await AuditLog.find()
+      // Note: userId is a string in AuditLog model, we might need to cast or manual lookup
+      // depends on if we want to populate. Since userId is stored as string in schema:
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    const total = await AuditLog.countDocuments();
+
+    res.status(200).json({
+      success: true,
+      data: logs,
+      pagination: {
+        total,
+        page,
+        limit,
+        pages: Math.ceil(total / limit),
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+}

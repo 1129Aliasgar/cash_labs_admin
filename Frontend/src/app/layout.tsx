@@ -4,8 +4,11 @@ import { ReactQueryProvider } from '@/lib/queryClient';
 import { AuthProvider } from '@/features/auth/components/AuthProvider';
 
 export const metadata: Metadata = {
-    title: 'PSPManager — Payment Service Provider Dashboard',
-    description: 'Secure multi-gateway routing network for merchants. PCI DSS compliant.',
+    title: 'CashLabs Admin',
+    description: 'Fintech-grade merchant management system',
+    icons: {
+        icon: '/favicon.png',
+    },
     robots: 'noindex, nofollow', // Admin dashboard — no public indexing
 };
 

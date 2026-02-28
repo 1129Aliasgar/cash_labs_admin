@@ -20,7 +20,12 @@ export function middleware(request: NextRequest) {
   const accessToken = request.cookies.get('accessToken')?.value;
 
   const isAuthRoute = pathname.startsWith('/auth');
-  const isPublicRoute = isAuthRoute || pathname === '/' || pathname === '/favicon.ico';
+  const isPublicRoute = 
+    isAuthRoute || 
+    pathname === '/' || 
+    pathname === '/favicon.ico' ||
+    pathname === '/favicon.png' ||
+    pathname === '/cashlabs-logo.png';
 
   // 1. Guard: Redirect unauthenticated users from protected routes
   if (!accessToken && !isPublicRoute) {
@@ -37,7 +42,14 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // Match all routes except static files, Next.js internals, and API
-    '/((?!_next/static|_next/image|favicon.ico|api/).*)',
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico, sitemap.xml, robots.txt (metadata files)
+     * - Images in the public folder (e.g., logo, banners)
+     */
+    '/((?!api|_next/static|_next/image|favicon.ico|favicon.png|cashlabs-logo.png|sitemap.xml|robots.txt).*)',
   ],
 };

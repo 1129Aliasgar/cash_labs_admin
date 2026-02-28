@@ -1,25 +1,14 @@
 import mongoose, { Document, Schema, Model } from 'mongoose';
 
-export enum UserRole {
-  SUPER_ADMIN = 'SUPER_ADMIN',
-  ADMIN = 'ADMIN',
-  MERCHANT = 'MERCHANT',
-  AGENT = 'AGENT',
-}
+import { UserRole, MerchantStatus } from '../constants';
 
-export enum MerchantStatus {
-  NONE = 'NONE',
-  ACTIVE = 'ACTIVE', // Has signed up, needs onboarding
-  PENDING = 'PENDING', // Has submitted onboarding, awaiting approval
-  APPROVED = 'APPROVED',
-  REJECTED = 'REJECTED',
-}
+export { UserRole, MerchantStatus };
 
 export interface IUser extends Document {
   email: string;
   password: string;
   fullName: string;
-  companyName: string;
+  companyName?: string;
   telegramId?: string;
 
   role: UserRole;
@@ -69,7 +58,6 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>(
     },
     companyName: {
       type: String,
-      required: true,
       trim: true,
     },
     telegramId: {

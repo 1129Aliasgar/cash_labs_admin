@@ -43,16 +43,8 @@ export function useLogin() {
       
       // REDIRECTION REMOVED: Delegated to central AuthProvider/Gate
     },
-    onError: (error: any, variables) => {
-      // Handle "unverified email" case - should this be handled by the Gate too?
-      // For now, keeping the 403 handling as it's a specific "pre-auth" redirect
-      if (
-        error.response?.status === 403 &&
-        error.response?.data?.message?.toLowerCase().includes('verify')
-      ) {
-        const email = variables.email;
-        router.push(`/auth/verify-email?email=${encodeURIComponent(email)}`);
-      }
+    onError: () => {
+      // REDIRECTION REMOVED: Reverted to showing raw 403 error on LoginPage
     },
   });
 }
@@ -62,13 +54,13 @@ export function useLogin() {
  */
 export function useSignup() {
   const queryClient = useQueryClient();
-  
+  const router = useRouter();
+
   return useMutation({
     mutationFn: (data: SignupData) => authApi.signup(data),
-    onSuccess: async () => {
-      // Ensure state is cleared or updated if necessary
-      await queryClient.invalidateQueries({ queryKey: AUTH_QUERY_KEY });
-      // Redirection to verification handled by the gate or specific UI trigger
+    onSuccess: async (_, variables) => {
+      // Funnel user to verification immediately after signup
+      router.push(`/auth/verify-email?email=${encodeURIComponent(variables.email)}`);
     },
   });
 }
@@ -93,8 +85,14 @@ export function useLogout() {
  * useVerifyEmail — verify email with token
  */
 export function useVerifyEmail() {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: (token: string) => authApi.verifyEmail(token),
+    onSuccess: (data) => {
+      // Establish session state immediately
+      queryClient.setQueryData(AUTH_QUERY_KEY, data.user);
+    }
   });
 }
 

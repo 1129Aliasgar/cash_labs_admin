@@ -8,6 +8,8 @@ import { Mail, AlertCircle, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { useForgotPassword } from '@/features/auth/hooks';
 import { forgotPasswordSchema, type ForgotPasswordFormData } from '@/features/auth/schemas';
 
+import { Logo } from '@/components/common/Logo';
+
 export default function ForgotPasswordPage() {
     const [serverError, setServerError] = useState('');
     const [submitted, setSubmitted] = useState(false);
@@ -36,12 +38,7 @@ export default function ForgotPasswordPage() {
             <div className="w-full max-w-md auth-card">
                 {/* Logo */}
                 <div className="flex flex-col items-center mb-8">
-                    <div className="flex items-center gap-2 mb-1">
-                        <div className="w-8 h-8 bg-brand-600 rounded-lg flex items-center justify-center">
-                            <span className="text-white font-bold text-sm">P</span>
-                        </div>
-                        <span className="text-xl font-bold text-gray-900">PSPManager</span>
-                    </div>
+                    <Logo className="mb-2" />
                 </div>
 
                 {!submitted ? (

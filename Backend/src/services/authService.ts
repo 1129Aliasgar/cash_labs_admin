@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import { Request } from 'express';
+import { sendVerificationEmail } from '../utils/mailer';
 import { config } from '../config';
 import { User, UserRole, MerchantStatus } from '../models/User';
 import { BlacklistedToken } from '../models/BlacklistedToken';
@@ -90,9 +91,19 @@ export async function signup(
 
   await writeAuditLog(AuditAction.SIGNUP, req, user.id, { email: data.email });
 
+  // ─── Send Verification Email (SendGrid API) ────────────────────────────────
+  const verificationLink = `${config.cors.frontendUrl}/auth/verify?token=${rawToken}`;
+
+  try {
+    await sendVerificationEmail(user.email, user.fullName, verificationLink);
+  } catch (emailError) {
+    console.error('[Service] Failed to send verification email:', emailError);
+    // Note: User is created but email failed.
+  }
+
   return {
     message: 'Account created. Please check your email to verify your account.',
-    verificationToken: rawToken, // In production: send via email, not response
+    verificationToken: '', // Redacted in production/all envs now for security
   };
 }
 
@@ -109,7 +120,12 @@ export async function signup(
 export async function verifyEmail(
   rawToken: string,
   req: Request
-): Promise<{ message: string }> {
+): Promise<{ 
+  message: string; 
+  accessToken: string; 
+  refreshToken: string;
+  user: { id: string; email: string; fullName: string; role: UserRole; merchantStatus: MerchantStatus } 
+}> {
   const hashedToken = hashToken(rawToken);
 
   const user = await User.findOne({
@@ -121,14 +137,30 @@ export async function verifyEmail(
     throw createError('Invalid or expired verification token.', 400);
   }
 
+  // Issue tokens BEFORE clearing DB fields (to have access to user data)
+  const accessToken = signAccessToken(user.id, user.role, user.isVerified);
+  const refreshToken = signRefreshToken(user.id);
+  const refreshTokenHash = hashToken(refreshToken);
+
   await User.findByIdAndUpdate(user._id, {
-    $set: { isVerified: true },
+    $set: { isVerified: true, refreshTokenHash },
     $unset: { verificationToken: '', verificationTokenExpiry: '' },
   });
 
   await writeAuditLog(AuditAction.EMAIL_VERIFIED, req, user.id);
 
-  return { message: 'Email verified successfully. You can now sign in.' };
+  return { 
+    message: 'Email verified successfully.',
+    accessToken,
+    refreshToken,
+    user: {
+      id: user.id,
+      email: user.email,
+      fullName: user.fullName,
+      role: user.role,
+      merchantStatus: user.merchantStatus,
+    }
+  };
 }
 
 /**
@@ -348,7 +380,7 @@ export async function getCurrentUser(
   id: string;
   email: string;
   fullName: string;
-  companyName: string;
+  companyName?: string;
   isVerified: boolean;
   role: string;
   merchantStatus: string;

@@ -45,31 +45,38 @@ export function AuthProvider({ children }: AuthProviderProps) {
             // 2. Authenticated users
             const role = user.role;
             const status = user.merchantStatus;
-            let targetRoute = '/superadmin/dashboard';
+
+            // Define User Zones
+            let allowedPrefix = '/superadmin';
+            let defaultHome = '/superadmin/dashboard';
 
             if (role === 'MERCHANT') {
                 if (status === 'ACTIVE') {
-                    targetRoute = '/merchant/onboarding';
+                    allowedPrefix = '/merchant/onboarding';
+                    defaultHome = '/merchant/onboarding';
                 } else if (status === 'PENDING') {
-                    targetRoute = '/merchant/application-pending';
-                } else {
-                    targetRoute = '/superadmin/dashboard';
+                    allowedPrefix = '/merchant/application-pending';
+                    defaultHome = '/merchant/application-pending';
                 }
             }
 
-            // Execute Redirection
-            if (pathname !== targetRoute) {
-                // Special case: Allow sub-paths (e.g. nested dashboard pages or onboarding steps)
-                if (pathname.startsWith(targetRoute) && pathname !== '/' && targetRoute !== '/') {
-                    return;
+            // A. Block authenticated users from public auth pages
+            if (isAuthRoute) {
+                if (!isRedirecting.current) {
+                    isRedirecting.current = true;
+                    router.replace(defaultHome);
                 }
+                return;
+            }
 
-                // Block authenticated users from auth pages (login/signup)
-                if (isAuthRoute || !pathname.startsWith(targetRoute) || (targetRoute === '/superadmin/dashboard' && pathname === '/dashboard')) {
-                    if (!isRedirecting.current) {
-                        isRedirecting.current = true;
-                        router.replace(targetRoute);
-                    }
+            // B. Zone Departure: Redirect if user is outside their designated system area
+            // (Exclude / favicon and root for simple redirection)
+            const isOutsideZone = !pathname.startsWith(allowedPrefix) && pathname !== '/' && pathname !== '/favicon.ico';
+
+            if (isOutsideZone) {
+                if (!isRedirecting.current) {
+                    isRedirecting.current = true;
+                    router.replace(defaultHome);
                 }
             }
         };

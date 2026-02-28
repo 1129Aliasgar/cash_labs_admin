@@ -68,7 +68,15 @@ export async function verifyEmail(req: Request, res: Response, next: NextFunctio
     const body = validate(verifyEmailSchema, req.body);
     const result = await authService.verifyEmail(body.token, req);
 
-    res.status(200).json({ success: true, message: result.message });
+    // Set HTTP-only secure cookies for Instant Onboarding
+    res.cookie('accessToken', result.accessToken, accessTokenCookieOptions);
+    res.cookie('refreshToken', result.refreshToken, refreshTokenCookieOptions);
+
+    res.status(200).json({ 
+      success: true, 
+      message: result.message,
+      user: result.user
+    });
   } catch (error) {
     next(error);
   }

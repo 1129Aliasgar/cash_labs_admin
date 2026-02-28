@@ -73,8 +73,8 @@ apiClient.interceptors.response.use(
       return apiClient(originalRequest);
     } catch (refreshError) {
       processQueue(refreshError as AxiosError);
-      // Refresh failed — redirect to login
-      if (typeof window !== 'undefined') {
+      // Refresh failed — redirect to login if not already on an auth page
+      if (typeof window !== 'undefined' && !window.location.pathname.startsWith('/auth')) {
         window.location.href = '/auth/login';
       }
       return Promise.reject(refreshError);

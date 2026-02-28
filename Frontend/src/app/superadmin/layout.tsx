@@ -30,7 +30,8 @@ const NAV_ITEMS = [
     { label: 'Analysis', icon: FileSearch, href: '/superadmin/analysis' },
     { label: 'Customer', icon: Users, href: '/superadmin/customer' },
     { label: 'Settlement', icon: Banknote, href: '/superadmin/settlement' },
-    { label: 'Team', icon: UserPlus, href: '/superadmin/settings/team' },
+    { label: 'Audit Logs', icon: FileSearch, href: '/superadmin/audit-logs' },
+    { label: 'Team', icon: UserPlus, href: '/superadmin/team' },
 ];
 
 export default function SuperAdminLayout({ children }: { children: React.ReactNode }) {

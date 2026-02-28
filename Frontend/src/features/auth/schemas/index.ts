@@ -13,7 +13,7 @@ export const signupSchema = z.object({
   fullName: z.string().min(2, 'Full name must be at least 2 characters').max(100).trim(),
   telegramId: z.string().trim().optional().or(z.literal('')),
   email: z.string().email('Please enter a valid email address').toLowerCase().trim(),
-  companyName: z.string().min(2, 'Company name must be at least 2 characters').max(150).trim(),
+  companyName: z.string().max(150).trim().optional().or(z.literal('')),
   role: z.enum(['MERCHANT', 'AGENT']).default('MERCHANT'),
   password: passwordSchema,
   agreeToTerms: z.boolean().refine((val) => val === true, {

@@ -20,7 +20,7 @@ export interface SignupData {
   email: string;
   password: string;
   fullName: string;
-  companyName: string;
+  companyName?: string;
   telegramId?: string;
   agreeToTerms: boolean;
 }

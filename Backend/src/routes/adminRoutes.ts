@@ -50,4 +50,14 @@ router.get(
   asyncHandler(AdminController.getAllMerchants)
 );
 
+/**
+ * @route GET /api/admin/audit-logs
+ * @desc Get system audit logs
+ */
+router.get(
+  '/audit-logs',
+  requireRole(UserRole.SUPER_ADMIN, UserRole.ADMIN),
+  asyncHandler(AdminController.getAuditLogs)
+);
+
 export default router;

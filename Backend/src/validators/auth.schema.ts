@@ -20,8 +20,8 @@ export const signupSchema = Joi.object({
   fullName: Joi.string().min(2).max(100).trim().required().messages({
     'string.min': 'Full name must be at least 2 characters.',
   }),
-  companyName: Joi.string().min(2).max(150).trim().required().messages({
-    'string.min': 'Company name must be at least 2 characters.',
+  companyName: Joi.string().max(150).trim().optional().allow('').messages({
+    'string.max': 'Company name must not exceed 150 characters.',
   }),
   role: Joi.string().valid('MERCHANT', 'AGENT').default('MERCHANT'),
   telegramId: Joi.string().trim().optional().allow(''),
