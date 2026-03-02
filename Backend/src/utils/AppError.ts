@@ -28,3 +28,8 @@ export class AppError extends Error {
     }
   }
 }
+
+/** Helper to create an AppError with message and status code (e.g. 400, 401, 404). */
+export function createError(message: string, statusCode: number): AppError {
+  return new AppError(message, statusCode, true);
+}

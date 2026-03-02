@@ -29,6 +29,7 @@ import { AppError } from './utils/AppError';
 
 import './controllers/AuthController';
 import './controllers/AdminController';
+import './controllers/AuditLogController';
 import './controllers/MerchantController';
 import './controllers/UserController';
 

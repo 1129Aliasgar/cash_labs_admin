@@ -29,12 +29,9 @@ export const tenantSelector = async (
       return;
     }
 
-    console.log('Connecting to database:', dbName);
 
     const conn = await getDbConnection(dbName);
-    console.log('Connected to database:', conn.name);
     const models = await registerModelsOnConnection(conn);
-    console.log('Models registered:', models);
 
     await tenantContextStorage.run(
       {

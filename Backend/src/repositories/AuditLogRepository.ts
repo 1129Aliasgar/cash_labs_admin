@@ -23,4 +23,13 @@ export class AuditLogRepository extends BaseRepository<IAuditLog> {
   }) {
     return super.create(data as Partial<IAuditLog>, MODEL_NAME);
   }
+
+  async findPaginated(skip: number, limit: number): Promise<{ logs: IAuditLog[]; total: number }> {
+    const model = this.getModel(MODEL_NAME);
+    const [logs, total] = await Promise.all([
+      model.find().sort({ createdAt: -1 }).skip(skip).limit(limit).lean().exec(),
+      model.countDocuments().exec(),
+    ]);
+    return { logs: logs as IAuditLog[], total };
+  }
 }

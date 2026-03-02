@@ -16,10 +16,12 @@ import { BlacklistedTokenRepository } from '../repositories/BlacklistedTokenRepo
 import { AuditLogRepository } from '../repositories/AuditLogRepository';
 import { AuthService } from '../services/AuthService';
 import { AdminService } from '../services/AdminService';
+import { AuditLogService } from '../services/AuditLogService';
 import { MerchantService } from '../services/MerchantService';
 import { UserService } from '../services/UserService';
 import { AuthController } from '../controllers/AuthController';
 import { AdminController } from '../controllers/AdminController';
+import { AuditLogController } from '../controllers/AuditLogController';
 import { MerchantController } from '../controllers/MerchantController';
 import { UserController } from '../controllers/UserController';
 
@@ -57,6 +59,11 @@ export function configureContainer(): Container {
     .inSingletonScope();
 
   container
+    .bind<AuditLogService>(TYPES.AuditLogService)
+    .to(AuditLogService)
+    .inSingletonScope();
+
+  container
     .bind<MerchantService>(TYPES.MerchantService)
     .to(MerchantService)
     .inSingletonScope();
@@ -68,6 +75,7 @@ export function configureContainer(): Container {
 
   container.bind(AuthController).toSelf().inSingletonScope();
   container.bind(AdminController).toSelf().inSingletonScope();
+  container.bind(AuditLogController).toSelf().inSingletonScope();
   container.bind(MerchantController).toSelf().inSingletonScope();
   container.bind(UserController).toSelf().inSingletonScope();
 
