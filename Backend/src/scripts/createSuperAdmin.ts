@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import 'dotenv/config';
-import { getDbConnection } from '../src/database/connectionManager';
-import { registerModelsOnConnection } from '../src/models';
-import { UserRole, MerchantStatus } from '../src/constants/user.constants';
+import { getDbConnection } from '../database/connectionManager';
+import { registerModelsOnConnection } from '../models';
+import { UserRole, MerchantStatus } from '../constants/user.constants';
 
 async function createSuperAdmin() {
   const email = process.env.SUPER_ADMIN_EMAIL;
@@ -17,6 +17,7 @@ async function createSuperAdmin() {
 
   try {
     const conn = await getDbConnection(dbName);
+    console.log('Connected to database');
     const models = await registerModelsOnConnection(conn);
     const User = models.user;
 

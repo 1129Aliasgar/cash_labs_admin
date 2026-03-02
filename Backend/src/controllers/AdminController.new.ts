@@ -13,7 +13,7 @@ export class AdminController {
   @httpPatch('/merchant/:id/approve', authenticate, requireRole(UserRole.SUPER_ADMIN))
   public async approveMerchant(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+      const id = req.params.id;
       const result = await this.adminService.approveMerchant(id, (req as any).userId, req);
       res.status(200).json({ success: true, message: result.message });
     } catch (error) {
@@ -24,7 +24,7 @@ export class AdminController {
   @httpPatch('/merchant/:id/reject', authenticate, requireRole(UserRole.SUPER_ADMIN, UserRole.ADMIN))
   public async rejectMerchant(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+      const id = req.params.id;
       const result = await this.adminService.rejectMerchant(id, req);
       res.status(200).json({ success: true, message: result.message });
     } catch (error) {
@@ -50,42 +50,5 @@ export class AdminController {
     } catch (error) {
       next(error);
     }
-  }
-}
-/**
- * getAuditLogs — Get system audit logs (Admin only)
- * @route GET /api/admin/audit-logs
- */
-export async function getAuditLogs(
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> {
-  try {
-    const page = parseInt(req.query.page as string) || 1;
-    const limit = parseInt(req.query.limit as string) || 50;
-    const skip = (page - 1) * limit;
-
-    const logs = await AuditLog.find()
-      // Note: userId is a string in AuditLog model, we might need to cast or manual lookup
-      // depends on if we want to populate. Since userId is stored as string in schema:
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit);
-
-    const total = await AuditLog.countDocuments();
-
-    res.status(200).json({
-      success: true,
-      data: logs,
-      pagination: {
-        total,
-        page,
-        limit,
-        pages: Math.ceil(total / limit),
-      },
-    });
-  } catch (error) {
-    next(error);
   }
 }

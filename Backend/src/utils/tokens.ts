@@ -1,11 +1,10 @@
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 import { config } from '../config';
-import { UserRole } from '../models/User';
 
 export interface AccessTokenPayload {
   userId: string;
-  role: UserRole;
+  role: string;
   isVerified: boolean;
 }
 
@@ -36,7 +35,7 @@ export function generateVerificationToken(): { rawToken: string; hashedToken: st
  * Signs a short-lived access token (15m by default).
  * Payload includes userId and role for RBAC.
  */
-export function signAccessToken(userId: string, role: UserRole, isVerified: boolean): string {
+export function signAccessToken(userId: string, role: string, isVerified: boolean): string {
   const payload: AccessTokenPayload = { userId, role, isVerified };
   return jwt.sign(payload, config.jwt.accessSecret, {
     expiresIn: config.jwt.accessExpiry as jwt.SignOptions['expiresIn'],
