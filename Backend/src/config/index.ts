@@ -34,7 +34,8 @@ export const config = {
   },
 
   cors: {
-    frontendUrl: process.env.FRONTEND_URL || 'http://localhost:3000',
+    // Normalize: no trailing slash so it matches browser Origin (e.g. https://gateway.gocashlabs.com)
+    frontendUrl: (process.env.FRONTEND_URL || 'http://localhost:3000').replace(/\/+$/, ''),
   },
 
   auth: {
