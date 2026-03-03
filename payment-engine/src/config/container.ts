@@ -14,11 +14,15 @@ import { TYPES } from './inversifyTypes';
 
 import { TenantContextProvider } from '../utils/tenantContext.provider';
 import { GatewayRepository } from '../repositories/GatewayRepository';
+import { ClientRepository } from '../repositories/ClientRepository';
+import { ClientGatewayRepository } from '../repositories/ClientGatewayRepository';
+import { GatewayRequestConfigRepository } from '../repositories/GatewayRequestConfigRepository';
 import { PaymentService } from '../services/payment.service';
 import { GatewayService } from '../services/GatewayService';
+import { TransactionService } from '../services/transaction.service';
 import { HealthController } from '../controllers/health.controller';
 import { PaymentController } from '../controllers/payment.controller';
-import { GatewayController } from '../controllers/GatewayController';
+import { TransactionController } from '../controllers/transaction.controller';
 
 export function configureContainer(): Container {
   const container = new Container();
@@ -35,6 +39,21 @@ export function configureContainer(): Container {
     .to(GatewayRepository)
     .inSingletonScope();
 
+  container
+    .bind<ClientRepository>(TYPES.ClientRepository)
+    .to(ClientRepository)
+    .inSingletonScope();
+
+  container
+    .bind<ClientGatewayRepository>(TYPES.ClientGatewayRepository)
+    .to(ClientGatewayRepository)
+    .inSingletonScope();
+
+  container
+    .bind<GatewayRequestConfigRepository>(TYPES.GatewayRequestConfigRepository)
+    .to(GatewayRequestConfigRepository)
+    .inSingletonScope();
+
   // Bind services
   container
     .bind<PaymentService>(TYPES.PaymentService)
@@ -46,10 +65,15 @@ export function configureContainer(): Container {
     .to(GatewayService)
     .inSingletonScope();
 
+  container
+    .bind<TransactionService>(TYPES.TransactionService)
+    .to(TransactionService)
+    .inSingletonScope();
+
   // Bind controllers (by class so inversify-express-utils can resolve them)
   container.bind(HealthController).toSelf().inSingletonScope();
   container.bind(PaymentController).toSelf().inSingletonScope();
-  container.bind(GatewayController).toSelf().inSingletonScope();
+  container.bind(TransactionController).toSelf().inSingletonScope();
 
   return container;
 }

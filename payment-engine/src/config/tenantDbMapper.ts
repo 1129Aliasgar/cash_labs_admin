@@ -1,6 +1,6 @@
 type TenantMapping = Record<string, string>;
 
-const rawMapping = process.env.BETSEA_TENANT_MAP || '';
+const rawMapping = process.env.TENANT_MAP || '';
 
 export const tenantDbMapper: TenantMapping = rawMapping
   .split(',')
