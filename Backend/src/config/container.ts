@@ -14,16 +14,30 @@ import { TenantContextProvider } from '../utils/tenantContext.provider';
 import { UserRepository } from '../repositories/UserRepository';
 import { BlacklistedTokenRepository } from '../repositories/BlacklistedTokenRepository';
 import { AuditLogRepository } from '../repositories/AuditLogRepository';
+import { GatewayRepository } from '../repositories/GatewayRepository';
+import { GatewayRequestConfigRepository } from '../repositories/GatewayRequestConfigRepository';
+import { ClientRepository } from '../repositories/ClientRepository';
+import { ClientGatewayRepository } from '../repositories/ClientGatewayRepository';
 import { AuthService } from '../services/AuthService';
 import { AdminService } from '../services/AdminService';
 import { AuditLogService } from '../services/AuditLogService';
+import { GatewayService } from '../services/GatewayService';
+import { GatewayRequestConfigService } from '../services/GatewayRequestConfigService';
+import { ClientService } from '../services/ClientService';
+import { ClientGatewayService } from '../services/ClientGatewayService';
 import { MerchantService } from '../services/MerchantService';
 import { UserService } from '../services/UserService';
-import { AuthController } from '../controllers/AuthController';
-import { AdminController } from '../controllers/AdminController';
-import { AuditLogController } from '../controllers/AuditLogController';
-import { MerchantController } from '../controllers/MerchantController';
-import { UserController } from '../controllers/UserController';
+import {
+  AuthController,
+  AdminController,
+  AuditLogController,
+  GatewayController,
+  GatewayRequestConfigController,
+  ClientController,
+  ClientGatewayController,
+  MerchantController,
+  UserController,
+} from '../controllers';
 
 export function configureContainer(): Container {
   const container = new Container();
@@ -49,6 +63,26 @@ export function configureContainer(): Container {
     .inSingletonScope();
 
   container
+    .bind<GatewayRepository>(TYPES.GatewayRepository)
+    .to(GatewayRepository)
+    .inSingletonScope();
+
+  container
+    .bind<GatewayRequestConfigRepository>(TYPES.GatewayRequestConfigRepository)
+    .to(GatewayRequestConfigRepository)
+    .inSingletonScope();
+
+  container
+    .bind<ClientRepository>(TYPES.ClientRepository)
+    .to(ClientRepository)
+    .inSingletonScope();
+
+  container
+    .bind<ClientGatewayRepository>(TYPES.ClientGatewayRepository)
+    .to(ClientGatewayRepository)
+    .inSingletonScope();
+
+  container
     .bind<AuthService>(TYPES.AuthService)
     .to(AuthService)
     .inSingletonScope();
@@ -64,6 +98,26 @@ export function configureContainer(): Container {
     .inSingletonScope();
 
   container
+    .bind<GatewayService>(TYPES.GatewayService)
+    .to(GatewayService)
+    .inSingletonScope();
+
+  container
+    .bind<GatewayRequestConfigService>(TYPES.GatewayRequestConfigService)
+    .to(GatewayRequestConfigService)
+    .inSingletonScope();
+
+  container
+    .bind<ClientService>(TYPES.ClientService)
+    .to(ClientService)
+    .inSingletonScope();
+
+  container
+    .bind<ClientGatewayService>(TYPES.ClientGatewayService)
+    .to(ClientGatewayService)
+    .inSingletonScope();
+
+  container
     .bind<MerchantService>(TYPES.MerchantService)
     .to(MerchantService)
     .inSingletonScope();
@@ -76,6 +130,10 @@ export function configureContainer(): Container {
   container.bind(AuthController).toSelf().inSingletonScope();
   container.bind(AdminController).toSelf().inSingletonScope();
   container.bind(AuditLogController).toSelf().inSingletonScope();
+  container.bind(GatewayController).toSelf().inSingletonScope();
+  container.bind(GatewayRequestConfigController).toSelf().inSingletonScope();
+  container.bind(ClientController).toSelf().inSingletonScope();
+  container.bind(ClientGatewayController).toSelf().inSingletonScope();
   container.bind(MerchantController).toSelf().inSingletonScope();
   container.bind(UserController).toSelf().inSingletonScope();
 

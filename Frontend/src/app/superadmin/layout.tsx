@@ -11,7 +11,8 @@ import {
     Settings,
     LogOut,
     ChevronRight,
-    ShieldCheck
+    ShieldCheck,
+    CreditCard
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -31,6 +32,7 @@ const NAV_ITEMS = [
     { label: 'Customer', icon: Users, href: '/superadmin/customer' },
     { label: 'Settlement', icon: Banknote, href: '/superadmin/settlement' },
     { label: 'Audit Logs', icon: FileSearch, href: '/superadmin/audit-logs' },
+    { label: 'Gateways', icon: CreditCard, href: '/superadmin/gateways' },
     { label: 'Team', icon: UserPlus, href: '/superadmin/team' },
 ];
 
