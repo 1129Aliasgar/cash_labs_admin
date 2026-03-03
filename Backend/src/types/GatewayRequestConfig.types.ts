@@ -15,6 +15,7 @@ export interface IGatewayRequestConfigDoc extends Document {
   type: RequestConfigType;
   headers: GatewayRequestConfigHeaders;
   bodyMapping: GatewayRequestConfigBodyMapping;
+  endpoint?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }

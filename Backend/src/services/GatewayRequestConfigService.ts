@@ -16,9 +16,10 @@ export interface CreateConfigInput {
   type: string;
   headers?: GatewayRequestConfigHeaders;
   bodyMapping?: GatewayRequestConfigBodyMapping;
+  endpoint?: string;
 }
 
-export type UpdateConfigInput = Partial<Pick<CreateConfigInput, 'headers' | 'bodyMapping'>>;
+export type UpdateConfigInput = Partial<Pick<CreateConfigInput, 'headers' | 'bodyMapping' | 'endpoint'>>;
 
 @injectable()
 export class GatewayRequestConfigService extends BaseService {
@@ -68,6 +69,7 @@ export class GatewayRequestConfigService extends BaseService {
       type: data.type,
       headers: data.headers,
       bodyMapping: data.bodyMapping,
+      endpoint: data.endpoint,
     });
     await this.setGatewayCapabilityConfigured(gatewayId, data.type);
     return config;
@@ -85,6 +87,7 @@ export class GatewayRequestConfigService extends BaseService {
     const updated = await this.configRepo.updateByGatewayIdAndType(gatewayId, type, {
       headers: data.headers,
       bodyMapping: data.bodyMapping,
+      endpoint: data.endpoint,
     });
     if (!updated) throw this.createError('Config not found for this gateway and type.', 404);
     await this.setGatewayCapabilityConfigured(gatewayId, type);

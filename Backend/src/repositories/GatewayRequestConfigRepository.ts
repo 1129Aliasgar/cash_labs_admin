@@ -20,6 +20,7 @@ export class GatewayRequestConfigRepository extends BaseRepository<IGatewayReque
     type: string;
     headers?: { static?: Record<string, string>; mapped?: Record<string, string> };
     bodyMapping?: Record<string, string>;
+    endpoint?: string;
   }): Promise<IGatewayRequestConfigDoc> {
     return super.create(data as Partial<IGatewayRequestConfigDoc>, MODEL_NAME) as Promise<IGatewayRequestConfigDoc>;
   }
@@ -49,7 +50,7 @@ export class GatewayRequestConfigRepository extends BaseRepository<IGatewayReque
   async updateByGatewayIdAndType(
     gatewayId: string,
     type: string,
-    data: Partial<Pick<IGatewayRequestConfigDoc, 'headers' | 'bodyMapping'>>
+    data: Partial<Pick<IGatewayRequestConfigDoc, 'headers' | 'bodyMapping' | 'endpoint'>>
   ): Promise<IGatewayRequestConfigDoc | null> {
     const id = new mongoose.Types.ObjectId(gatewayId);
     const updated = await this.getModel(MODEL_NAME)

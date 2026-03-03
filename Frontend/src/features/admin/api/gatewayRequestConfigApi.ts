@@ -15,6 +15,7 @@ export interface GatewayRequestConfig {
   type: string;
   headers: GatewayRequestConfigHeaders;
   bodyMapping: GatewayRequestConfigBodyMapping;
+  endpoint?: string;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -23,9 +24,12 @@ export interface CreateConfigPayload {
   type: string;
   headers?: GatewayRequestConfigHeaders;
   bodyMapping?: GatewayRequestConfigBodyMapping;
+  endpoint?: string;
 }
 
-export type UpdateConfigPayload = Partial<Pick<CreateConfigPayload, 'headers' | 'bodyMapping'>>;
+export type UpdateConfigPayload = Partial<
+  Pick<CreateConfigPayload, 'headers' | 'bodyMapping' | 'endpoint'>
+>;
 
 export const gatewayRequestConfigApi = {
   list: async (gatewayId: string): Promise<{ success: boolean; data: GatewayRequestConfig[] }> => {
