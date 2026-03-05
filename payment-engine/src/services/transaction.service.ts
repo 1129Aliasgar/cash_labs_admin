@@ -76,12 +76,10 @@ export class TransactionService extends BaseService {
     );
 
     const clientGateways = await this.clientGatewayRepository.findByClientId(String(client!._id));
-    console.log('Client gateways:', clientGateways);
     const withApmEnabled = clientGateways.filter((cg) => {
       const gw = cg.gatewayId as { apm?: { enabled?: boolean } };
       return gw?.apm?.enabled === true;
     });
-    console.log('With APM enabled:', withApmEnabled);
     this.validateBusinessRule(
       withApmEnabled.length > 0,
       'No gateway with APM enabled found for this client',
@@ -97,9 +95,12 @@ export class TransactionService extends BaseService {
       );
       if (!config) continue;
 
-      const gateway = cg.gatewayId as { endpoint?: string };
-      const endpoint = gateway?.endpoint?.trim();
-      this.validateValue(endpoint, 'Gateway endpoint for APM', HTTP_STATUS.BAD_REQUEST);
+      const endpoint = (config.endpoint ?? '').trim();
+      this.validateValue(
+        endpoint,
+        'Gateway request config endpoint for APM',
+        HTTP_STATUS.BAD_REQUEST
+      );
 
       const internalRequest: Record<string, unknown> = {
         customer: body.customer,
@@ -107,19 +108,23 @@ export class TransactionService extends BaseService {
         meta: body.meta ?? {},
       };
 
-      const requestBody = buildBody(config as ConfigWithDefaults, internalRequest);
-      const requestHeaders = buildHeaders(config, (cg.credentials ?? {}) as Record<string, unknown>);
+      const requestBody =  buildBody(config as ConfigWithDefaults, internalRequest);
+      const requestHeaders =  buildHeaders(config, (cg.credentials ?? {}) as Record<string, unknown>);
 
-      const response = await fetch(endpoint!, {
+      console.log('Request headers:', requestHeaders);
+      console.log('Request body:', requestBody);
+      console.log('Endpoint:', endpoint);
+
+
+      const response = await fetch(endpoint, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...requestHeaders,
-        },
+        headers: requestHeaders,
         body: JSON.stringify(requestBody),
       });
+      console.log('Response:', response);
 
       const data = await response.json().catch(() => ({}));
+      console.log('Response:', response.status, data);
       if (!response.ok) {
         throw this.createError(
           (data as { message?: string }).message ?? `Gateway responded with ${response.status}`,
