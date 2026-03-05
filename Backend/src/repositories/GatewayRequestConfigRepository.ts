@@ -3,7 +3,10 @@ import mongoose from 'mongoose';
 import { TYPES } from '../config/inversifyTypes';
 import { TenantContextProvider } from '../utils/tenantContext.provider';
 import { BaseRepository } from './BaseRepository';
-import { IGatewayRequestConfigDoc } from '../types/GatewayRequestConfig.types';
+import {
+  IGatewayRequestConfigDoc,
+  GatewayRequestConfigResponseMapping,
+} from '../types/GatewayRequestConfig.types';
 
 const MODEL_NAME = 'gatewayRequestConfig';
 
@@ -20,6 +23,7 @@ export class GatewayRequestConfigRepository extends BaseRepository<IGatewayReque
     type: string;
     headers?: { static?: Record<string, string>; mapped?: Record<string, string> };
     bodyMapping?: Record<string, string>;
+    responseMapping?: GatewayRequestConfigResponseMapping;
     endpoint?: string;
   }): Promise<IGatewayRequestConfigDoc> {
     return super.create(data as Partial<IGatewayRequestConfigDoc>, MODEL_NAME) as Promise<IGatewayRequestConfigDoc>;
@@ -50,7 +54,9 @@ export class GatewayRequestConfigRepository extends BaseRepository<IGatewayReque
   async updateByGatewayIdAndType(
     gatewayId: string,
     type: string,
-    data: Partial<Pick<IGatewayRequestConfigDoc, 'headers' | 'bodyMapping' | 'endpoint'>>
+    data: Partial<
+      Pick<IGatewayRequestConfigDoc, 'headers' | 'bodyMapping' | 'responseMapping' | 'endpoint'>
+    >
   ): Promise<IGatewayRequestConfigDoc | null> {
     const id = new mongoose.Types.ObjectId(gatewayId);
     const updated = await this.getModel(MODEL_NAME)

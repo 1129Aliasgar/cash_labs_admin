@@ -624,6 +624,7 @@ function ConfigModal({
   const [formHeadersStatic, setFormHeadersStatic] = useState('{}');
   const [formHeadersMapped, setFormHeadersMapped] = useState('{}');
   const [formBodyMapping, setFormBodyMapping] = useState('{}');
+  const [formResponseMapping, setFormResponseMapping] = useState('{}');
   const [formEndpoint, setFormEndpoint] = useState('');
 
   const existingTypes = configs.map((c) => c.type);
@@ -637,6 +638,7 @@ function ConfigModal({
     setFormHeadersStatic('{}');
     setFormHeadersMapped('{}');
     setFormBodyMapping('{}');
+    setFormResponseMapping('{}');
     setFormEndpoint('');
     setConfigFormOpen(true);
   };
@@ -647,6 +649,7 @@ function ConfigModal({
     setFormHeadersStatic(JSON.stringify(config.headers?.static ?? {}, null, 2));
     setFormHeadersMapped(JSON.stringify(config.headers?.mapped ?? {}, null, 2));
     setFormBodyMapping(JSON.stringify(config.bodyMapping ?? {}, null, 2));
+    setFormResponseMapping(JSON.stringify(config.responseMapping ?? {}, null, 2));
     setFormEndpoint(config.endpoint ?? '');
     setConfigFormOpen(true);
   };
@@ -656,10 +659,12 @@ function ConfigModal({
     let headersStatic: Record<string, string> = {};
     let headersMapped: Record<string, string> = {};
     let bodyMapping: Record<string, string> = {};
+    let responseMapping: Record<string, string> = {};
     try {
       headersStatic = JSON.parse(formHeadersStatic || '{}');
       headersMapped = JSON.parse(formHeadersMapped || '{}');
       bodyMapping = JSON.parse(formBodyMapping || '{}');
+      responseMapping = JSON.parse(formResponseMapping || '{}');
     } catch {
       return;
     }
@@ -667,6 +672,7 @@ function ConfigModal({
       type: formType,
       headers: { static: headersStatic, mapped: headersMapped },
       bodyMapping,
+      responseMapping,
       endpoint: formEndpoint || undefined,
     };
     if (editingConfigType) {
@@ -676,6 +682,7 @@ function ConfigModal({
           data: {
             headers: payload.headers,
             bodyMapping: payload.bodyMapping,
+            responseMapping: payload.responseMapping,
             endpoint: payload.endpoint,
           },
         },
@@ -742,7 +749,8 @@ function ConfigModal({
                         <span className="text-xs text-slate-500 ml-2">
                           {Object.keys(c.headers?.static ?? {}).length +
                             Object.keys(c.headers?.mapped ?? {}).length}{' '}
-                          header keys, {Object.keys(c.bodyMapping ?? {}).length} body mappings
+                          header keys, {Object.keys(c.bodyMapping ?? {}).length} body,{' '}
+                          {Object.keys(c.responseMapping ?? {}).length} response mappings
                         </span>
                         {c.endpoint && (
                           <div className="text-xs text-slate-400 mt-1 truncate max-w-xs">
@@ -814,6 +822,18 @@ function ConfigModal({
                   rows={5}
                   className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm font-mono focus:ring-2 focus:ring-slate-900/10 outline-none"
                   placeholder='{"first_name": "customer.firstName", "email": "customer.email"}'
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Response mapping — JSON
+                </label>
+                <textarea
+                  value={formResponseMapping}
+                  onChange={(e) => setFormResponseMapping(e.target.value)}
+                  rows={5}
+                  className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm font-mono focus:ring-2 focus:ring-slate-900/10 outline-none"
+                  placeholder='{"transactionId": "response.id", "status": "response.status"}'
                 />
               </div>
               <div>

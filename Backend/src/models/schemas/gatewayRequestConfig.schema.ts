@@ -21,7 +21,8 @@ const gatewayRequestConfigSchema = new Schema<IGatewayRequestConfigDoc>(
       mapped: { type: Schema.Types.Mixed, default: () => ({}) },
     },
     bodyMapping: { type: Schema.Types.Mixed, default: () => ({}) },
-    endpoint: { type: String, required: false },
+    responseMapping: { type: Schema.Types.Mixed, default: () => ({}) },
+    endpoint: { type: String, required: true },
   },
   { timestamps: true, versionKey: false }
 );

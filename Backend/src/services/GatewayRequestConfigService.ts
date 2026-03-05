@@ -8,6 +8,7 @@ import { IGatewayRequestConfigDoc } from '../types/GatewayRequestConfig.types';
 import {
   GatewayRequestConfigHeaders,
   GatewayRequestConfigBodyMapping,
+  GatewayRequestConfigResponseMapping,
 } from '../types/GatewayRequestConfig.types';
 import { REQUEST_CONFIG_TYPE } from '../constants/gateway.constants';
 import { IGateway } from '../types/Gateway.types';
@@ -17,9 +18,12 @@ export interface CreateConfigInput {
   headers?: GatewayRequestConfigHeaders;
   bodyMapping?: GatewayRequestConfigBodyMapping;
   endpoint?: string;
+  responseMapping?: GatewayRequestConfigResponseMapping;
 }
 
-export type UpdateConfigInput = Partial<Pick<CreateConfigInput, 'headers' | 'bodyMapping' | 'endpoint'>>;
+export type UpdateConfigInput = Partial<
+  Pick<CreateConfigInput, 'headers' | 'bodyMapping' | 'responseMapping' | 'endpoint'>
+>;
 
 @injectable()
 export class GatewayRequestConfigService extends BaseService {
@@ -69,6 +73,7 @@ export class GatewayRequestConfigService extends BaseService {
       type: data.type,
       headers: data.headers,
       bodyMapping: data.bodyMapping,
+      responseMapping: data.responseMapping,
       endpoint: data.endpoint,
     });
     await this.setGatewayCapabilityConfigured(gatewayId, data.type);
@@ -87,6 +92,7 @@ export class GatewayRequestConfigService extends BaseService {
     const updated = await this.configRepo.updateByGatewayIdAndType(gatewayId, type, {
       headers: data.headers,
       bodyMapping: data.bodyMapping,
+      responseMapping: data.responseMapping,
       endpoint: data.endpoint,
     });
     if (!updated) throw this.createError('Config not found for this gateway and type.', 404);

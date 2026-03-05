@@ -9,12 +9,17 @@ export interface GatewayRequestConfigBodyMapping {
   [key: string]: string;
 }
 
+export interface GatewayRequestConfigResponseMapping {
+  [key: string]: string;
+}
+
 export interface GatewayRequestConfig {
   _id: string;
   gatewayId: string;
   type: string;
   headers: GatewayRequestConfigHeaders;
   bodyMapping: GatewayRequestConfigBodyMapping;
+  responseMapping?: GatewayRequestConfigResponseMapping;
   endpoint?: string;
   createdAt?: string;
   updatedAt?: string;
@@ -24,11 +29,12 @@ export interface CreateConfigPayload {
   type: string;
   headers?: GatewayRequestConfigHeaders;
   bodyMapping?: GatewayRequestConfigBodyMapping;
+  responseMapping?: GatewayRequestConfigResponseMapping;
   endpoint?: string;
 }
 
 export type UpdateConfigPayload = Partial<
-  Pick<CreateConfigPayload, 'headers' | 'bodyMapping' | 'endpoint'>
+  Pick<CreateConfigPayload, 'headers' | 'bodyMapping' | 'responseMapping' | 'endpoint'>
 >;
 
 export const gatewayRequestConfigApi = {
