@@ -20,6 +20,7 @@ import { GatewayRequestConfigRepository } from '../repositories/GatewayRequestCo
 import { PaymentService } from '../services/payment.service';
 import { GatewayService } from '../services/GatewayService';
 import { TransactionService } from '../services/transaction.service';
+import { TransactionEventProducerService } from '../services/transactionEventProducer.service';
 import { HealthController } from '../controllers/health.controller';
 import { PaymentController } from '../controllers/payment.controller';
 import { TransactionController } from '../controllers/transaction.controller';
@@ -68,6 +69,11 @@ export function configureContainer(): Container {
   container
     .bind<TransactionService>(TYPES.TransactionService)
     .to(TransactionService)
+    .inSingletonScope();
+
+  container
+    .bind<TransactionEventProducerService>(TYPES.TransactionEventProducerService)
+    .to(TransactionEventProducerService)
     .inSingletonScope();
 
   // Bind controllers (by class so inversify-express-utils can resolve them)
