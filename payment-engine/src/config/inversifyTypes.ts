@@ -10,6 +10,7 @@ export const TYPES = {
   PaymentService: Symbol.for('PaymentService'),
   GatewayService: Symbol.for('GatewayService'),
   TransactionService: Symbol.for('TransactionService'),
+  TransactionEventProducerService: Symbol.for('TransactionEventProducerService'),
   // Repositories
   GatewayRepository: Symbol.for('GatewayRepository'),
   ClientRepository: Symbol.for('ClientRepository'),

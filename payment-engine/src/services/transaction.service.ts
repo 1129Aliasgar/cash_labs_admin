@@ -4,6 +4,8 @@ import { TYPES } from '../types';
 import { ClientRepository } from '../repositories/ClientRepository';
 import { ClientGatewayRepository } from '../repositories/ClientGatewayRepository';
 import { GatewayRequestConfigRepository } from '../repositories/GatewayRequestConfigRepository';
+import { TransactionEventProducerService } from './transactionEventProducer.service';
+import { tenantContextStorage } from '../utils/tenantContext.provider';
 import { IGatewayRequestConfigDoc } from '../types/GatewayRequestConfig.types';
 import { REQUEST_CONFIG_TYPE } from '../constants/gateway.constants';
 import { HTTP_STATUS } from '../constants/index';
@@ -51,12 +53,83 @@ function buildHeaders(
   return headers;
 }
 
+/**
+ * Normalize responseMapping from config (may be object or JSON string from DB).
+ */
+function normalizeResponseMapping(
+  raw: unknown
+): Record<string, string> {
+  if (raw == null) return {};
+  if (typeof raw === 'object' && raw !== null && !Array.isArray(raw)) {
+    const obj = raw as Record<string, unknown>;
+    const result: Record<string, string> = {};
+    for (const k of Object.keys(obj)) {
+      const v = obj[k];
+      if (typeof v === 'string') result[k] = v;
+    }
+    return result;
+  }
+  if (typeof raw === 'string') {
+    try {
+      const parsed = JSON.parse(raw) as Record<string, unknown>;
+      return normalizeResponseMapping(parsed);
+    } catch {
+      return {};
+    }
+  }
+  return {};
+}
+
+/**
+ * Map gateway response to a normalized shape using config.responseMapping.
+ * responseMapping: outputKey -> dot path (e.g. transactionId -> "message.id").
+ */
+function mapResponse(
+  source: Record<string, unknown>,
+  responseMapping: Record<string, string>
+): Record<string, unknown> {
+  const out: Record<string, unknown> = {};
+  for (const outputKey of Object.keys(responseMapping)) {
+    const path = responseMapping[outputKey];
+    if (typeof path !== 'string') continue;
+    const value = get(source, path);
+    out[outputKey] = value ?? null;
+  }
+  return out;
+}
+
+/**
+ * Get the payload object from gateway response.
+ * Handles: { data: [ {...} ] }, { data: {...} }, or raw array [ {...} ].
+ */
+function getGatewayPayload(gatewayResponse: unknown): Record<string, unknown> {
+  if (Array.isArray(gatewayResponse) && gatewayResponse.length > 0) {
+    const first = gatewayResponse[0];
+    if (first != null && typeof first === 'object' && !Array.isArray(first)) {
+      return first as Record<string, unknown>;
+    }
+  }
+  if (gatewayResponse != null && typeof gatewayResponse === 'object' && !Array.isArray(gatewayResponse)) {
+    const obj = gatewayResponse as Record<string, unknown>;
+    const data = obj.data;
+    if (Array.isArray(data) && data.length > 0 && data[0] != null && typeof data[0] === 'object') {
+      return data[0] as Record<string, unknown>;
+    }
+    if (data != null && typeof data === 'object' && !Array.isArray(data)) {
+      return data as Record<string, unknown>;
+    }
+    return obj;
+  }
+  return {};
+}
+
 @injectable()
 export class TransactionService extends BaseService {
   constructor(
     @inject(TYPES.ClientRepository) private readonly clientRepository: ClientRepository,
     @inject(TYPES.ClientGatewayRepository) private readonly clientGatewayRepository: ClientGatewayRepository,
-    @inject(TYPES.GatewayRequestConfigRepository) private readonly gatewayRequestConfigRepository: GatewayRequestConfigRepository
+    @inject(TYPES.GatewayRequestConfigRepository) private readonly gatewayRequestConfigRepository: GatewayRequestConfigRepository,
+    @inject(TYPES.TransactionEventProducerService) private readonly transactionEventProducer: TransactionEventProducerService
   ) {
     super();
   }
@@ -108,30 +181,55 @@ export class TransactionService extends BaseService {
         meta: body.meta ?? {},
       };
 
-      const requestBody =  buildBody(config as ConfigWithDefaults, internalRequest);
-      const requestHeaders =  buildHeaders(config, (cg.credentials ?? {}) as Record<string, unknown>);
-
-      console.log('Request headers:', requestHeaders);
-      console.log('Request body:', requestBody);
-      console.log('Endpoint:', endpoint);
-
+      const requestBody = buildBody(config as ConfigWithDefaults, internalRequest);
+      const requestHeaders = buildHeaders(config, (cg.credentials ?? {}) as Record<string, unknown>);
 
       const response = await fetch(endpoint, {
         method: 'POST',
-        headers: requestHeaders,
+        headers: {
+          'Content-Type': 'application/json',
+          ...requestHeaders,
+        },
         body: JSON.stringify(requestBody),
       });
-      console.log('Response:', response);
 
-      const data = await response.json().catch(() => ({}));
-      console.log('Response:', response.status, data);
+      const gatewayResponse = await response.json().catch(() => ({})) as {
+        success?: boolean;
+        data?: unknown[];
+        message?: string;
+      };
+
       if (!response.ok) {
         throw this.createError(
-          (data as { message?: string }).message ?? `Gateway responded with ${response.status}`,
+          gatewayResponse.message ?? `Gateway responded with ${response.status}`,
           response.status
         );
       }
-      return { success: true, data };
+
+      const responseMapping = normalizeResponseMapping(config.responseMapping);
+      const source = getGatewayPayload(gatewayResponse);
+
+      const mappedData =
+        Object.keys(responseMapping).length > 0
+          ? mapResponse(source, responseMapping)
+          : source;
+
+      const tenantCtx = tenantContextStorage.getStore();
+      const tenantHost = tenantCtx?.host;
+      if (tenantHost) {
+        this.transactionEventProducer
+          .sendTransactionEvent({
+            tenantHost,
+            transactionId:
+              (mappedData as Record<string, unknown>).transactionId as string | undefined,
+            requestBody: internalRequest as Record<string, unknown>,
+            gatewayResponse: gatewayResponse as Record<string, unknown>,
+            status: 'success',
+          })
+          .catch((e) => console.error('[TransactionService] Event send failed', e));
+      }
+
+      return { success: true, data: mappedData };
     }
 
     throw this.createError(

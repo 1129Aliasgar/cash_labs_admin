@@ -10,11 +10,16 @@ export interface GatewayRequestConfigBodyMapping {
   [outputKey: string]: string;
 }
 
+export interface GatewayRequestConfigResponseMapping {
+  [outputKey: string]: string;
+}
+
 export interface IGatewayRequestConfigDoc extends Document {
   gatewayId: Types.ObjectId;
   type: RequestConfigType;
   headers: GatewayRequestConfigHeaders;
   bodyMapping: GatewayRequestConfigBodyMapping;
+  responseMapping?: GatewayRequestConfigResponseMapping;
   endpoint?: string;
   createdAt?: Date;
   updatedAt?: Date;
