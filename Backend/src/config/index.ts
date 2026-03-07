@@ -44,8 +44,8 @@ export const config = {
       parseInt(process.env.LOCKOUT_DURATION_MINUTES || '15', 10) * 60 * 1000,
   },
 
-  email: {
-    apiKey: requireEnv('SENDGRID_API_KEY'),
-    from: requireEnv('EMAIL_FROM') || 'PSPManager <noreply@pspmanager.com>',
+  // Kafka brokers — comma-separated (e.g. "kafka:9092" inside Docker)
+  kafka: {
+    brokers: (process.env.KAFKA_BROKERS || 'localhost:9092').split(','),
   },
 } as const;

@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff, Lock, Mail, AlertCircle, ArrowRight, Shield } from 'lucide-react';
@@ -10,6 +11,7 @@ import { loginSchema, type LoginFormData } from '@/features/auth/schemas';
 import { Logo } from '@/components/common/Logo';
 
 export default function LoginPage() {
+    const router = useRouter();
     const [showPassword, setShowPassword] = useState(false);
     const [serverError, setServerError] = useState('');
 
@@ -30,10 +32,21 @@ export default function LoginPage() {
                 // REDIRECTION REMOVED: Managed by root AuthProvider/Gate
             },
             onError: (error: unknown) => {
-                const axiosError = error as { response?: { data?: { message?: string } } };
-                setServerError(
-                    axiosError?.response?.data?.message || 'Login failed. Please try again.'
-                );
+                const axiosError = error as {
+                    response?: { status?: number; data?: { message?: string } };
+                };
+                const status = axiosError?.response?.status;
+                const message = axiosError?.response?.data?.message ?? '';
+
+                // ─── If email is not verified, redirect to verification screen ───
+                if (status === 403 && message.toLowerCase().includes('verify')) {
+                    router.push(
+                        `/auth/verify-email?email=${encodeURIComponent(data.email)}`
+                    );
+                    return;
+                }
+
+                setServerError(message || 'Login failed. Please try again.');
             },
         });
     };

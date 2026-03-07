@@ -18,7 +18,7 @@ const userSchema = new Schema<IUser>(
       select: false,
     },
     fullName: { type: String, required: true, trim: true },
-    companyName: { type: String, required: true, trim: true },
+    companyName: { type: String, required: false, trim: true },
     telegramId: { type: String, trim: true },
     role: {
       type: String,

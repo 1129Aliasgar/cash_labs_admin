@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Review &amp; Submit - PSPManager Portal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#138aec",
+                        "background-light": "#f8fafc",
+                        "background-dark": "#0f172a",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.375rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .step-active {
+            @apply bg-primary/10 text-primary border-l-4 border-primary;
+        }
+        .step-completed {
+            @apply text-green-600;
+        }
+        .paper-card {
+            @apply bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200;
+        }
+        .stepper-item {
+            @apply flex items-center gap-4 px-6 py-4 border-l-4 border-transparent transition-all;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex min-h-screen w-full overflow-hidden">
+<aside class="w-72 border-r border-slate-200 bg-white dark:bg-slate-900 hidden lg:flex flex-col sticky top-0 h-screen">
+<div class="p-8">
+<div class="flex items-center gap-3">
+<div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-white">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+</div>
+<div>
+<h2 class="text-lg font-bold leading-tight tracking-tight">PSPManager</h2>
+<p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Enterprise Onboarding</p>
+</div>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto">
+<div class="px-8 mb-6">
+<p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Application Progress</p>
+</div>
+<nav class="space-y-1">
+<div class="stepper-item step-completed">
+<div class="flex h-8 w-8 items-center justify-center rounded-full bg-green-100 text-green-600">
+<span class="material-symbols-outlined text-lg">check</span>
+</div>
+<div>
+<p class="text-sm font-bold">Business Info</p>
+<p class="text-[10px] text-slate-400 uppercase font-medium">Completed</p>
+</div>
+</div>
+<div class="stepper-item step-completed">
+<div class="flex h-8 w-8 items-center justify-center rounded-full bg-green-100 text-green-600">
+<span class="material-symbols-outlined text-lg">check</span>
+</div>
+<div>
+<p class="text-sm font-bold">KYC Documents</p>
+<p class="text-[10px] text-slate-400 uppercase font-medium">Completed</p>
+</div>
+</div>
+<div class="stepper-item step-completed">
+<div class="flex h-8 w-8 items-center justify-center rounded-full bg-green-100 text-green-600">
+<span class="material-symbols-outlined text-lg">check</span>
+</div>
+<div>
+<p class="text-sm font-bold">Settlement Details</p>
+<p class="text-[10px] text-slate-400 uppercase font-medium">Completed</p>
+</div>
+</div>
+<div class="stepper-item step-active">
+<div class="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-white">
+<span class="text-xs font-bold">4</span>
+</div>
+<div>
+<p class="text-sm font-bold">Review &amp; Submit</p>
+<p class="text-[10px] text-primary/60 uppercase font-medium">Current Step</p>
+</div>
+</div>
+</nav>
+</div>
+<div class="p-8 border-t border-slate-100">
+<div class="flex items-center gap-3 px-3 py-3 bg-slate-50 rounded-xl border border-slate-100">
+<img alt="User" class="h-8 w-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDuL9b6mlZxD_O2r64TmBKwjk_iQq_tL9ccZZAIxxY0rLfWev9ETrGDn7Cpt3-Xm-Bm3Vb9c8meu2KdBoHLY2RPmohg_cFaJc9_AsH3Xb9XjIVEC66j5whNq_-4to_PLBqWLrlG_e429L3-XW-D_mI5aA8syt3drLLnfUoqfRkOqdtnDbnE8Gl4hf2dVLL8SqoACzyViA32bC3YdWm6r94id66ocv3rlcaZjl10isoElgeoe-UYF07Iws0g6XwyTrLR4oG7XsEkKeU"/>
+<div class="min-w-0">
+<p class="text-xs font-bold truncate">J. Richardson</p>
+<p class="text-[10px] text-slate-500 truncate">j.richardson@nexus.io</p>
+</div>
+</div>
+</div>
+</aside>
+<main class="flex-1 flex flex-col h-screen overflow-hidden">
+<header class="h-16 border-b border-slate-200 bg-white dark:bg-slate-900 flex items-center justify-between px-8 shrink-0">
+<div class="flex items-center gap-2">
+<span class="text-sm font-medium text-slate-500">Step 4 of 4</span>
+<span class="material-symbols-outlined text-slate-400 text-sm">chevron_right</span>
+<span class="text-sm font-bold text-slate-900">Review &amp; Submit</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-slate-500 hover:text-slate-800 text-xs font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">save</span> SAVE DRAFT
+                </button>
+<div class="h-4 w-px bg-slate-200"></div>
+<div class="flex items-center gap-2 px-3 py-1.5 bg-green-50 text-green-700 rounded-full border border-green-100">
+<span class="material-symbols-outlined text-sm fill-1">check_circle</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Ready to Submit</span>
+</div>
+</div>
+</header>
+<div class="flex-1 overflow-y-auto bg-slate-50/50 p-8">
+<div class="max-w-5xl mx-auto">
+<div class="mb-8">
+<h1 class="text-2xl font-black text-slate-900 tracking-tight">Onboarding Final Review &amp; Submit</h1>
+<p class="text-slate-500 mt-1">Please perform a final check of your application data before submitting for compliance verification.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<section class="paper-card p-6 relative">
+<button class="absolute top-5 right-5 text-primary hover:bg-primary/5 px-3 py-1 rounded text-xs font-bold flex items-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-sm">edit</span> EDIT
+                        </button>
+<div class="flex items-center gap-3 mb-6">
+<div class="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center text-slate-600">
+<span class="material-symbols-outlined text-[20px]">corporate_fare</span>
+</div>
+<h2 class="font-bold text-slate-900">Business Details</h2>
+</div>
+<div class="space-y-4">
+<div>
+<p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Legal Entity Name</p>
+<p class="text-sm font-semibold text-slate-800 mt-0.5">Nexus Global Solutions Ltd.</p>
+</div>
+<div>
+<p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Tax ID / Registration</p>
+<p class="text-sm font-semibold text-slate-800 mt-0.5">VAT-8829104-X</p>
+</div>
+<div>
+<p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Operating Domain</p>
+<p class="text-sm font-semibold text-primary mt-0.5 hover:underline cursor-pointer">nexus-global.io</p>
+</div>
+</div>
+</section>
+<section class="paper-card p-6 relative">
+<button class="absolute top-5 right-5 text-primary hover:bg-primary/5 px-3 py-1 rounded text-xs font-bold flex items-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-sm">edit</span> EDIT
+                        </button>
+<div class="flex items-center gap-3 mb-6">
+<div class="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center text-slate-600">
+<span class="material-symbols-outlined text-[20px]">contact_mail</span>
+</div>
+<h2 class="font-bold text-slate-900">Contact Information</h2>
+</div>
+<div class="space-y-4">
+<div>
+<p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Primary Contact</p>
+<p class="text-sm font-semibold text-slate-800 mt-0.5">Jonathan Richardson</p>
+</div>
+<div>
+<p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Email Address</p>
+<p class="text-sm font-semibold text-slate-800 mt-0.5">j.richardson@nexus-global.io</p>
+</div>
+<div>
+<p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Authorized Role</p>
+<p class="text-sm font-semibold text-slate-800 mt-0.5">Managing Director</p>
+</div>
+</div>
+</section>
+<section class="paper-card p-6 relative col-span-1 md:col-span-2">
+<button class="absolute top-5 right-5 text-primary hover:bg-primary/5 px-3 py-1 rounded text-xs font-bold flex items-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-sm">edit</span> EDIT
+                        </button>
+<div class="flex items-center gap-3 mb-6">
+<div class="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center text-slate-600">
+<span class="material-symbols-outlined text-[20px]">folder_shared</span>
+</div>
+<h2 class="font-bold text-slate-900">KYC Documents</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="flex items-center gap-4 p-4 bg-slate-50 border border-slate-100 rounded-lg">
+<div class="w-10 h-10 bg-white rounded border border-slate-200 flex items-center justify-center text-red-500 shadow-sm">
+<span class="material-symbols-outlined">picture_as_pdf</span>
+</div>
+<div class="min-w-0 flex-1">
+<p class="text-xs font-bold truncate">Certificate_of_Inc.pdf</p>
+<div class="flex items-center gap-1 mt-0.5">
+<span class="text-[10px] font-bold text-green-600 bg-green-100 px-1 rounded tracking-tighter">VERIFIED</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-4 p-4 bg-slate-50 border border-slate-100 rounded-lg">
+<div class="w-10 h-10 bg-white rounded border border-slate-200 flex items-center justify-center text-blue-500 shadow-sm">
+<span class="material-symbols-outlined">image</span>
+</div>
+<div class="min-w-0 flex-1">
+<p class="text-xs font-bold truncate">Director_ID_Scan.jpg</p>
+<div class="flex items-center gap-1 mt-0.5">
+<span class="text-[10px] font-bold text-green-600 bg-green-100 px-1 rounded tracking-tighter">VERIFIED</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-4 p-4 bg-slate-50 border border-slate-100 rounded-lg">
+<div class="w-10 h-10 bg-white rounded border border-slate-200 flex items-center justify-center text-red-500 shadow-sm">
+<span class="material-symbols-outlined">picture_as_pdf</span>
+</div>
+<div class="min-w-0 flex-1">
+<p class="text-xs font-bold truncate">Proof_of_Domain.pdf</p>
+<div class="flex items-center gap-1 mt-0.5">
+<span class="text-[10px] font-bold text-green-600 bg-green-100 px-1 rounded tracking-tighter">VERIFIED</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="paper-card p-6 relative col-span-1 md:col-span-2">
+<button class="absolute top-5 right-5 text-primary hover:bg-primary/5 px-3 py-1 rounded text-xs font-bold flex items-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-sm">edit</span> EDIT
+                        </button>
+<div class="flex items-center gap-3 mb-6">
+<div class="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center text-slate-600">
+<span class="material-symbols-outlined text-[20px]">account_balance</span>
+</div>
+<h2 class="font-bold text-slate-900">Settlement Information</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+<div>
+<p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Bank Name</p>
+<p class="text-sm font-semibold text-slate-800 mt-0.5">Standard European Bank</p>
+</div>
+<div>
+<p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Account Number</p>
+<p class="text-sm font-semibold text-slate-800 mt-0.5">•••• 8829 0122</p>
+</div>
+<div>
+<p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Swift / BIC</p>
+<p class="text-sm font-semibold text-slate-800 mt-0.5">STEURBE22</p>
+</div>
+<div>
+<p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Currency</p>
+<p class="text-sm font-semibold text-slate-800 mt-0.5 flex items-center gap-1">
+<span class="material-symbols-outlined text-xs text-slate-400">euro</span> EUR
+                                </p>
+</div>
+</div>
+</section>
+</div>
+<div class="mt-10 p-6 bg-slate-900 text-white rounded-2xl shadow-xl overflow-hidden relative">
+<div class="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
+<span class="material-symbols-outlined text-[120px]">verified_user</span>
+</div>
+<div class="relative z-10">
+<h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">gavel</span>
+                            Merchant Declaration
+                        </h3>
+<div class="flex items-start gap-4">
+<div class="flex items-center h-6">
+<input class="h-5 w-5 rounded border-slate-700 bg-slate-800 text-primary focus:ring-primary focus:ring-offset-slate-900" id="declare" name="declare" type="checkbox"/>
+</div>
+<div class="text-sm">
+<label class="font-medium text-slate-300 leading-relaxed" for="declare">
+                                    I hereby certify that the information provided in this application is accurate, complete, and current to the best of my knowledge. I acknowledge that <span class="text-white font-bold">PSPManager</span> reserves the right to request additional documentation or terminate the account if any discrepancy is found. I have reviewed and agree to the <a class="text-primary hover:underline underline-offset-4" href="#">General Terms &amp; Conditions</a> and the <a class="text-primary hover:underline underline-offset-4" href="#">Privacy Policy</a>.
+                                </label>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-10 flex flex-col md:flex-row items-center justify-between gap-6 pb-12 border-t border-slate-200 pt-10">
+<div class="flex items-center gap-2 text-slate-500">
+<span class="material-symbols-outlined text-sm">info</span>
+<p class="text-xs font-medium">Approval typically takes 24-48 business hours.</p>
+</div>
+<div class="flex items-center gap-4 w-full md:w-auto">
+<button class="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3 bg-white border border-slate-200 text-slate-700 font-bold rounded-xl hover:bg-slate-50 transition-all shadow-sm text-sm">
+<span class="material-symbols-outlined text-[20px]">picture_as_pdf</span>
+                            Download Summary PDF
+                        </button>
+<button class="flex-1 md:flex-none flex items-center justify-center gap-2 px-12 py-3 bg-primary text-white font-bold rounded-xl hover:bg-primary/90 transition-all shadow-lg shadow-primary/30 transform hover:-translate-y-0.5 text-sm">
+                            Submit Application
+                            <span class="material-symbols-outlined text-[20px]">send</span>
+</button>
+</div>
+</div>
+<div class="flex flex-wrap items-center justify-center gap-8 py-10 opacity-70">
+<div class="flex items-center gap-2 grayscale hover:grayscale-0 transition-all duration-300">
+<div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-sm">lock</span>
+</div>
+<div class="leading-none">
+<p class="text-[10px] font-black tracking-widest text-slate-900 uppercase">Secure</p>
+<p class="text-[8px] font-bold text-slate-500">256-BIT SSL</p>
+</div>
+</div>
+<div class="flex items-center gap-2 grayscale hover:grayscale-0 transition-all duration-300">
+<div class="w-8 h-8 rounded-full bg-red-600 flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-sm">verified</span>
+</div>
+<div class="leading-none">
+<p class="text-[10px] font-black tracking-widest text-slate-900 uppercase">PCI DSS</p>
+<p class="text-[8px] font-bold text-slate-500">COMPLIANT L1</p>
+</div>
+</div>
+<div class="flex items-center gap-2 grayscale hover:grayscale-0 transition-all duration-300">
+<div class="w-8 h-8 rounded-full bg-green-600 flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-sm">security</span>
+</div>
+<div class="leading-none">
+<p class="text-[10px] font-black tracking-widest text-slate-900 uppercase">Encrypted</p>
+<p class="text-[8px] font-bold text-slate-500">AES-GCM-256</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+
+</body></html>

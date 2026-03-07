@@ -26,6 +26,8 @@ import {
   type CreateClientGatewayPayload,
   type UpdateClientGatewayPayload,
 } from '../api/clientGatewayApi';
+import { transactionApi } from '../api/transactionApi';
+import { customerApi } from '../api/customerApi';
 
 export const ADMIN_QUERY_KEYS = {
   pendingMerchants: ['admin', 'merchants', 'pending'] as const,
@@ -35,6 +37,9 @@ export const ADMIN_QUERY_KEYS = {
   gatewayConfigs: (gatewayId: string) => ['admin', 'gateways', gatewayId, 'configs'] as const,
   clients: ['admin', 'clients'] as const,
   clientGateways: ['admin', 'client-gateways'] as const,
+  transactions: ['admin', 'transactions'] as const,
+  customers: ['admin', 'customers'] as const,
+  transaction: (id: string) => ['admin', 'transactions', id] as const,
 };
 
 /**
@@ -247,5 +252,45 @@ export function useUpdateClientGateway() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ADMIN_QUERY_KEYS.clientGateways });
     },
+  });
+}
+
+// ─── Transactions ────────────────────────────────────────────────────────────
+
+export function useTransactions(params: any = {}) {
+  return useQuery({
+    queryKey: [...ADMIN_QUERY_KEYS.transactions, params],
+    queryFn: () => transactionApi.list(params),
+    staleTime: 1000 * 60 * 2,
+  });
+}
+
+export function useTransactionDetails(id: string) {
+  return useQuery({
+    queryKey: ADMIN_QUERY_KEYS.transaction(id),
+    queryFn: () => transactionApi.getById(id),
+    enabled: !!id,
+    staleTime: 1000 * 60 * 5,
+  });
+}
+
+export function useRefundTransaction() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => transactionApi.refund(id),
+    onSuccess: (_, id) => {
+      queryClient.invalidateQueries({ queryKey: ADMIN_QUERY_KEYS.transactions });
+      queryClient.invalidateQueries({ queryKey: ADMIN_QUERY_KEYS.transaction(id) });
+    },
+  });
+}
+
+// ─── Customers ───────────────────────────────────────────────────────────────
+
+export function useCustomers(params: any = {}) {
+  return useQuery({
+    queryKey: [...ADMIN_QUERY_KEYS.customers, params],
+    queryFn: () => customerApi.list(params),
+    staleTime: 1000 * 60 * 5,
   });
 }

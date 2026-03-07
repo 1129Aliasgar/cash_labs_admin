@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Set New Password - PSP Gateway</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#138aec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101a22",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .checkbox-tick-svg {
+            --checkbox-tick-svg: url('data:image/svg+xml,%3csvg viewBox=%270 0 16 16%27 fill=%27rgb(248,250,252)%27 xmlns=%27http://www.w3.org/2000/svg%27%3e%3cpath d=%27M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z%27/%3e%3c/svg%3e');
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col font-display">
+<!-- Top Navigation -->
+<header class="w-full bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-6 py-4">
+<div class="max-w-7xl mx-auto flex items-center justify-between">
+<div class="flex items-center gap-2 text-primary">
+<div class="size-8">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M24 4H6V17.3333V30.6667H24V44H42V30.6667V17.3333H24V4Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h1 class="text-slate-900 dark:text-white text-xl font-bold tracking-tight">PSP Gateway</h1>
+</div>
+<a class="text-sm font-medium text-slate-500 hover:text-primary transition-colors" href="#">Back to Login</a>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-grow flex items-center justify-center p-6">
+<div class="w-full max-w-md bg-white dark:bg-slate-900 rounded-xl shadow-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+<div class="p-8">
+<!-- Header -->
+<div class="mb-8 text-center">
+<h2 class="text-3xl font-black text-slate-900 dark:text-white mb-2 tracking-tight">Set New Password</h2>
+<p class="text-slate-500 dark:text-slate-400 text-sm">Please enter a strong password to secure your PSP account.</p>
+</div>
+<!-- Form -->
+<form class="space-y-5">
+<!-- Password Field -->
+<div>
+<label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">New Password</label>
+<div class="relative flex items-center">
+<input class="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-slate-400" placeholder="••••••••" type="password"/>
+<button class="absolute right-3 text-slate-400 hover:text-slate-600 transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</div>
+</div>
+<!-- Password Strength Meter -->
+<div class="space-y-2">
+<div class="flex justify-between items-center text-xs font-bold uppercase tracking-wider text-slate-500">
+<span>Strength: <span class="text-primary">Strong</span></span>
+<span>65%</span>
+</div>
+<div class="h-2 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 65%;"></div>
+</div>
+</div>
+<!-- Password Requirements Checklist -->
+<div class="grid grid-cols-1 gap-2 py-2">
+<div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+<span class="material-symbols-outlined text-emerald-500 text-[18px]">check_circle</span>
+<span>At least 8 characters</span>
+</div>
+<div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+<span class="material-symbols-outlined text-emerald-500 text-[18px]">check_circle</span>
+<span>Includes a symbol (@#$)</span>
+</div>
+<div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+<span class="material-symbols-outlined text-slate-300 dark:text-slate-700 text-[18px]">radio_button_unchecked</span>
+<span>Includes a number</span>
+</div>
+<div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+<span class="material-symbols-outlined text-emerald-500 text-[18px]">check_circle</span>
+<span>Mix of uppercase &amp; lowercase</span>
+</div>
+</div>
+<!-- Confirm Password Field -->
+<div>
+<label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Confirm New Password</label>
+<div class="relative flex items-center">
+<input class="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-slate-400" placeholder="••••••••" type="password"/>
+<button class="absolute right-3 text-slate-400 hover:text-slate-600 transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</div>
+</div>
+<!-- Reset Button -->
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-3.5 rounded-lg shadow-lg shadow-primary/20 transition-all active:scale-[0.98] mt-4" type="submit">
+                        Reset Password
+                    </button>
+</form>
+</div>
+<!-- Trust Badges Footer -->
+<div class="bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 p-6">
+<div class="flex flex-wrap justify-center gap-6 items-center">
+<div class="flex items-center gap-1.5 grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all cursor-default">
+<span class="material-symbols-outlined text-blue-600 text-[20px]">verified_user</span>
+<span class="text-[10px] font-black tracking-widest text-slate-600 dark:text-slate-400 uppercase">Secure</span>
+</div>
+<div class="flex items-center gap-1.5 grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all cursor-default">
+<span class="material-symbols-outlined text-emerald-600 text-[20px]">payments</span>
+<span class="text-[10px] font-black tracking-widest text-slate-600 dark:text-slate-400 uppercase">PCI DSS Compliant</span>
+</div>
+<div class="flex items-center gap-1.5 grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all cursor-default">
+<span class="material-symbols-outlined text-amber-600 text-[20px]">lock</span>
+<span class="text-[10px] font-black tracking-widest text-slate-600 dark:text-slate-400 uppercase">Encrypted</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Page Footer -->
+<footer class="w-full py-8 text-center">
+<p class="text-xs text-slate-400 dark:text-slate-600">
+            © 2024 Multi-Gateway PSP platform. All rights reserved. <br/>
+            Protected by advanced multi-layer encryption protocols.
+        </p>
+</footer>
+</body></html>

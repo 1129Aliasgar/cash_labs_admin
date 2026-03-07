@@ -1,97 +1,118 @@
 'use client';
 
-import {
-    Users,
-    UserCheck,
-    UserX,
-    Hourglass,
-    Search,
-    Filter,
-    MoreVertical,
-    Check,
-    X,
-    Loader2,
-    ArrowUpRight,
-    ArrowDownRight,
-    ExternalLink
-} from 'lucide-react';
-import { useState } from 'react';
-import { useAllMerchants, useApproveMerchant, useRejectMerchant } from '@/features/admin/hooks';
-import { cn } from '@/lib/utils';
+import React from 'react';
+import { useAllMerchants } from '@/features/admin/hooks';
+import { clsx, type ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+function cn(...inputs: ClassValue[]) {
+    return twMerge(clsx(inputs));
+}
 
 export default function OrganizationPage() {
-    const { data: merchantsData, isLoading } = useAllMerchants();
-    const approveMerchant = useApproveMerchant();
-    const rejectMerchant = useRejectMerchant();
-    const [searchTerm, setSearchTerm] = useState('');
-    const [statusFilter, setStatusFilter] = useState<'ALL' | 'PENDING' | 'APPROVED' | 'REJECTED'>('ALL');
+    const { data: merchantsResponse, isLoading, error } = useAllMerchants();
+    const organizations = merchantsResponse?.data || [];
 
-    const merchants = merchantsData?.data || [];
-
-    // Filter logic
-    const filteredMerchants = merchants.filter(m => {
-        const matchesSearch = (m.companyName || m.fullName).toLowerCase().includes(searchTerm.toLowerCase()) || m.email.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesStatus = statusFilter === 'ALL' || m.merchantStatus === statusFilter;
-        return matchesSearch && matchesStatus;
-    });
-
-    const stats = [
-        { label: 'Total Merchants', value: merchants.length, icon: Users, color: 'text-blue-600', bg: 'bg-blue-50' },
-        { label: 'Active', value: merchants.filter(m => m.merchantStatus === 'APPROVED').length, icon: UserCheck, color: 'text-emerald-600', bg: 'bg-emerald-50' },
-        { label: 'Pending', value: merchants.filter(m => m.merchantStatus === 'PENDING').length, icon: Hourglass, color: 'text-amber-600', bg: 'bg-amber-50' },
-        { label: 'Rejected', value: merchants.filter(m => m.merchantStatus === 'REJECTED').length, icon: UserX, color: 'text-rose-600', bg: 'bg-rose-50' },
-    ];
+    if (isLoading) {
+        return (
+            <div className="flex items-center justify-center min-h-[400px]">
+                <div className="size-10 border-4 border-[#138aec]/20 border-t-[#138aec] rounded-full animate-spin"></div>
+            </div>
+        );
+    }
 
     return (
-        <div className="space-y-8 animate-in fade-in duration-500">
-            {/* Header */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="space-y-6">
+            <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Organization Management</h1>
-                    <p className="text-slate-500 text-sm mt-1">Manage merchant accounts and process applications.</p>
+                    <h2 className="text-2xl font-bold tracking-tight text-slate-900">Organizations</h2>
+                    <p className="text-slate-500 mt-0.5 text-sm">Manage hierarchy and financial parameters for your legal entities.</p>
                 </div>
-                <div className="flex items-center space-x-3">
-                    <button className="px-4 py-2 bg-slate-900 text-white rounded-xl text-sm font-medium hover:bg-slate-800 transition-all flex items-center shadow-lg shadow-slate-200">
-                        Add New Merchant <ArrowUpRight className="ml-2 w-4 h-4" />
-                    </button>
-                </div>
+                <button className="flex items-center gap-2 px-4 py-2 bg-[#138aec] text-white rounded-lg text-sm font-bold shadow-lg shadow-[#138aec]/20 hover:bg-[#1176c9] transition-all">
+                    <span className="material-symbols-outlined text-[20px]">add</span>
+                    Create New Organization
+                </button>
             </div>
 
-            {/* Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {stats.map((stat) => (
-                    <div key={stat.label} className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow group">
-                        <div className="flex justify-between items-start mb-4">
-                            <div className={cn("p-3 rounded-xl", stat.bg)}>
-                                <stat.icon className={cn("w-6 h-6", stat.color)} />
-                            </div>
-                        </div>
-                        <div>
-                            <p className="text-slate-500 text-sm font-medium">{stat.label}</p>
-                            <h3 className="text-2xl font-bold text-slate-900 mt-1">{stat.value}</h3>
-                        </div>
+            <div className="bg-white border border-slate-200 shadow-sm rounded-xl overflow-hidden">
+                <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse">
+                        <thead className="bg-slate-50 border-b border-slate-200">
+                            <tr>
+                                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-left">Org Name</th>
+                                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-left">Email</th>
+                                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-left">Created Date</th>
+                                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center">Associated Clients</th>
+                                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center">Status</th>
+                                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100">
+                            {organizations.map((org) => (
+                                <tr key={org.id}>
+                                    <td className="px-6 py-4">
+                                        <div className="flex items-center gap-3">
+                                            <div className="size-8 rounded bg-slate-100 flex items-center justify-center text-slate-500 font-bold text-xs uppercase">
+                                                {org.fullName?.substring(0, 2) || 'OR'}
+                                            </div>
+                                            <div className="text-sm font-semibold text-slate-900">{org.fullName}</div>
+                                        </div>
+                                    </td>
+                                    <td className="px-6 py-4 text-sm text-slate-600">{org.email}</td>
+                                    <td className="px-6 py-4 text-sm text-slate-600">
+                                        {org.createdAt ? new Date(org.createdAt).toLocaleDateString() : 'N/A'}
+                                    </td>
+                                    <td className="px-6 py-4 text-center">
+                                        <a className="text-sm font-semibold text-[#138aec] hover:underline decoration-2 underline-offset-4" href="#">
+                                            {/* Logic for associated clients could be added here */}
+                                            {org.role === 'MERCHANT' ? '12' : '0'}
+                                        </a>
+                                    </td>
+                                    <td className="px-6 py-4 text-center">
+                                        <span className={cn(
+                                            "px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-tight",
+                                            org.isVerified
+                                                ? "bg-emerald-100 text-emerald-600"
+                                                : "bg-amber-100 text-amber-600"
+                                        )}>
+                                            {org.isVerified ? 'Verified' : 'Pending'}
+                                        </span>
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <button className="p-1.5 text-slate-400 hover:text-[#138aec] hover:bg-slate-100 rounded transition-colors" title="Edit">
+                                                <span className="material-symbols-outlined text-[18px]">edit</span>
+                                            </button>
+                                            <button className="p-1.5 text-slate-400 hover:text-amber-500 hover:bg-slate-100 rounded transition-colors" title="Settings">
+                                                <span className="material-symbols-outlined text-[18px]">settings</span>
+                                            </button>
+                                            <button className="p-1.5 text-slate-400 hover:text-rose-500 hover:bg-slate-100 rounded transition-colors" title="Delete">
+                                                <span className="material-symbols-outlined text-[18px]">delete</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                            {organizations.length === 0 && (
+                                <tr>
+                                    <td colSpan={6} className="px-6 py-12 text-center text-slate-500">
+                                        No organizations found.
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+                <div className="px-6 py-4 border-t border-slate-100 bg-slate-50/50 flex items-center justify-between">
+                    <p className="text-xs font-semibold text-slate-500">Showing {organizations.length} organizations</p>
+                    <div className="flex gap-2">
+                        <button className="p-2 rounded-lg border border-slate-200 hover:bg-white transition-colors disabled:opacity-50" disabled>
+                            <span className="material-symbols-outlined text-[18px]">chevron_left</span>
+                        </button>
+                        <button className="p-2 rounded-lg border border-slate-200 hover:bg-white transition-colors disabled:opacity-50" disabled>
+                            <span className="material-symbols-outlined text-[18px]">chevron_right</span>
+                        </button>
                     </div>
-                ))}
-            </div>
-
-            {/* Organization Detail View */}
-            <div className="bg-white rounded-2xl border border-slate-200 p-12 text-center shadow-sm max-w-4xl mx-auto">
-                <div className="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6 text-blue-600 border-4 border-white shadow-sm">
-                    <Users className="w-10 h-10" />
-                </div>
-                <h3 className="text-2xl font-bold text-slate-900 tracking-tight">Organization Profile</h3>
-                <p className="text-slate-500 text-sm mt-3 max-w-lg mx-auto leading-relaxed">
-                    View and manage your platform's high-level entity configurations, legal documentation, and operational branches. Merchant account approvals and tracking have been centralized in the <span className="text-blue-600 font-bold hover:underline cursor-pointer" onClick={() => (window.location.href = '/superadmin/dashboard')}>Main Dashboard Queue</span>.
-                </p>
-
-                <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto">
-                    <button className="flex items-center justify-center gap-2 px-6 py-4 bg-white border border-slate-200 rounded-2xl text-sm font-bold text-slate-700 hover:bg-slate-50 transition-all shadow-sm">
-                        <ExternalLink className="w-4 h-4 text-slate-400" />
-                        Edit Corporate Identity
-                    </button>
-                    <button className="flex items-center justify-center gap-2 px-6 py-4 bg-slate-900 text-white rounded-2xl text-sm font-bold hover:bg-slate-800 transition-all shadow-lg shadow-slate-200">
-                        View Network Statistics
-                    </button>
                 </div>
             </div>
         </div>

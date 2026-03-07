@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sign Up - PSPManager</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#138aec",
+                        "background-soft": "#f8fafc",
+                        "pci-green": "#10b981",
+                        "secure-blue": "#2563eb",
+                        "encrypt-gold": "#d97706"
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.375rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        @layer base {
+            body {
+                font-family: 'Inter', sans-serif;
+            }
+        }
+        .password-step {
+            height: 4px;
+            flex: 1;
+            border-radius: 2px;
+            background-color: #e2e8f0;
+        }
+        .password-step.active-strong { background-color: #138aec; }
+        select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2364748b' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.75rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+    </style>
+</head>
+<body class="bg-background-soft text-slate-900 font-display min-h-screen flex items-center justify-center p-6">
+<div class="w-full max-w-[640px]">
+<div class="mb-8 text-center">
+<div class="inline-flex items-center gap-2 text-primary mb-2">
+<span class="material-symbols-outlined !text-4xl">account_balance_wallet</span>
+<span class="text-2xl font-bold tracking-tight text-slate-900 uppercase">PSPManager</span>
+</div>
+<h1 class="text-2xl font-bold text-slate-900">Create Your Merchant Account</h1>
+<p class="text-slate-500 mt-1">Join the multi-gateway routing network today.</p>
+</div>
+<div class="bg-white rounded-2xl shadow-xl shadow-slate-200/60 border border-slate-100 p-8 md:p-10">
+<form class="space-y-5">
+<div class="space-y-1.5">
+<label class="text-sm font-semibold text-slate-700">Account Type</label>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary !text-xl">badge</span>
+<select class="w-full pl-10 pr-4 py-3 bg-white border border-slate-200 rounded-lg focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all text-slate-700">
+<option value="merchant">Merchant</option>
+<option value="agent">Agent</option>
+</select>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+<div class="space-y-1.5">
+<label class="text-sm font-semibold text-slate-700">Full Name</label>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary !text-xl">person</span>
+<input class="w-full pl-10 pr-4 py-3 bg-white border border-slate-200 rounded-lg focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all placeholder:text-slate-400" placeholder="John Doe" type="text"/>
+</div>
+</div>
+<div class="space-y-1.5">
+<label class="text-sm font-semibold text-slate-700">Telegram ID</label>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary !text-xl">send</span>
+<input class="w-full pl-10 pr-4 py-3 bg-white border border-slate-200 rounded-lg focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all placeholder:text-slate-400" placeholder="@username" type="text"/>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+<div class="space-y-1.5">
+<label class="text-sm font-semibold text-slate-700">Email</label>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary !text-xl">mail</span>
+<input class="w-full pl-10 pr-4 py-3 bg-white border border-slate-200 rounded-lg focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all placeholder:text-slate-400" placeholder="name@company.com" type="email"/>
+</div>
+</div>
+<div class="space-y-1.5">
+<label class="text-sm font-semibold text-slate-700">Company Name</label>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary !text-xl">corporate_fare</span>
+<input class="w-full pl-10 pr-4 py-3 bg-white border border-slate-200 rounded-lg focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all placeholder:text-slate-400" placeholder="Legal Entity Name" type="text"/>
+</div>
+</div>
+</div>
+<div class="space-y-1.5">
+<label class="text-sm font-semibold text-slate-700">Create Password</label>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary !text-xl">lock</span>
+<input class="w-full pl-10 pr-12 py-3 bg-white border border-slate-200 rounded-lg focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all placeholder:text-slate-400" placeholder="••••••••" type="password"/>
+<button class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-primary" type="button">
+<span class="material-symbols-outlined !text-xl">visibility</span>
+</button>
+</div>
+<div class="flex gap-1.5 mt-2">
+<div class="password-step active-strong"></div>
+<div class="password-step active-strong"></div>
+<div class="password-step active-strong"></div>
+<div class="password-step"></div>
+</div>
+<p class="text-[11px] text-primary font-bold uppercase tracking-wider mt-1.5">Strong password</p>
+</div>
+<div class="flex items-start gap-3 pt-2">
+<div class="flex items-center h-5">
+<input class="w-4 h-4 text-primary border-slate-300 rounded focus:ring-primary focus:ring-offset-0" id="terms" type="checkbox"/>
+</div>
+<label class="text-sm text-slate-600 leading-tight" for="terms">
+                    I agree to the <a class="text-primary font-medium hover:underline" href="#">Terms of Service</a> and <a class="text-primary font-medium hover:underline" href="#">Privacy Policy</a>.
+                </label>
+</div>
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2 group mt-4" type="submit">
+                Create Account
+                <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+</form>
+<div class="mt-8 text-center border-t border-slate-100 pt-6">
+<p class="text-slate-500 text-sm">
+                Already have an account? 
+                <a class="text-primary font-bold hover:underline ml-1" href="#">Sign In</a>
+</p>
+</div>
+</div>
+<div class="mt-10 flex flex-wrap justify-center items-center gap-6">
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-100/50">
+<img alt="PCI Compliant Logo" class="h-5" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrLT_Zzb4Nz3m7Ciai71pdLsvVV8R0rOEY3gt_wSXsBtWQWq1K5CIXKUyN61LGBNpvbqkiFQou8NjnL_ruVRg2hbS9hsgBCTKjqD-Fe2dmpK9YKd2InQ-ScE1w-QeaDx4vaGa_pbYvIl_CZrwDCGZy8y_Yc9nhye5evuKbjKiF-jepiNwgK8NlLCSYk6q9rmrr4QwcLeAvceS5hqO7tVbka8HRU98uE63RjsYBgL_j8aXYDT7QWOphd3ApDx9JkplOCNLoEXeZ_o4"/>
+<span class="text-[10px] font-bold text-pci-green uppercase tracking-wider">PCI DSS Level 1</span>
+</div>
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-100/50">
+<span class="material-symbols-outlined text-secure-blue !text-[18px]">verified_user</span>
+<span class="text-[10px] font-bold text-secure-blue uppercase tracking-wider leading-none">Bank-Grade Security</span>
+</div>
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-50 border border-amber-100/50">
+<span class="material-symbols-outlined text-encrypt-gold !text-[18px]">encrypted</span>
+<span class="text-[10px] font-bold text-encrypt-gold uppercase tracking-wider leading-none">256-bit AES</span>
+</div>
+</div>
+<div class="mt-6 flex justify-center gap-6 opacity-60">
+<img alt="ISO Certified Logo" class="h-6" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnFGFX7KvcLmZqTABblsGNgyTQqbJRVUuTjNBktA4Nhcp10NLwRyiF8cUiaJkAF7fXFqTHaWDsdniuVoUmWT9--Ka4ScXh_WrILhSN71YauXnVMPcuwSRnv9FS-qqcKU5NIV_O_abdEsS3B6YJnLiGmNmOOo6-24x35aVwRdbliwaTmQzQX7Kv9wHaigf0DaE9n0DipbISW7gr6FOTCUBQTihHjDYLg4sE3lwFflOT15nMaFX5AbIlSHz9xH9qkio_BQP8HnoNbhk"/>
+<img alt="SSL Secured Logo" class="h-6" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVrOULeU23ymlBE06-JLUqABBMWsc5TBvV_oTtH9JNvjF4_g1WG2vedBJntZhVP_bKViqh16x9RvEBkuWaJzDzQS4wZeTIx19aWVg-SMfwAZquIHArlQz_YgECDtLO_V8hbRtUbEOzw1mLvACpOM0E8SyxLWmXK4M9wKmntxJj8PKRMq7Zh-1zWzA1wToctpul3x9K5zMPwXsHy9ee6WsXjVVRNzPwQ2n-8hQIN7DT-glt7Ot3gy4hmK9Uj0lcSKj5NcdxQZKRswA"/>
+</div>
+</div>
+
+</body></html>
