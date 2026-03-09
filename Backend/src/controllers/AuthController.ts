@@ -60,7 +60,9 @@ export class AuthController {
     try {
       const body = validate(verifyEmailSchema, req.body);
       const result = await this.authService.verifyEmail(body.token, req);
-      res.status(200).json({ success: true, message: result.message });
+      res.cookie('accessToken', result.accessToken, accessTokenCookieOptions);
+      res.cookie('refreshToken', result.refreshToken, refreshTokenCookieOptions);
+      res.status(200).json({ success: true, message: result.message, user: result.user });
     } catch (error) {
       next(error);
     }

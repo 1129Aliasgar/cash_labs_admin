@@ -26,6 +26,7 @@ import {
   setRequireApprovedMerchantMiddleware,
 } from './middlewares/requireApprovedMerchant.middleware';
 import { AppError } from './utils/AppError';
+import { connectProducer, disconnectProducer } from './kafka/producer';
 
 import './controllers/AuthController';
 import './controllers/AdminController';
@@ -111,13 +112,23 @@ async function startServer(): Promise<void> {
   const app = server.build();
 
   const PORT = config.port;
+
+  // ─── Connect Kafka producer before accepting traffic ─────────────────────
+  try {
+    await connectProducer();
+  } catch (err) {
+    console.error('[Server] Failed to connect Kafka producer:', err);
+    // Non-fatal: API still starts, but email events won't be published until Kafka is ready.
+  }
+
   const httpServer = app.listen(PORT, () => {
     console.log(`[Server] PSPManager Auth API running on port ${PORT} [${config.env}]`);
   });
 
   const shutdown = async (signal: string): Promise<void> => {
     console.log(`\n[Server] ${signal} received. Shutting down gracefully...`);
-    httpServer.close(() => {
+    httpServer.close(async () => {
+      await disconnectProducer();
       process.exit(0);
     });
     setTimeout(() => {

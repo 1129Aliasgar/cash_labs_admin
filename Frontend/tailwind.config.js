@@ -16,7 +16,7 @@ module.exports = {
           300: '#93c5fd',
           400: '#60a5fa',
           500: '#3b82f6',
-          600: '#2563eb',  // Primary brand blue (matches PSPManager design)
+          600: '#138aec',  // Primary brand blue (High-fidelity light blue theme)
           700: '#1d4ed8',
           800: '#1e40af',
           900: '#1e3a8a',

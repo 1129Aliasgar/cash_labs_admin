@@ -17,6 +17,7 @@ import {
 } from '../utils/tokens';
 import { UserRole, MerchantStatus, AuditAction } from '../constants/user.constants';
 import { IUser } from '../types/User.types';
+import { publishEmailEvent } from '../kafka/producer';
 
 function getClientInfo(req: Request): { ip: string; userAgent: string } {
   const ip =
@@ -86,13 +87,36 @@ export class AuthService extends BaseService {
       email: data.email,
     });
 
+    // ─── Publish email verification event to Kafka (fire-and-forget) ─────────
+    // This MUST NOT throw — signup must succeed regardless of email delivery.
+    try {
+      await publishEmailEvent({
+        type: 'VERIFY_EMAIL',
+        userId: (user as IUser)._id?.toString() ?? '',
+        email: data.email,
+        token: rawToken,
+        retryCount: 0,
+      });
+    } catch (kafkaErr) {
+      console.error('[AuthService] Failed to publish email event to Kafka:', kafkaErr);
+      // Non-fatal: the user is already created. Worker can be re-triggered manually.
+    }
+
     return {
       message: 'Account created. Please check your email to verify your account.',
       verificationToken: rawToken,
     };
   }
 
-  async verifyEmail(rawToken: string, req: Request): Promise<{ message: string }> {
+  async verifyEmail(
+    rawToken: string,
+    req: Request
+  ): Promise<{
+    message: string;
+    accessToken: string;
+    refreshToken: string;
+    user: { id: string; email: string; fullName: string; role: string; merchantStatus: string };
+  }> {
     const hashedToken = hashToken(rawToken);
     const user = await this.userRepo.getUserModel().findOne({
       verificationToken: hashedToken,
@@ -103,14 +127,32 @@ export class AuthService extends BaseService {
       throw this.createError('Invalid or expired verification token.', 400);
     }
 
+    const refreshToken = signRefreshToken(user._id.toString());
+    const refreshTokenHash = hashToken(refreshToken);
+
     await this.userRepo.updateById(user._id.toString(), {
       isVerified: true,
       verificationToken: undefined,
       verificationTokenExpiry: undefined,
+      refreshTokenHash,
     } as Partial<IUser>);
 
     await this.writeAuditLog(AuditAction.EMAIL_VERIFIED, req, user._id.toString());
-    return { message: 'Email verified successfully. You can now sign in.' };
+
+    const accessToken = signAccessToken(user._id.toString(), user.role, true);
+
+    return {
+      message: 'Email verified successfully. You are now signed in.',
+      accessToken,
+      refreshToken,
+      user: {
+        id: user._id.toString(),
+        email: user.email,
+        fullName: user.fullName,
+        role: user.role,
+        merchantStatus: user.merchantStatus,
+      },
+    };
   }
 
   async login(

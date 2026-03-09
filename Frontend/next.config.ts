@@ -21,6 +21,17 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+
+  // Redirects for legacy routes
+  async redirects() {
+    return [
+      {
+        source: '/auth/verify',
+        destination: '/auth/verify-email',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

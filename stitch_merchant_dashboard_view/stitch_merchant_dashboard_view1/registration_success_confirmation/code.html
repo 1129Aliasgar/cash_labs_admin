@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Registration Success - PSP Gateway</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#138aec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101a22",
+                        "success-green": "#22c55e",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .paper-card {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen flex flex-col font-display">
+<!-- Top Navigation Bar -->
+<header class="w-full bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-6 py-4">
+<div class="max-w-7xl mx-auto flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="text-primary">
+<svg class="size-8" fill="currentColor" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M24 4H6V17.3333V30.6667H24V44H42V30.6667V17.3333H24V44Z" fill="currentColor" fill-rule="evenodd" opacity="0.2"></path>
+<path d="M24 4H6V17.3333V30.6667H24V44H42V30.6667V17.3333H24V4Z" fill="currentColor"></path>
+</svg>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-xl font-bold tracking-tight">PSP Gateway</h2>
+</div>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600 dark:text-slate-400">
+<a class="hover:text-primary transition-colors" href="#">Dashboard</a>
+<a class="hover:text-primary transition-colors" href="#">Transactions</a>
+<a class="hover:text-primary transition-colors" href="#">Settings</a>
+</nav>
+<div class="h-10 w-10 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center overflow-hidden border border-slate-200 dark:border-slate-800">
+<span class="material-symbols-outlined text-slate-500">person</span>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 flex items-center justify-center p-6">
+<div class="w-full max-w-[520px]">
+<!-- Centered Success Card -->
+<div class="paper-card bg-white dark:bg-slate-900 rounded-xl overflow-hidden border border-slate-100 dark:border-slate-800 flex flex-col items-center p-10 text-center">
+<!-- Success Icon -->
+<div class="mb-8 relative">
+<div class="absolute inset-0 bg-success-green/10 rounded-full scale-150 blur-xl"></div>
+<div class="relative h-20 w-20 bg-success-green rounded-full flex items-center justify-center text-white shadow-lg shadow-success-green/20">
+<span class="material-symbols-outlined !text-5xl font-bold">check</span>
+</div>
+</div>
+<!-- Text Content -->
+<h1 class="text-slate-900 dark:text-slate-100 text-3xl font-bold mb-4 tracking-tight">Account Created Successfully!</h1>
+<p class="text-slate-600 dark:text-slate-400 text-base leading-relaxed mb-10 max-w-[400px]">
+                    Your account is now ready. You can proceed to complete your merchant onboarding or explore your dashboard.
+                </p>
+<!-- Action Buttons -->
+<div class="w-full flex flex-col gap-3 mb-10">
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-3.5 px-6 rounded-lg transition-all flex items-center justify-center gap-2 group">
+<span>Go to Dashboard</span>
+<span class="material-symbols-outlined !text-lg transition-transform group-hover:translate-x-1">arrow_forward</span>
+</button>
+<button class="w-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-900 dark:text-slate-100 font-bold py-3.5 px-6 rounded-lg transition-all border border-slate-200 dark:border-slate-700">
+                        Complete Onboarding
+                    </button>
+</div>
+<!-- Trust Badges -->
+<div class="w-full pt-8 border-t border-slate-100 dark:border-slate-800">
+<div class="flex flex-wrap items-center justify-center gap-6">
+<div class="flex items-center gap-2 text-[11px] font-bold tracking-widest text-slate-400 dark:text-slate-500 uppercase">
+<span class="material-symbols-outlined !text-lg text-primary">verified_user</span>
+                            SECURE
+                        </div>
+<div class="flex items-center gap-2 text-[11px] font-bold tracking-widest text-slate-400 dark:text-slate-500 uppercase">
+<span class="material-symbols-outlined !text-lg text-success-green">lock</span>
+                            PCI DSS
+                        </div>
+<div class="flex items-center gap-2 text-[11px] font-bold tracking-widest text-slate-400 dark:text-slate-500 uppercase">
+<span class="material-symbols-outlined !text-lg text-orange-400">encrypted</span>
+                            ENCRYPTED
+                        </div>
+</div>
+</div>
+</div>
+<!-- Footer Small Print -->
+<div class="mt-8 text-center">
+<p class="text-slate-400 dark:text-slate-600 text-xs">
+                    Need help setting up your account? 
+                    <a class="text-primary hover:underline font-medium" href="#">Contact Support</a>
+</p>
+</div>
+</div>
+</main>
+<!-- Background Decoration Elements (Optional, clean look) -->
+<div class="fixed top-0 left-0 -z-10 w-full h-full pointer-events-none opacity-40">
+<div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/5 rounded-full blur-[120px]"></div>
+<div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-success-green/5 rounded-full blur-[120px]"></div>
+</div>
+</body></html>
