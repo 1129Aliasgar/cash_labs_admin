@@ -3,6 +3,19 @@ declare module 'kafkajs' {
     clientId: string;
     brokers: string[];
     logLevel?: number;
+    ssl?: {
+      rejectUnauthorized?: boolean;
+      cert?: Buffer;
+      key?: Buffer;
+      ca?: Buffer[];
+      [key: string]: unknown;
+    };
+    sasl?: {
+      mechanism: 'plain' | string;
+      username: string;
+      password: string;
+      [key: string]: unknown;
+    };
     [key: string]: unknown;
   }
 

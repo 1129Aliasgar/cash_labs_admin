@@ -1,6 +1,25 @@
 declare module 'kafkajs' {
+  export interface KafkaConfig {
+    clientId: string;
+    brokers: string[];
+    ssl?: {
+      rejectUnauthorized?: boolean;
+      cert?: Buffer;
+      key?: Buffer;
+      ca?: Buffer[];
+      [key: string]: unknown;
+    };
+    sasl?: {
+      mechanism: 'plain' | string;
+      username: string;
+      password: string;
+      [key: string]: unknown;
+    };
+    [key: string]: unknown;
+  }
+
   export class Kafka {
-    constructor(config: { clientId: string; brokers: string[]; [key: string]: unknown });
+    constructor(config: KafkaConfig);
     consumer(config: {
       groupId: string;
       sessionTimeout?: number;
@@ -8,6 +27,15 @@ declare module 'kafkajs' {
       maxWaitTimeInMs?: number;
       rebalanceTimeout?: number;
     }): Consumer;
+    producer(): Producer;
+  }
+
+  export interface Producer {
+    connect(): Promise<void>;
+    send(params: {
+      topic: string;
+      messages: Array<{ value: string }>;
+    }): Promise<unknown>;
   }
 
   export interface Consumer {
