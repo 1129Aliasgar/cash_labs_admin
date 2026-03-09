@@ -213,18 +213,21 @@ export class TransactionService extends BaseService {
         Object.keys(responseMapping).length > 0
           ? mapResponse(source, responseMapping)
           : source;
+      (mappedData as Record<string, unknown>).root = gatewayResponse;
 
       const tenantCtx = tenantContextStorage.getStore();
       const tenantHost = tenantCtx?.host;
       if (tenantHost) {
-        this.transactionEventProducer
+        await this.transactionEventProducer
           .sendTransactionEvent({
             tenantHost,
             transactionId:
               (mappedData as Record<string, unknown>).transactionId as string | undefined,
+            referenceId:
+              (mappedData as Record<string, unknown>).referenceId as string | undefined,
             requestBody: internalRequest as Record<string, unknown>,
             gatewayResponse: gatewayResponse as Record<string, unknown>,
-            status: 'success',
+            status: mappedData.status as string,
           })
           .catch((e) => console.error('[TransactionService] Event send failed', e));
       }

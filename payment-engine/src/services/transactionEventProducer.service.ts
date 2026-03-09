@@ -6,9 +6,10 @@ import { createKafkaClient } from '../utils/kafkaConfig';
 export interface TransactionEventPayload {
   tenantHost: string;
   transactionId?: string;
+  referenceId?: string;
   requestBody?: Record<string, unknown>;
   gatewayResponse?: Record<string, unknown> | null;
-  status?: 'pending' | 'success' | 'failed';
+  status?: string;
   [key: string]: unknown;
 }
 
@@ -37,10 +38,6 @@ export class TransactionEventProducerService {
    * No-ops if ENABLE_TRANSACTION_EVENTS is not 'true'. Swallows errors so the API request is not failed.
    */
   async sendTransactionEvent(payload: TransactionEventPayload): Promise<void> {
-    const enabled =
-      (process.env.ENABLE_TRANSACTION_EVENTS || '').toLowerCase() === 'true';
-    if (!enabled) return;
-
     try {
       await this.ensureConnected();
       const value = JSON.stringify(payload);

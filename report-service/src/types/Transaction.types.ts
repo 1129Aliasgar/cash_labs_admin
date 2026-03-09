@@ -4,6 +4,7 @@ export interface ITransaction {
   transactionId?: string;
   requestBody: Record<string, unknown>;
   gatewayResponse: Record<string, unknown> | null;
+  transactionDetails?: Record<string, unknown>;
   status: TransactionStatus;
 }
 

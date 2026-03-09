@@ -6,8 +6,10 @@ import { ITransactionDoc, TransactionStatus } from '../types/Transaction.types';
 
 export interface TransactionEventPayload {
   transactionId?: string;
+  referenceId?: string;
   requestBody?: Record<string, unknown>;
   gatewayResponse?: Record<string, unknown> | null;
+  transactionDetails?: Record<string, unknown>;
   status?: TransactionStatus;
   [key: string]: unknown;
 }
@@ -48,6 +50,9 @@ export class TransactionService {
     const gatewayResponse =
       event.gatewayResponse && typeof event.gatewayResponse === 'object' ? event.gatewayResponse : null;
 
+    const transactionDetails =
+      event.transactionDetails && typeof event.transactionDetails === 'object' ? event.transactionDetails : {};
+
     if (transactionId) {
       const doc = await Transaction.findOneAndUpdate(
         { transactionId },
@@ -56,6 +61,7 @@ export class TransactionService {
             transactionId,
             requestBody,
             gatewayResponse,
+            transactionDetails,
             status,
           },
         },
@@ -67,6 +73,7 @@ export class TransactionService {
     return await Transaction.create({
       requestBody,
       gatewayResponse,
+      transactionDetails,
       status,
     });
   }

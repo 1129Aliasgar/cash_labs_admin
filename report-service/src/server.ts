@@ -79,16 +79,11 @@ async function startServer(): Promise<void> {
     console.log(`API:    http://localhost:${PORT}/api/hello`);
   });
 
-  const enableConsumer =
-    (process.env.ENABLE_TRANSACTION_CONSUMER || '').toLowerCase() === 'true' ||
-    (process.env.ENABLE_KAFKA_CONSUMERS || '').toLowerCase() === 'true';
 
-  if (enableConsumer) {
     const consumer = container.get<TransactionEventConsumerService>(TYPES.TransactionEventConsumerService);
     consumer.start().catch((err) => {
       console.error('[TransactionConsumer] Failed to start', err);
     });
-  }
 }
 
 process.on('SIGTERM', () => {

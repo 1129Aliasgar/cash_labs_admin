@@ -1,0 +1,9 @@
+{
+  "name": "kafka-scripts",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Kafka topic and admin scripts",
+  "dependencies": {
+    "kafkajs": "^2.2.4"
+  }
+}
