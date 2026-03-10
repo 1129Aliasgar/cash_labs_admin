@@ -7,7 +7,6 @@
 
 export const TYPES = {
   // Services
-  PaymentService: Symbol.for('PaymentService'),
   GatewayService: Symbol.for('GatewayService'),
   TransactionService: Symbol.for('TransactionService'),
   TransactionEventProducerService: Symbol.for('TransactionEventProducerService'),
@@ -20,6 +19,6 @@ export const TYPES = {
   TenantContextProvider: Symbol.for('TenantContextProvider'),
   // Controllers
   HealthController: Symbol.for('HealthController'),
-  PaymentController: Symbol.for('PaymentController'),
+  RedirectController: Symbol.for('RedirectController'),
   TransactionController: Symbol.for('TransactionController'),
 };

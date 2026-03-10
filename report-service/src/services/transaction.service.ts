@@ -74,6 +74,7 @@ export class TransactionService {
     const redirectUrl = typeof event.redirectUrl === 'string' ? event.redirectUrl : undefined;
     const returnUrl = typeof event.returnUrl === 'string' ? event.returnUrl : undefined;
     const callbackUrl = typeof event.callbackUrl === 'string' ? event.callbackUrl : undefined;
+    const descriptor = typeof event.descriptor === 'string' ? event.descriptor : undefined;
 
     if (transactionId) {
       const doc = await Transaction.findOneAndUpdate(

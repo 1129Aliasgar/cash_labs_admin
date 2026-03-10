@@ -40,7 +40,7 @@ export class TransactionEventConsumerService {
     const clientId = process.env.KAFKA_TRANSACTION_CLIENT_ID || 'report-service';
     this.kafka = createKafkaClient(clientId);
     this.consumer = this.kafka.consumer({
-      groupId: process.env.KAFKA_TRANSACTION_GROUP_ID || 'report-service-transaction-group',
+      groupId: process.env.KAFKA_TRANSACTION_GROUP_ID || '  ',
       sessionTimeout: 60000,
       heartbeatInterval: 10000,
       maxWaitTimeInMs: 5000,

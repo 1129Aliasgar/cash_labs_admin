@@ -213,7 +213,20 @@ export class TransactionService extends BaseService {
         Object.keys(responseMapping).length > 0
           ? mapResponse(source, responseMapping)
           : source;
+
       (mappedData as Record<string, unknown>).root = gatewayResponse;
+
+      const txId = (mappedData as Record<string, unknown>).transactionId;
+      const baseUrl =
+        (process.env.PAYMENT_ENGINE_PUBLIC_URL ||
+          process.env.PUBLIC_BASE_URL ||
+          process.env.BASE_URL ||
+          '').replace(/\/+$/, '');
+      if (baseUrl && typeof txId === 'string' && txId.trim()) {
+        (mappedData as Record<string, unknown>).redirectLink = `${baseUrl}/redirect/${encodeURIComponent(
+          txId.trim()
+        )}`;
+      }
 
       const tenantCtx = tenantContextStorage.getStore();
       const tenantHost = tenantCtx?.host;

@@ -19,7 +19,7 @@ import { tenantSelector } from './middlewares/tenantSelector.middleware';
 
 // Import controllers to register them with inversify-express-utils
 import './controllers/health.controller';
-import './controllers/payment.controller';
+import './controllers/redirect.controller';
 import './controllers/transaction.controller';
 
 function configureApp(app: Application): void {

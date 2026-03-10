@@ -17,12 +17,11 @@ import { GatewayRepository } from '../repositories/GatewayRepository';
 import { ClientRepository } from '../repositories/ClientRepository';
 import { ClientGatewayRepository } from '../repositories/ClientGatewayRepository';
 import { GatewayRequestConfigRepository } from '../repositories/GatewayRequestConfigRepository';
-import { PaymentService } from '../services/payment.service';
 import { GatewayService } from '../services/GatewayService';
 import { TransactionService } from '../services/transaction.service';
 import { TransactionEventProducerService } from '../services/transactionEventProducer.service';
 import { HealthController } from '../controllers/health.controller';
-import { PaymentController } from '../controllers/payment.controller';
+import { RedirectController } from '../controllers/redirect.controller';
 import { TransactionController } from '../controllers/transaction.controller';
 
 export function configureContainer(): Container {
@@ -57,11 +56,6 @@ export function configureContainer(): Container {
 
   // Bind services
   container
-    .bind<PaymentService>(TYPES.PaymentService)
-    .to(PaymentService)
-    .inSingletonScope();
-
-  container
     .bind<GatewayService>(TYPES.GatewayService)
     .to(GatewayService)
     .inSingletonScope();
@@ -78,7 +72,7 @@ export function configureContainer(): Container {
 
   // Bind controllers (by class so inversify-express-utils can resolve them)
   container.bind(HealthController).toSelf().inSingletonScope();
-  container.bind(PaymentController).toSelf().inSingletonScope();
+  container.bind(RedirectController).toSelf().inSingletonScope();
   container.bind(TransactionController).toSelf().inSingletonScope();
 
   return container;
