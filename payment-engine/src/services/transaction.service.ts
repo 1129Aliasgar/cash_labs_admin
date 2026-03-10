@@ -218,15 +218,27 @@ export class TransactionService extends BaseService {
       const tenantCtx = tenantContextStorage.getStore();
       const tenantHost = tenantCtx?.host;
       if (tenantHost) {
+        const amountNum = typeof body.transaction?.amount === 'string'
+          ? parseFloat(body.transaction.amount)
+          : undefined;
         await this.transactionEventProducer
           .sendTransactionEvent({
             tenantHost,
             transactionId:
               (mappedData as Record<string, unknown>).transactionId as string | undefined,
-            referenceId:
-              (mappedData as Record<string, unknown>).referenceId as string | undefined,
-            requestBody: internalRequest as Record<string, unknown>,
-            gatewayResponse: gatewayResponse as Record<string, unknown>,
+            descriptor:
+              (mappedData as Record<string, unknown>).descriptor as string | undefined,
+            gatewayLogs: [
+              {
+                requestBody: internalRequest as Record<string, unknown>,
+                gatewayResponse: gatewayResponse as Record<string, unknown>,
+              },
+            ],
+            currency: body.transaction?.currency,
+            amount: amountNum && !Number.isNaN(amountNum) ? amountNum : undefined,
+            redirectUrl: (body.meta as Record<string, unknown> | undefined)?.redirectUrl as string | undefined,
+            returnUrl: body.transaction?.returnUrl,
+            callbackUrl: (body.meta as Record<string, unknown> | undefined)?.callbackUrl as string | undefined,
             status: mappedData.status as string,
           })
           .catch((e) => console.error('[TransactionService] Event send failed', e));

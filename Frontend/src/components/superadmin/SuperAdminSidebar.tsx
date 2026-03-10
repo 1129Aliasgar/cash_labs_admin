@@ -22,6 +22,7 @@ const NAV_ITEMS = [
     { label: 'Settlement', icon: 'account_balance_wallet', href: '/superadmin/settlement' },
     { label: 'Teams', icon: 'group', href: '/superadmin/team' },
     { label: 'Audit Logs', icon: 'history', href: '/superadmin/audit-logs' },
+    { label: 'Gateways', icon: 'settings_input_component', href: '/superadmin/gateways' },
 ];
 
 const BOTTOM_ITEMS = [

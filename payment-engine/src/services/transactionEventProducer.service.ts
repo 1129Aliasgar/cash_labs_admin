@@ -6,9 +6,13 @@ import { createKafkaClient } from '../utils/kafkaConfig';
 export interface TransactionEventPayload {
   tenantHost: string;
   transactionId?: string;
-  referenceId?: string;
-  requestBody?: Record<string, unknown>;
-  gatewayResponse?: Record<string, unknown> | null;
+  descriptor?: string;
+  gatewayLogs?: Array<{ requestBody?: Record<string, unknown>; gatewayResponse?: Record<string, unknown> | null }>;
+  currency?: string;
+  amount?: number;
+  redirectUrl?: string;
+  returnUrl?: string;
+  callbackUrl?: string;
   status?: string;
   [key: string]: unknown;
 }

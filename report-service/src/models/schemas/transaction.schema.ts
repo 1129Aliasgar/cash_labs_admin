@@ -10,15 +10,29 @@ const transactionSchema = new Schema<ITransactionDoc>(
       required: false,
       index: true,
     },
-    requestBody: {
-      type: Schema.Types.Mixed,
-      required: true,
-      default: () => ({}),
+    descriptor: {
+      type: String,
+      required: false,
+      index: true,
     },
-    gatewayResponse: {
+    gatewayLogs: {
+      type: [
+        {
+          requestBody: Schema.Types.Mixed,
+          gatewayResponse: Schema.Types.Mixed,
+        },
+      ],
+      default: () => [],
+    },
+    currency: { type: String, required: false },
+    amount: { type: Number, required: false },
+    redirectUrl: { type: String, required: false },
+    returnUrl: { type: String, required: false },
+    callbackUrl: { type: String, required: false },
+    transactionDetails: {
       type: Schema.Types.Mixed,
       required: false,
-      default: null,
+      default: () => ({}),
     },
     status: {
       type: String,
@@ -33,5 +47,6 @@ const transactionSchema = new Schema<ITransactionDoc>(
 
 transactionSchema.index({ status: 1, createdAt: -1 });
 transactionSchema.index({ transactionId: 1, createdAt: -1 });
+transactionSchema.index({ descriptor: 1, createdAt: -1 });
 
 export default transactionSchema;

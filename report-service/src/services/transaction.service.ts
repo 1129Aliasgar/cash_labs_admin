@@ -6,9 +6,15 @@ import { ITransactionDoc, TransactionStatus } from '../types/Transaction.types';
 
 export interface TransactionEventPayload {
   transactionId?: string;
-  referenceId?: string;
+  descriptor?: string;
   requestBody?: Record<string, unknown>;
   gatewayResponse?: Record<string, unknown> | null;
+  gatewayLogs?: Array<{ requestBody?: Record<string, unknown>; gatewayResponse?: Record<string, unknown> | null }>;
+  currency?: string;
+  amount?: number;
+  redirectUrl?: string;
+  returnUrl?: string;
+  callbackUrl?: string;
   transactionDetails?: Record<string, unknown>;
   status?: TransactionStatus;
   [key: string]: unknown;
@@ -39,19 +45,35 @@ export class TransactionService {
     const Transaction = this.getTransactionModel();
 
     const transactionId = typeof event.transactionId === 'string' ? event.transactionId : undefined;
+    const referenceId = typeof event.referenceId === 'string' ? event.referenceId : undefined;
     const status: TransactionStatus =
       event.status === 'pending' || event.status === 'success' || event.status === 'failed'
         ? event.status
         : 'pending';
 
-    const requestBody =
-      event.requestBody && typeof event.requestBody === 'object' ? event.requestBody : (event as Record<string, unknown>);
-
-    const gatewayResponse =
-      event.gatewayResponse && typeof event.gatewayResponse === 'object' ? event.gatewayResponse : null;
-
     const transactionDetails =
       event.transactionDetails && typeof event.transactionDetails === 'object' ? event.transactionDetails : {};
+
+    let gatewayLogs: Array<{ requestBody: Record<string, unknown>; gatewayResponse: Record<string, unknown> | null }> =
+      [];
+    if (Array.isArray(event.gatewayLogs) && event.gatewayLogs.length > 0) {
+      gatewayLogs = event.gatewayLogs
+        .filter((e) => e && (e.requestBody != null || e.gatewayResponse != null))
+        .map((e) => ({
+          requestBody: (e.requestBody && typeof e.requestBody === 'object' ? e.requestBody : {}) as Record<string, unknown>,
+          gatewayResponse: (e.gatewayResponse && typeof e.gatewayResponse === 'object' ? e.gatewayResponse : null) as Record<string, unknown> | null,
+        }));
+    } else if (event.requestBody != null || event.gatewayResponse != null) {
+      const rb = event.requestBody && typeof event.requestBody === 'object' ? event.requestBody : {};
+      const gr = event.gatewayResponse && typeof event.gatewayResponse === 'object' ? event.gatewayResponse : null;
+      gatewayLogs = [{ requestBody: rb as Record<string, unknown>, gatewayResponse: gr as Record<string, unknown> | null }];
+    }
+
+    const currency = typeof event.currency === 'string' ? event.currency : undefined;
+    const amount = typeof event.amount === 'number' ? event.amount : undefined;
+    const redirectUrl = typeof event.redirectUrl === 'string' ? event.redirectUrl : undefined;
+    const returnUrl = typeof event.returnUrl === 'string' ? event.returnUrl : undefined;
+    const callbackUrl = typeof event.callbackUrl === 'string' ? event.callbackUrl : undefined;
 
     if (transactionId) {
       const doc = await Transaction.findOneAndUpdate(
@@ -59,8 +81,13 @@ export class TransactionService {
         {
           $set: {
             transactionId,
-            requestBody,
-            gatewayResponse,
+            descriptor,
+            gatewayLogs,
+            currency,
+            amount,
+            redirectUrl,
+            returnUrl,
+            callbackUrl,
             transactionDetails,
             status,
           },
@@ -71,8 +98,13 @@ export class TransactionService {
     }
 
     return await Transaction.create({
-      requestBody,
-      gatewayResponse,
+      descriptor,
+      gatewayLogs,
+      currency,
+      amount,
+      redirectUrl,
+      returnUrl,
+      callbackUrl,
       transactionDetails,
       status,
     });
