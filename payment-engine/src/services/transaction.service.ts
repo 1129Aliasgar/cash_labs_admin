@@ -214,7 +214,6 @@ export class TransactionService extends BaseService {
           ? mapResponse(source, responseMapping)
           : source;
 
-      (mappedData as Record<string, unknown>).root = gatewayResponse;
 
       const txId = (mappedData as Record<string, unknown>).transactionId;
       const baseUrl =
@@ -222,40 +221,50 @@ export class TransactionService extends BaseService {
           process.env.PUBLIC_BASE_URL ||
           process.env.BASE_URL ||
           '').replace(/\/+$/, '');
-      if (baseUrl && typeof txId === 'string' && txId.trim()) {
-        (mappedData as Record<string, unknown>).redirectLink = `${baseUrl}/redirect/${encodeURIComponent(
+      console.log('baseUrl', baseUrl);
+      console.log('txId', txId);
+      console.log('typeof txId', typeof txId);
+      const providerReturnUrl = (mappedData as Record<string, unknown>).redirectUrl;
+      console.log('typeof providerReturnUrl', typeof providerReturnUrl);
+      console.log('providerReturnUrl', providerReturnUrl);
+      if (baseUrl && txId && typeof txId === 'string' && txId.trim()) {
+        console.log('providerReturnUrl', providerReturnUrl);
+        console.log('baseUrl', baseUrl);
+        console.log('txId', txId);
+        (mappedData as Record<string, unknown>).redirectUrl = `${baseUrl}/redirect/${encodeURIComponent(
           txId.trim()
         )}`;
+        console.log('redirectUri', (mappedData as Record<string, unknown>).redirectUri);
       }
 
       const tenantCtx = tenantContextStorage.getStore();
       const tenantHost = tenantCtx?.host;
-      if (tenantHost) {
-        const amountNum = typeof body.transaction?.amount === 'string'
-          ? parseFloat(body.transaction.amount)
-          : undefined;
-        await this.transactionEventProducer
-          .sendTransactionEvent({
-            tenantHost,
-            transactionId:
-              (mappedData as Record<string, unknown>).transactionId as string | undefined,
-            descriptor:
-              (mappedData as Record<string, unknown>).descriptor as string | undefined,
-            gatewayLogs: [
-              {
-                requestBody: internalRequest as Record<string, unknown>,
-                gatewayResponse: gatewayResponse as Record<string, unknown>,
-              },
-            ],
-            currency: body.transaction?.currency,
-            amount: amountNum && !Number.isNaN(amountNum) ? amountNum : undefined,
-            redirectUrl: (body.meta as Record<string, unknown> | undefined)?.redirectUrl as string | undefined,
-            returnUrl: body.transaction?.returnUrl,
-            callbackUrl: (body.meta as Record<string, unknown> | undefined)?.callbackUrl as string | undefined,
-            status: mappedData.status as string,
-          })
-          .catch((e) => console.error('[TransactionService] Event send failed', e));
-      }
+      // if (tenantHost) {
+      //   const amountNum = typeof body.transaction?.amount === 'string'
+      //     ? parseFloat(body.transaction.amount)
+      //     : undefined;
+      //   await this.transactionEventProducer
+      //     .sendTransactionEvent({
+      //       tenantHost,
+      //       transactionId:
+      //         (mappedData as Record<string, unknown>).transactionId as string | undefined,
+      //       descriptor:
+      //         (mappedData as Record<string, unknown>).descriptor as string | undefined,
+      //       gatewayLogs: [
+      //         {
+      //           requestBody: internalRequest as Record<string, unknown>,
+      //           gatewayResponse: gatewayResponse as Record<string, unknown>,
+      //         },
+      //       ],
+      //       currency: body.transaction?.currency,
+      //       amount: amountNum && !Number.isNaN(amountNum) ? amountNum : undefined,
+      //       redirectUrl: providerReturnUrl,
+      //       returnUrl: body.transaction?.returnUrl,
+      //       callbackUrl: (body.meta as Record<string, unknown> | undefined)?.callbackUrl as string | undefined,
+      //       status: mappedData.status as string,
+      //     })
+      //     .catch((e) => console.error('[TransactionService] Event send failed', e));
+      // }
 
       return { success: true, data: mappedData };
     }
