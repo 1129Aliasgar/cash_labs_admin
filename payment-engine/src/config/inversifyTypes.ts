@@ -15,6 +15,7 @@ export const TYPES = {
   ClientRepository: Symbol.for('ClientRepository'),
   ClientGatewayRepository: Symbol.for('ClientGatewayRepository'),
   GatewayRequestConfigRepository: Symbol.for('GatewayRequestConfigRepository'),
+  TransactionRepository: Symbol.for('TransactionRepository'),
   // Utilities
   TenantContextProvider: Symbol.for('TenantContextProvider'),
   // Controllers

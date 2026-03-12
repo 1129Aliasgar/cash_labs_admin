@@ -17,6 +17,7 @@ import { GatewayRepository } from '../repositories/GatewayRepository';
 import { ClientRepository } from '../repositories/ClientRepository';
 import { ClientGatewayRepository } from '../repositories/ClientGatewayRepository';
 import { GatewayRequestConfigRepository } from '../repositories/GatewayRequestConfigRepository';
+import { TransactionRepository } from '../repositories/TransactionRepository';
 import { GatewayService } from '../services/GatewayService';
 import { TransactionService } from '../services/transaction.service';
 import { TransactionEventProducerService } from '../services/transactionEventProducer.service';
@@ -52,6 +53,11 @@ export function configureContainer(): Container {
   container
     .bind<GatewayRequestConfigRepository>(TYPES.GatewayRequestConfigRepository)
     .to(GatewayRequestConfigRepository)
+    .inSingletonScope();
+
+  container
+    .bind<TransactionRepository>(TYPES.TransactionRepository)
+    .to(TransactionRepository)
     .inSingletonScope();
 
   // Bind services

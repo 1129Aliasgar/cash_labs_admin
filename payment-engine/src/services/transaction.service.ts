@@ -4,12 +4,13 @@ import { TYPES } from '../types';
 import { ClientRepository } from '../repositories/ClientRepository';
 import { ClientGatewayRepository } from '../repositories/ClientGatewayRepository';
 import { GatewayRequestConfigRepository } from '../repositories/GatewayRequestConfigRepository';
-import { TransactionEventProducerService } from './transactionEventProducer.service';
-import { tenantContextStorage } from '../utils/tenantContext.provider';
+import { TransactionRepository } from '../repositories/TransactionRepository';
 import { IGatewayRequestConfigDoc } from '../types/GatewayRequestConfig.types';
 import { REQUEST_CONFIG_TYPE } from '../constants/gateway.constants';
 import { HTTP_STATUS } from '../constants/index';
 import type { ApmTransactionBody } from '../validators/transaction.validator';
+import type { TransactionStatus } from '../types/Transaction.types';
+import { AppError } from '../utils/AppError';
 
 /** Get value at dot-separated path (e.g. "customer.firstName") */
 function get(obj: Record<string, unknown>, path: string): unknown {
@@ -98,6 +99,13 @@ function mapResponse(
   return out;
 }
 
+function normalizeTxStatus(input: unknown): TransactionStatus {
+  if (typeof input !== 'string') return 'pending';
+  const v = input.trim().toLowerCase();
+  if (v === 'success' || v === 'failed' || v === 'pending') return v;
+  return 'pending';
+}
+
 /**
  * Get the payload object from gateway response.
  * Handles: { data: [ {...} ] }, { data: {...} }, or raw array [ {...} ].
@@ -129,7 +137,7 @@ export class TransactionService extends BaseService {
     @inject(TYPES.ClientRepository) private readonly clientRepository: ClientRepository,
     @inject(TYPES.ClientGatewayRepository) private readonly clientGatewayRepository: ClientGatewayRepository,
     @inject(TYPES.GatewayRequestConfigRepository) private readonly gatewayRequestConfigRepository: GatewayRequestConfigRepository,
-    @inject(TYPES.TransactionEventProducerService) private readonly transactionEventProducer: TransactionEventProducerService
+    @inject(TYPES.TransactionRepository) private readonly transactionRepository: TransactionRepository
   ) {
     super();
   }
@@ -139,139 +147,148 @@ export class TransactionService extends BaseService {
     clientSecret: string,
     body: ApmTransactionBody
   ): Promise<{ success: boolean; data: unknown }> {
-    const client = await this.clientRepository.findByClientId(clientId, true);
-    this.validateValue(client, 'Client', HTTP_STATUS.UNAUTHORIZED);
-    const secret = (client as { clientSecret?: string }).clientSecret;
-    this.validateBusinessRule(
-      secret === clientSecret,
-      'Invalid client credentials',
-      HTTP_STATUS.UNAUTHORIZED
-    );
-
-    const clientGateways = await this.clientGatewayRepository.findByClientId(String(client!._id));
-    const withApmEnabled = clientGateways.filter((cg) => {
-      const gw = cg.gatewayId as { apm?: { enabled?: boolean } };
-      return gw?.apm?.enabled === true;
-    });
-    this.validateBusinessRule(
-      withApmEnabled.length > 0,
-      'No gateway with APM enabled found for this client',
-      HTTP_STATUS.BAD_REQUEST
-    );
-
-    for (const cg of withApmEnabled) {
-      const gw = cg.gatewayId as { _id?: { toString(): string } };
-      const gatewayIdStr = gw?._id?.toString() ?? String(cg.gatewayId);
-      const config = await this.gatewayRequestConfigRepository.findByGatewayIdAndType(
-        gatewayIdStr,
-        REQUEST_CONFIG_TYPE.APM
+    try {
+      const client = await this.clientRepository.findByClientId(clientId, true);
+      this.validateValue(client, 'Client', HTTP_STATUS.UNAUTHORIZED);
+      const secret = (client as { clientSecret?: string }).clientSecret;
+      this.validateBusinessRule(
+        secret === clientSecret,
+        'Invalid client credentials',
+        HTTP_STATUS.UNAUTHORIZED
       );
-      if (!config) continue;
 
-      const endpoint = (config.endpoint ?? '').trim();
-      this.validateValue(
-        endpoint,
-        'Gateway request config endpoint for APM',
+      const clientGateways = await this.clientGatewayRepository.findByClientId(String(client!._id));
+      const withApmEnabled = clientGateways.filter((cg) => {
+        const gw = cg.gatewayId as { apm?: { enabled?: boolean } };
+        return gw?.apm?.enabled === true;
+      });
+      this.validateBusinessRule(
+        withApmEnabled.length > 0,
+        'No gateway with APM enabled found for this client',
         HTTP_STATUS.BAD_REQUEST
       );
 
-      const internalRequest: Record<string, unknown> = {
-        customer: body.customer,
-        transaction: body.transaction,
-        meta: body.meta ?? {},
-      };
-
-      const requestBody = buildBody(config as ConfigWithDefaults, internalRequest);
-      const requestHeaders = buildHeaders(config, (cg.credentials ?? {}) as Record<string, unknown>);
-
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...requestHeaders,
-        },
-        body: JSON.stringify(requestBody),
-      });
-
-      const gatewayResponse = await response.json().catch(() => ({})) as {
-        success?: boolean;
-        data?: unknown[];
-        message?: string;
-      };
-
-      if (!response.ok) {
-        throw this.createError(
-          gatewayResponse.message ?? `Gateway responded with ${response.status}`,
-          response.status
+      for (const cg of withApmEnabled) {
+        const gw = cg.gatewayId as { _id?: { toString(): string } };
+        const gatewayIdStr = gw?._id?.toString() ?? String(cg.gatewayId);
+        const config = await this.gatewayRequestConfigRepository.findByGatewayIdAndType(
+          gatewayIdStr,
+          REQUEST_CONFIG_TYPE.APM
         );
-      }
+        if (!config) continue;
 
-      const responseMapping = normalizeResponseMapping(config.responseMapping);
-      const source = getGatewayPayload(gatewayResponse);
+        const endpoint = (config.endpoint ?? '').trim();
+        this.validateValue(
+          endpoint,
+          'Gateway request config endpoint for APM',
+          HTTP_STATUS.BAD_REQUEST
+        );
 
-      const mappedData =
-        Object.keys(responseMapping).length > 0
-          ? mapResponse(source, responseMapping)
-          : source;
+        const internalRequest: Record<string, unknown> = {
+          customer: body.customer,
+          transaction: body.transaction,
+          meta: body.meta ?? {},
+        };
 
+        const requestBody = buildBody(config as ConfigWithDefaults, internalRequest);
+        const requestHeaders = buildHeaders(
+          config,
+          (cg.credentials ?? {}) as Record<string, unknown>
+        );
 
-      const txId = (mappedData as Record<string, unknown>).transactionId;
-      const baseUrl =
-        (process.env.PAYMENT_ENGINE_PUBLIC_URL ||
-          process.env.PUBLIC_BASE_URL ||
-          process.env.BASE_URL ||
-          '').replace(/\/+$/, '');
-      console.log('baseUrl', baseUrl);
-      console.log('txId', txId);
-      console.log('typeof txId', typeof txId);
-      const providerReturnUrl = (mappedData as Record<string, unknown>).redirectUrl;
-      console.log('typeof providerReturnUrl', typeof providerReturnUrl);
-      console.log('providerReturnUrl', providerReturnUrl);
-      if (baseUrl && txId && typeof txId === 'string' && txId.trim()) {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...requestHeaders,
+          },
+          body: JSON.stringify(requestBody),
+        });
+
+        const gatewayResponse = (await response.json().catch(() => ({}))) as {
+          success?: boolean;
+          data?: unknown[];
+          message?: string;
+        };
+
+        if (!response.ok) {
+          throw this.createError(
+            gatewayResponse.message ?? `Gateway responded with ${response.status}`,
+            response.status
+          );
+        }
+
+        const responseMapping = normalizeResponseMapping(config.responseMapping);
+        const source = getGatewayPayload(gatewayResponse);
+
+        const mappedData =
+          Object.keys(responseMapping).length > 0
+            ? mapResponse(source, responseMapping)
+            : source;
+
+        const txId = (mappedData as Record<string, unknown>).transactionId;
+        const baseUrl =
+          (process.env.PAYMENT_ENGINE_PUBLIC_URL ||
+            process.env.PUBLIC_BASE_URL ||
+            process.env.BASE_URL ||
+            '').replace(/\/+$/, '');
+
+        const providerReturnUrl = (mappedData as Record<string, unknown>).redirectUrl;
+        console.log('typeof providerReturnUrl', typeof providerReturnUrl);
         console.log('providerReturnUrl', providerReturnUrl);
-        console.log('baseUrl', baseUrl);
-        console.log('txId', txId);
-        (mappedData as Record<string, unknown>).redirectUrl = `${baseUrl}/redirect/${encodeURIComponent(
-          txId.trim()
-        )}`;
-        console.log('redirectUri', (mappedData as Record<string, unknown>).redirectUri);
+        if (baseUrl && txId && typeof txId === 'string' && txId.trim()) {
+          (mappedData as Record<string, unknown>).redirectUrl = `${baseUrl}/redirect/${encodeURIComponent(
+            txId.trim()
+          )}`;
+          console.log('redirectUri', (mappedData as Record<string, unknown>).redirectUri);
+        }
+
+        const amountNum =
+          typeof body.transaction?.amount === 'string'
+            ? parseFloat(body.transaction.amount)
+            : undefined;
+
+        try {
+          await this.transactionRepository.upsertByTransactionId({
+            transactionId:
+              (mappedData as Record<string, unknown>).transactionId as string | undefined,
+            descriptor:
+              (mappedData as Record<string, unknown>).descriptor as string | undefined,
+            gatewayLogs: [
+              {
+                requestBody: internalRequest as Record<string, unknown>,
+                gatewayResponse: gatewayResponse as Record<string, unknown>,
+              },
+            ],
+            currency: body.transaction?.currency,
+            amount: amountNum && !Number.isNaN(amountNum) ? amountNum : undefined,
+            redirectUrl: providerReturnUrl as string | undefined,
+            returnUrl: body.transaction?.returnUrl,
+            callbackUrl:
+              (body.meta as Record<string, unknown> | undefined)?.callbackUrl as
+                | string
+                | undefined,
+            transactionDetails: mappedData as Record<string, unknown>,
+            status: normalizeTxStatus((mappedData as Record<string, unknown>).status),
+          });
+        } catch (e) {
+          console.error('[TransactionService] DB save failed', e);
+          throw this.createError('Failed to save transaction', HTTP_STATUS.INTERNAL_SERVER_ERROR);
+        }
+
+        return { success: true, data: mappedData };
       }
 
-      const tenantCtx = tenantContextStorage.getStore();
-      const tenantHost = tenantCtx?.host;
-      // if (tenantHost) {
-      //   const amountNum = typeof body.transaction?.amount === 'string'
-      //     ? parseFloat(body.transaction.amount)
-      //     : undefined;
-      //   await this.transactionEventProducer
-      //     .sendTransactionEvent({
-      //       tenantHost,
-      //       transactionId:
-      //         (mappedData as Record<string, unknown>).transactionId as string | undefined,
-      //       descriptor:
-      //         (mappedData as Record<string, unknown>).descriptor as string | undefined,
-      //       gatewayLogs: [
-      //         {
-      //           requestBody: internalRequest as Record<string, unknown>,
-      //           gatewayResponse: gatewayResponse as Record<string, unknown>,
-      //         },
-      //       ],
-      //       currency: body.transaction?.currency,
-      //       amount: amountNum && !Number.isNaN(amountNum) ? amountNum : undefined,
-      //       redirectUrl: providerReturnUrl,
-      //       returnUrl: body.transaction?.returnUrl,
-      //       callbackUrl: (body.meta as Record<string, unknown> | undefined)?.callbackUrl as string | undefined,
-      //       status: mappedData.status as string,
-      //     })
-      //     .catch((e) => console.error('[TransactionService] Event send failed', e));
-      // }
-
-      return { success: true, data: mappedData };
+      throw this.createError(
+        'No APM gateway with request config found for this client',
+        HTTP_STATUS.BAD_REQUEST
+      );
+    } catch (e) {
+      if (e instanceof AppError) {
+        throw e;
+      }
+      console.error('[TransactionService] createApmTransaction failed', e);
+      throw this.createError('Failed to create transaction', HTTP_STATUS.INTERNAL_SERVER_ERROR);
     }
-
-    throw this.createError(
-      'No APM gateway with request config found for this client',
-      HTTP_STATUS.BAD_REQUEST
-    );
   }
 }
