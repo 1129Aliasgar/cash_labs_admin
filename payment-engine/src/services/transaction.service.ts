@@ -240,7 +240,6 @@ export class TransactionService extends BaseService {
           (mappedData as Record<string, unknown>).redirectUrl = `${baseUrl}/redirect/${encodeURIComponent(
             txId.trim()
           )}`;
-          console.log('redirectUri', (mappedData as Record<string, unknown>).redirectUri);
         }
 
         const amountNum =
